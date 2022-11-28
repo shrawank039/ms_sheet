@@ -35,6 +35,22 @@ class CreateSheets extends StatefulWidget {
 }
 
 class _CreateSheetsState extends State<CreateSheets> {
+  String _valueChanged4 = '';
+  String _valueToValidate4 = '';
+  String _valueSaved4 = '';
+
+  late TextEditingController _controller4;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+    String lsHour = TimeOfDay.now().hour.toString().padLeft(2, '0');
+    String lsMinute = TimeOfDay.now().minute.toString().padLeft(2, '0');
+    _controller4 = TextEditingController(text: '$lsHour:$lsMinute');
+  }
+
   @override
   Widget build(BuildContext context) {
     return Expanded(
@@ -129,6 +145,30 @@ class _CreateSheetsState extends State<CreateSheets> {
                     child: Padding(
                       padding: EdgeInsets.only(left: 1.w),
                       child: DateTimePicker(
+                          type: DateTimePickerType.time,
+                          //timePickerEntryModeInput: true,
+                          controller: _controller4,
+                          //initialValue: '',
+                          icon: Icon(Icons.access_time),
+                          timeLabelText: "End Time",
+                          use24HourFormat: false,
+                          locale: Locale('en', 'IN'),
+                          onChanged: (val) {
+                            print('0' + val.toString());
+                            setState(() {
+                              _controller4.text = val;
+                            });
+                          },
+                          validator: (val) {
+                            print('1' + val.toString());
+                            setState(() => _controller4.text = val ?? '');
+                            return null;
+                          },
+                          onSaved: (val) {
+                            print('2' + val.toString());
+                            setState(() => _controller4.text = val ?? '');
+                          }),
+                      /*DateTimePicker(
                         type: DateTimePickerType.date,
                         dateMask: 'd MMM, yyyy',
                         initialValue: DateTime.now().toString(),
@@ -151,11 +191,11 @@ class _CreateSheetsState extends State<CreateSheets> {
                           return null;
                         },
                         onSaved: (val) => print(val),
-                      ),
+                      ),*/
                     ),
                   ),
                 )),
-                Expanded(
+                /*Expanded(
                     child: Container(
                   alignment: Alignment.center,
                   // height: 9.w,
@@ -167,7 +207,8 @@ class _CreateSheetsState extends State<CreateSheets> {
                     color: ColorsRes.lightWeightColor,
                     child: Padding(
                       padding: EdgeInsets.only(left: 1.w),
-                      child: DateTimePicker(
+                      child:
+                      DateTimePicker(
                         type: DateTimePickerType.date,
                         dateMask: 'd MMM, yyyy',
                         initialValue: DateTime.now().toString(),
@@ -193,7 +234,7 @@ class _CreateSheetsState extends State<CreateSheets> {
                       ),
                     ),
                   ),
-                )),
+                )),*/
                 SizedBox(
                   width: 2.w,
                 ),

@@ -164,7 +164,7 @@ class _SheetsCardPCState extends State<SheetsCardPC> {
                   Icons.airplane_ticket,
                   ColorsRes.green,
                   2.3.w,
-                  '11-03-2022',
+                  '27-11-2022',
                   1.6.w,
                   ColorsRes.green,
                 )
@@ -182,14 +182,14 @@ class _SheetsCardPCState extends State<SheetsCardPC> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'FARIDABAD',
+                      'NEW DELHI',
                       style: TextStyle(
                           color: ColorsRes.black,
                           fontSize: 2.0.w,
                           fontWeight: FontWeight.w500),
                     ),
                     Text(
-                      'Last Time: 10:30pm',
+                      'Last Time: 11:00pm',
                       style: TextStyle(
                         color: ColorsRes.lightGrey,
                         fontSize: 1.6.w,
@@ -302,14 +302,14 @@ class _SheetsCardMoileState extends State<SheetsCardMoile> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'FARIDABAD',
+                      'NEW DELHI',
                       style: TextStyle(
                           color: ColorsRes.black,
                           fontSize: 3.5.w,
                           fontWeight: FontWeight.w500),
                     ),
                     Text(
-                      'Last Time: 10:30pm',
+                      'Last Time: 11:00pm',
                       style: TextStyle(
                         color: ColorsRes.lightGrey,
                         fontSize: 2.8.w,
@@ -431,7 +431,6 @@ class _SheetsCreateSectionState extends State<SheetsCreateSection> {
               ),
             ],
           );
-          ;
         } else {
           return Row(
             children: [

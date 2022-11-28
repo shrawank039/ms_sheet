@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:ms_sheet/data/models/agents_model.dart';
+import 'package:ms_sheet/global.dart' as global;
 import 'package:ms_sheet/ui/screens/panels/master_panel.dart';
 import 'package:ms_sheet/ui/styles/color.dart';
 import 'package:sizer/sizer.dart';
@@ -16,51 +16,6 @@ class MainPanel extends StatefulWidget {
 }
 
 class _MainPanelState extends State<MainPanel> {
-  final List<AgentsModel> clients = [
-    AgentsModel(
-      id: '1',
-      name: 'Client 1',
-      date: DateTime.now(),
-      picture:
-          'https://www.soycarmin.com/__export/1658099176495/sites/debate/img/2022/07/17/chris-evans-novia_crop1658098869098.jpg_943222218.jpg',
-    ),
-    AgentsModel(
-      id: '2',
-      name: 'Client 2',
-      date: DateTime.now(),
-      picture:
-          'https://assets.myntassets.com/dpr_1.5,q_60,w_400,c_limit,fl_progressive/assets/images/16407468/2021/12/28/fce7ca1e-01ec-4c12-a90f-c7b75abda0e01640669480687-Difference-of-Opinion-Men-Tshirts-4021640669480120-1.jpg',
-    ),
-    AgentsModel(
-      id: '3',
-      name: 'Client 3',
-      date: DateTime.now(),
-      picture:
-          'https://image.shutterstock.com/image-photo/casually-handsome-confident-young-man-260nw-439433326.jpg',
-    ),
-    AgentsModel(
-      id: '4',
-      name: 'Client 4',
-      date: DateTime.now(),
-      picture:
-          'https://www.muscleandfitness.com/wp-content/uploads/2015/08/what_makes_a_man_more_manly_main0.jpg?quality=86&strip=all',
-    ),
-    AgentsModel(
-      id: '5',
-      name: 'Client 5',
-      date: DateTime.now(),
-      picture:
-          'https://www.muscleandfitness.com/wp-content/uploads/2015/08/what_makes_a_man_more_manly_main0.jpg?quality=86&strip=all',
-    ),
-    AgentsModel(
-      id: '6',
-      name: 'Client 6',
-      date: DateTime.now(),
-      picture:
-          'https://www.muscleandfitness.com/wp-content/uploads/2015/08/what_makes_a_man_more_manly_main0.jpg?quality=86&strip=all',
-    ),
-  ];
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -105,7 +60,7 @@ class _MainPanelState extends State<MainPanel> {
                                 color: ColorsRes.darkGrey, fontSize: 2.5.w),
                           ),
                           Text(
-                            'Faridabad',
+                            'Delhi',
                             style: TextStyle(
                                 color: ColorsRes.mainBlue, fontSize: 2.5.w),
                           ),
@@ -329,7 +284,7 @@ class _MainPanelState extends State<MainPanel> {
                       textAlign: TextAlign.start,
                     ),
                     Column(
-                      children: clients.map((e) {
+                      children: global.clients.map((e) {
                         return clientsList(e.picture, e.name, e.date);
                       }).toList(),
                     ),
@@ -648,7 +603,7 @@ Widget pairList(int index, double pair, double amount) {
   );
 }
 
-Widget clientsList(String? pic, String? name, DateTime? date) {
+Widget clientsList(String? pic, String? name, String? date) {
   return Container(
     width: 50.w,
     margin: EdgeInsets.only(top: 1.w),
@@ -702,7 +657,7 @@ Widget clientsList(String? pic, String? name, DateTime? date) {
                       width: 1.w,
                     ),
                     Text(
-                      'Total : 2500',
+                      'Total : 1750',
                       textAlign: TextAlign.left,
                       style: TextStyle(
                         fontSize: 1.3.w,

@@ -142,13 +142,13 @@ class DesignConfig {
   }
 
   static Container inputBoxDecorated(
-    Color BgColor,
-    double radius,
-    double fontSize,
-    String hint,
-    IconData icon,
-    double iconSize,
-  ) {
+      Color BgColor,
+      double radius,
+      double fontSize,
+      String hint,
+      IconData icon,
+      double iconSize,
+      TextInputType inputType) {
     return Container(
       alignment: Alignment.center,
       // height: 9.w,
@@ -161,6 +161,7 @@ class DesignConfig {
         child: Padding(
           padding: EdgeInsets.only(left: 1.w),
           child: TextField(
+            keyboardType: inputType,
             style: TextStyle(
                 fontSize: fontSize,
                 fontFamily: 'Arial',

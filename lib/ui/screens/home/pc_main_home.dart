@@ -155,10 +155,10 @@ class _PCHomeState extends State<PCHome> {
                       GestureDetector(
                         onTap: () {
                           setState(() {
-                            currentPage = 'Agents';
+                            currentPage = 'Clients';
                           });
                         },
-                        child: (currentPage == 'Agents')
+                        child: (currentPage == 'Clients')
                             ? Card(
                                 color: ColorsRes.lightBlue,
                                 elevation: 0,
@@ -178,7 +178,7 @@ class _PCHomeState extends State<PCHome> {
                                         width: 1.5.w,
                                       ),
                                       Text(
-                                        'Agents',
+                                        'Clients',
                                         style: TextStyle(
                                           color: ColorsRes.mainBlue,
                                           fontSize: 1.7.w,
@@ -207,7 +207,7 @@ class _PCHomeState extends State<PCHome> {
                                         width: 1.5.w,
                                       ),
                                       Text(
-                                        'Agents',
+                                        'Clients',
                                         style: TextStyle(
                                           color: ColorsRes.darkGrey,
                                           fontSize: 1.7.w,
@@ -464,7 +464,7 @@ class _PCHomeState extends State<PCHome> {
                   if (currentPage == 'Sheets') ...[
                     hiding(),
                     Sheets(),
-                  ] else if (currentPage == 'Agents') ...[
+                  ] else if (currentPage == 'Clients') ...[
                     hiding(),
                     Agents(),
                   ] else if (currentPage == 'Wallet') ...[
@@ -505,7 +505,7 @@ Widget userDetails(String currentPage) {
       ClipRRect(
         borderRadius: BorderRadius.circular(8),
         child: Image.network(
-          'https://cdn-icons-png.flaticon.com/512/149/149071.png',
+          'https://cdn-icons-png.flaticon.com/256/149/149071.png',
           height: 6.w,
           width: 6.w,
           fit: BoxFit.cover,
@@ -518,7 +518,7 @@ Widget userDetails(String currentPage) {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Aeimesh',
+              'Jay T',
               textAlign: TextAlign.left,
               style: TextStyle(
                   fontSize: 2.w,
@@ -526,7 +526,7 @@ Widget userDetails(String currentPage) {
                   color: const Color.fromARGB(255, 0, 0, 0)),
             ),
             Text(
-              '+91 854662548',
+              '+91 1234567890',
               textAlign: TextAlign.left,
               style: TextStyle(
                 fontSize: 1.5.w,

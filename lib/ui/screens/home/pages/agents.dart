@@ -1,8 +1,11 @@
+import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
-import 'package:ms_sheet/data/models/agents_model.dart';
 import 'package:ms_sheet/ui/styles/color.dart';
 import 'package:ms_sheet/ui/styles/design.dart';
+import 'package:ms_sheet/widgets/delete_confirmation_popup.dart';
 import 'package:sizer/sizer.dart';
+
+import '../../../../global.dart';
 
 class Agents extends StatefulWidget {
   @override
@@ -10,58 +13,6 @@ class Agents extends StatefulWidget {
 }
 
 class _SheetsState extends State<Agents> {
-  final List<AgentsModel> agents = [
-    AgentsModel(
-      id: '1',
-      name: 'Agent 1',
-      date: DateTime.now(),
-      picture:
-          'https://www.soycarmin.com/__export/1658099176495/sites/debate/img/2022/07/17/chris-evans-novia_crop1658098869098.jpg_943222218.jpg',
-    ),
-    AgentsModel(
-      id: '2',
-      name: 'Agent 2',
-      date: DateTime.now(),
-      picture:
-          'https://assets.myntassets.com/dpr_1.5,q_60,w_400,c_limit,fl_progressive/assets/images/16407468/2021/12/28/fce7ca1e-01ec-4c12-a90f-c7b75abda0e01640669480687-Difference-of-Opinion-Men-Tshirts-4021640669480120-1.jpg',
-    ),
-    AgentsModel(
-      id: '3',
-      name: 'Agent 3',
-      date: DateTime.now(),
-      picture:
-          'https://image.shutterstock.com/image-photo/casually-handsome-confident-young-man-260nw-439433326.jpg',
-    ),
-    AgentsModel(
-      id: '4',
-      name: 'Agent 4',
-      date: DateTime.now(),
-      picture:
-          'https://www.muscleandfitness.com/wp-content/uploads/2015/08/what_makes_a_man_more_manly_main0.jpg?quality=86&strip=all',
-    ),
-    AgentsModel(
-      id: '4',
-      name: 'Agent 4',
-      date: DateTime.now(),
-      picture:
-          'https://www.muscleandfitness.com/wp-content/uploads/2015/08/what_makes_a_man_more_manly_main0.jpg?quality=86&strip=all',
-    ),
-    AgentsModel(
-      id: '4',
-      name: 'Agent 4',
-      date: DateTime.now(),
-      picture:
-          'https://www.muscleandfitness.com/wp-content/uploads/2015/08/what_makes_a_man_more_manly_main0.jpg?quality=86&strip=all',
-    ),
-    AgentsModel(
-      id: '4',
-      name: 'Agent 4',
-      date: DateTime.now(),
-      picture:
-          'https://www.muscleandfitness.com/wp-content/uploads/2015/08/what_makes_a_man_more_manly_main0.jpg?quality=86&strip=all',
-    ),
-  ];
-
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(
@@ -114,7 +65,7 @@ class _SheetsState extends State<Agents> {
                     Expanded(
                       child: Column(
                         children: agents.map((e) {
-                          return agentsList(e.picture, e.name, e.date);
+                          return agentsList(e.picture, e.name, e.date, context);
                         }).toList(),
                       ),
                     ),
@@ -194,7 +145,8 @@ Widget topBar() {
   );
 }
 
-Widget agentsList(String? pic, String? name, DateTime? date) {
+Widget agentsList(
+    String? pic, String? name, String? date, BuildContext context) {
   return Container(
     margin: EdgeInsets.only(top: 1.w),
     decoration: DesignConfig.boxDecorationContainerCardShadow(
@@ -233,7 +185,7 @@ Widget agentsList(String? pic, String? name, DateTime? date) {
                       color: const Color.fromARGB(255, 0, 0, 0)),
                 ),
                 Text(
-                  'Created On: 20 oct, 2022',
+                  date!,
                   textAlign: TextAlign.left,
                   style: TextStyle(
                     fontSize: 1.3.w,
@@ -248,7 +200,11 @@ Widget agentsList(String? pic, String? name, DateTime? date) {
             child: Container(),
           ),
           IconButton(
-            onPressed: () {},
+            onPressed: () {
+              showDialog(
+                  context: context,
+                  builder: (context) => const DeleteConfirmationPopup());
+            },
             icon: Icon(
               Icons.delete,
               color: ColorsRes.red,
@@ -272,7 +228,7 @@ Widget agentsList(String? pic, String? name, DateTime? date) {
   );
 }
 
-Widget agentsListMobile(String? pic, String? name, DateTime? date) {
+Widget agentsListMobile(String? pic, String? name, String? date) {
   return Container(
     margin: EdgeInsets.only(top: 2.w),
     decoration: DesignConfig.boxDecorationContainerCardShadow(
@@ -314,7 +270,7 @@ Widget agentsListMobile(String? pic, String? name, DateTime? date) {
                   height: 1.w,
                 ),
                 Text(
-                  'Created On: 20 oct, 2022',
+                  date!,
                   textAlign: TextAlign.left,
                   style: TextStyle(
                     fontSize: 2.8.w,
@@ -361,6 +317,15 @@ class CreateAgentSection extends StatefulWidget {
 }
 
 class _CreateAgentSectionState extends State<CreateAgentSection> {
+  String? selectedValue;
+  final TextEditingController textEditingController = TextEditingController();
+
+  @override
+  void dispose() {
+    textEditingController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Expanded(
@@ -369,7 +334,7 @@ class _CreateAgentSectionState extends State<CreateAgentSection> {
         padding: EdgeInsets.all(1.5.w),
         decoration: DesignConfig.boxDecorationContainerCardShadow(
             ColorsRes.white,
-            Color.fromRGBO(44, 39, 46, 0.059),
+            const Color.fromRGBO(44, 39, 46, 0.059),
             16.0,
             3,
             3,
@@ -381,8 +346,14 @@ class _CreateAgentSectionState extends State<CreateAgentSection> {
             Row(
               children: [
                 Expanded(
-                  child: DesignConfig.inputBoxDecorated(const Color(0xFFf9f9f9),
-                      1.5.w, 2.2.w, 'Enter agent name', Icons.person, 3.w),
+                  child: DesignConfig.inputBoxDecorated(
+                      const Color(0xFFf9f9f9),
+                      1.5.w,
+                      2.2.w,
+                      'Enter client name',
+                      Icons.person,
+                      3.w,
+                      TextInputType.text),
                 ),
                 Expanded(
                   child: DesignConfig.inputBoxDecorated(
@@ -391,27 +362,52 @@ class _CreateAgentSectionState extends State<CreateAgentSection> {
                       2.2.w,
                       'Enter mobile number',
                       Icons.mobile_friendly,
-                      3.w),
+                      3.w,
+                      TextInputType.phone),
                 ),
               ],
             ),
             Row(
               children: [
                 Expanded(
-                  child: DesignConfig.inputBoxDecorated(const Color(0xFFf9f9f9),
-                      1.5.w, 2.2.w, 'Pair rate', Icons.monetization_on, 3.w),
+                  child: DesignConfig.inputBoxDecorated(
+                      const Color(0xFFf9f9f9),
+                      1.5.w,
+                      2.2.w,
+                      'Pair rate',
+                      Icons.monetization_on,
+                      3.w,
+                      TextInputType.number),
                 ),
                 Expanded(
-                  child: DesignConfig.inputBoxDecorated(const Color(0xFFf9f9f9),
-                      1.5.w, 2.2.w, 'In out rate', Icons.monetization_on, 3.w),
+                  child: DesignConfig.inputBoxDecorated(
+                      const Color(0xFFf9f9f9),
+                      1.5.w,
+                      2.2.w,
+                      'In out rate',
+                      Icons.monetization_on,
+                      3.w,
+                      TextInputType.number),
                 ),
                 Expanded(
-                  child: DesignConfig.inputBoxDecorated(const Color(0xFFf9f9f9),
-                      1.5.w, 2.2.w, 'Commission', Icons.monetization_on, 3.w),
+                  child: DesignConfig.inputBoxDecorated(
+                      const Color(0xFFf9f9f9),
+                      1.5.w,
+                      2.2.w,
+                      'Commission',
+                      Icons.monetization_on,
+                      3.w,
+                      TextInputType.number),
                 ),
                 Expanded(
-                  child: DesignConfig.inputBoxDecorated(const Color(0xFFf9f9f9),
-                      1.5.w, 2.2.w, 'Patti', Icons.pattern, 3.w),
+                  child: DesignConfig.inputBoxDecorated(
+                      const Color(0xFFf9f9f9),
+                      1.5.w,
+                      2.2.w,
+                      'Patti',
+                      Icons.pattern,
+                      3.w,
+                      TextInputType.number),
                 ),
               ],
             ),
@@ -424,15 +420,90 @@ class _CreateAgentSectionState extends State<CreateAgentSection> {
                       2.2.w,
                       'Bid limit',
                       Icons.production_quantity_limits,
-                      3.w),
+                      3.w,
+                      TextInputType.number),
                 ),
                 Expanded(
-                  child: DesignConfig.inputBoxDecorated(const Color(0xFFf9f9f9),
-                      1.5.w, 2.2.w, 'Daily incentive', Icons.credit_card, 3.w),
-                ),
-                Expanded(
-                  child: DesignConfig.inputBoxDecorated(const Color(0xFFf9f9f9),
-                      1.5.w, 2.2.w, 'Preference', Icons.person_add, 3.w),
+                  child: Card(
+                    margin: EdgeInsets.only(left: 1.w, right: 1.w, top: 2.w),
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(1.5.w)),
+                    elevation: 0,
+                    color: const Color(0xFFf9f9f9),
+                    child: Padding(
+                      padding: EdgeInsets.only(left: 1.w),
+                      child: DropdownButtonHideUnderline(
+                        child: DropdownButton2(
+                          dropdownDecoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(8),
+                            color: const Color(0xFFf9f9f9),
+                          ),
+                          isExpanded: true,
+                          hint: Text(
+                            'Select Reference',
+                            style: TextStyle(
+                              fontSize: 2.2.w,
+                              color: const Color.fromARGB(255, 174, 174, 174),
+                            ),
+                          ),
+                          items: agents
+                              .map((item) => DropdownMenuItem<String>(
+                                    value: item.name,
+                                    child: Text(
+                                      item.name.toString(),
+                                      style: const TextStyle(
+                                        fontSize: 14,
+                                      ),
+                                    ),
+                                  ))
+                              .toList(),
+                          value: selectedValue,
+                          onChanged: (value) {
+                            setState(() {
+                              selectedValue = value as String;
+                            });
+                          },
+                          //itemHeight: 40,
+                          dropdownMaxHeight: 300,
+                          searchController: textEditingController,
+                          searchInnerWidget: Padding(
+                            padding: const EdgeInsets.only(
+                              top: 8,
+                              bottom: 4,
+                              right: 8,
+                              left: 8,
+                            ),
+                            child: TextFormField(
+                              controller: textEditingController,
+                              decoration: InputDecoration(
+                                isDense: true,
+                                // contentPadding: const EdgeInsets.symmetric(
+                                //   horizontal: 10,
+                                //   vertical: 8,
+                                // ),
+                                hintText: 'Search for agents...',
+                                hintStyle: const TextStyle(fontSize: 12),
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                              ),
+                            ),
+                          ),
+                          searchMatchFn: (item, searchValue) {
+                            return (item.value
+                                .toString()
+                                .contains(searchValue));
+                          },
+                          //This to clear the search value when you close the menu
+                          onMenuStateChange: (isOpen) {
+                            if (!isOpen) {
+                              textEditingController.clear();
+                            }
+                          },
+                        ),
+                      ),
+                    ),
+                  ),
                 ),
               ],
             ),
@@ -441,7 +512,19 @@ class _CreateAgentSectionState extends State<CreateAgentSection> {
             ),
             Row(
               children: [
-                Expanded(child: Container()),
+                Expanded(
+                  child: DesignConfig.inputBoxDecorated(
+                      const Color(0xFFf9f9f9),
+                      1.5.w,
+                      2.2.w,
+                      'Daily incentive',
+                      Icons.credit_card,
+                      3.w,
+                      TextInputType.number),
+                ),
+                SizedBox(
+                  width: 1.w,
+                ),
                 Card(
                   margin: EdgeInsets.only(right: 1.w),
                   color: ColorsRes.mainBlue,
@@ -489,36 +572,72 @@ class _CreateAgentSectionMobileState extends State<CreateAgentSectionMobile> {
           Row(
             children: [
               Expanded(
-                child: DesignConfig.inputBoxDecorated(const Color(0xFFf9f9f9),
-                    1.5.w, 4.w, 'Agent name', Icons.person, 5.w),
+                child: DesignConfig.inputBoxDecorated(
+                    const Color(0xFFf9f9f9),
+                    1.5.w,
+                    4.w,
+                    'Agent name',
+                    Icons.person,
+                    5.w,
+                    TextInputType.text),
               ),
               Expanded(
-                child: DesignConfig.inputBoxDecorated(const Color(0xFFf9f9f9),
-                    1.5.w, 4.w, 'Mobile number', Icons.mobile_friendly, 5.w),
-              ),
-            ],
-          ),
-          Row(
-            children: [
-              Expanded(
-                child: DesignConfig.inputBoxDecorated(const Color(0xFFf9f9f9),
-                    1.5.w, 4.w, 'Pair rate', Icons.monetization_on, 5.w),
-              ),
-              Expanded(
-                child: DesignConfig.inputBoxDecorated(const Color(0xFFf9f9f9),
-                    1.5.w, 4.w, 'In out rate', Icons.monetization_on, 5.w),
-              ),
-              Expanded(
-                child: DesignConfig.inputBoxDecorated(const Color(0xFFf9f9f9),
-                    1.5.w, 4.w, 'Commission', Icons.monetization_on, 5.w),
+                child: DesignConfig.inputBoxDecorated(
+                    const Color(0xFFf9f9f9),
+                    1.5.w,
+                    4.w,
+                    'Mobile number',
+                    Icons.mobile_friendly,
+                    5.w,
+                    TextInputType.phone),
               ),
             ],
           ),
           Row(
             children: [
               Expanded(
-                child: DesignConfig.inputBoxDecorated(const Color(0xFFf9f9f9),
-                    1.5.w, 4.w, 'Patti', Icons.pattern, 5.w),
+                child: DesignConfig.inputBoxDecorated(
+                    const Color(0xFFf9f9f9),
+                    1.5.w,
+                    4.w,
+                    'Pair rate',
+                    Icons.monetization_on,
+                    5.w,
+                    TextInputType.number),
+              ),
+              Expanded(
+                child: DesignConfig.inputBoxDecorated(
+                    const Color(0xFFf9f9f9),
+                    1.5.w,
+                    4.w,
+                    'In out rate',
+                    Icons.monetization_on,
+                    5.w,
+                    TextInputType.number),
+              ),
+              Expanded(
+                child: DesignConfig.inputBoxDecorated(
+                    const Color(0xFFf9f9f9),
+                    1.5.w,
+                    4.w,
+                    'Commission',
+                    Icons.monetization_on,
+                    5.w,
+                    TextInputType.number),
+              ),
+            ],
+          ),
+          Row(
+            children: [
+              Expanded(
+                child: DesignConfig.inputBoxDecorated(
+                    const Color(0xFFf9f9f9),
+                    1.5.w,
+                    4.w,
+                    'Patti',
+                    Icons.pattern,
+                    5.w,
+                    TextInputType.number),
               ),
               Expanded(
                 child: DesignConfig.inputBoxDecorated(
@@ -527,11 +646,18 @@ class _CreateAgentSectionMobileState extends State<CreateAgentSectionMobile> {
                     4.w,
                     'Bid limit',
                     Icons.production_quantity_limits,
-                    5.w),
+                    5.w,
+                    TextInputType.number),
               ),
               Expanded(
-                child: DesignConfig.inputBoxDecorated(const Color(0xFFf9f9f9),
-                    1.5.w, 4.w, 'Daily incentive', Icons.credit_card, 5.w),
+                child: DesignConfig.inputBoxDecorated(
+                    const Color(0xFFf9f9f9),
+                    1.5.w,
+                    4.w,
+                    'Daily incentive',
+                    Icons.credit_card,
+                    5.w,
+                    TextInputType.number),
               ),
             ],
           ),
@@ -540,8 +666,14 @@ class _CreateAgentSectionMobileState extends State<CreateAgentSectionMobile> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Expanded(
-                child: DesignConfig.inputBoxDecorated(const Color(0xFFf9f9f9),
-                    1.5.w, 4.w, 'Preference', Icons.person_add, 5.w),
+                child: DesignConfig.inputBoxDecorated(
+                    const Color(0xFFf9f9f9),
+                    1.5.w,
+                    4.w,
+                    'Reference',
+                    Icons.person_add,
+                    5.w,
+                    TextInputType.text),
               ),
               SizedBox(
                 width: 2.w,

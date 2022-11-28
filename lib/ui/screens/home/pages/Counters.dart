@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:ms_sheet/data/models/agents_model.dart';
+import 'package:ms_sheet/global.dart' as global;
 import 'package:ms_sheet/ui/styles/color.dart';
 import 'package:ms_sheet/ui/styles/design.dart';
 import 'package:ms_sheet/widgets/player_limit_popup.dart';
@@ -11,51 +11,6 @@ class Counters extends StatefulWidget {
 }
 
 class _SheetsState extends State<Counters> {
-  final List<AgentsModel> agents = [
-    AgentsModel(
-      id: '1',
-      name: 'Counter 1',
-      date: DateTime.now(),
-      picture:
-          'https://www.soycarmin.com/__export/1658099176495/sites/debate/img/2022/07/17/chris-evans-novia_crop1658098869098.jpg_943222218.jpg',
-    ),
-    AgentsModel(
-      id: '2',
-      name: 'Counter 2',
-      date: DateTime.now(),
-      picture:
-          'https://assets.myntassets.com/dpr_1.5,q_60,w_400,c_limit,fl_progressive/assets/images/16407468/2021/12/28/fce7ca1e-01ec-4c12-a90f-c7b75abda0e01640669480687-Difference-of-Opinion-Men-Tshirts-4021640669480120-1.jpg',
-    ),
-    AgentsModel(
-      id: '3',
-      name: 'Counter 3',
-      date: DateTime.now(),
-      picture:
-          'https://image.shutterstock.com/image-photo/casually-handsome-confident-young-man-260nw-439433326.jpg',
-    ),
-    AgentsModel(
-      id: '4',
-      name: 'Counter 4',
-      date: DateTime.now(),
-      picture:
-          'https://www.muscleandfitness.com/wp-content/uploads/2015/08/what_makes_a_man_more_manly_main0.jpg?quality=86&strip=all',
-    ),
-    AgentsModel(
-      id: '5',
-      name: 'Counter 5',
-      date: DateTime.now(),
-      picture:
-          'https://www.muscleandfitness.com/wp-content/uploads/2015/08/what_makes_a_man_more_manly_main0.jpg?quality=86&strip=all',
-    ),
-    AgentsModel(
-      id: '6',
-      name: 'Counter 6',
-      date: DateTime.now(),
-      picture:
-          'https://www.muscleandfitness.com/wp-content/uploads/2015/08/what_makes_a_man_more_manly_main0.jpg?quality=86&strip=all',
-    ),
-  ];
-
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -68,7 +23,7 @@ class _SheetsState extends State<Counters> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Column(
-              children: agents.map((e) {
+              children: global.agents.map((e) {
                 return agentsList(e.picture, e.name, e.date, context);
               }).toList(),
             ),
@@ -99,7 +54,8 @@ class _SheetsState extends State<Counters> {
                               2.2.w,
                               'Enter agent name',
                               Icons.person,
-                              3.w),
+                              3.w,
+                              TextInputType.name),
                         ),
                         Expanded(
                           child: DesignConfig.inputBoxDecorated(
@@ -108,7 +64,8 @@ class _SheetsState extends State<Counters> {
                               2.2.w,
                               'Enter mobile number',
                               Icons.mobile_friendly,
-                              3.w),
+                              3.w,
+                              TextInputType.phone),
                         ),
                       ],
                     ),
@@ -121,7 +78,8 @@ class _SheetsState extends State<Counters> {
                               2.2.w,
                               'Pair rate',
                               Icons.monetization_on,
-                              3.w),
+                              3.w,
+                              TextInputType.number),
                         ),
                         Expanded(
                           child: DesignConfig.inputBoxDecorated(
@@ -130,7 +88,8 @@ class _SheetsState extends State<Counters> {
                               2.2.w,
                               'In out rate',
                               Icons.monetization_on,
-                              3.w),
+                              3.w,
+                              TextInputType.number),
                         ),
                         Expanded(
                           child: DesignConfig.inputBoxDecorated(
@@ -139,7 +98,8 @@ class _SheetsState extends State<Counters> {
                               2.2.w,
                               'Commission',
                               Icons.monetization_on,
-                              3.w),
+                              3.w,
+                              TextInputType.number),
                         ),
                         Expanded(
                           child: DesignConfig.inputBoxDecorated(
@@ -148,7 +108,8 @@ class _SheetsState extends State<Counters> {
                               2.2.w,
                               'Patti',
                               Icons.pattern,
-                              3.w),
+                              3.w,
+                              TextInputType.number),
                         ),
                       ],
                     ),
@@ -255,7 +216,7 @@ Widget topBar() {
 }
 
 Widget agentsList(
-    String? pic, String? name, DateTime? date, BuildContext context) {
+    String? pic, String? name, String? date, BuildContext context) {
   return Container(
     width: 50.w,
     margin: EdgeInsets.only(top: 1.w),
@@ -295,7 +256,7 @@ Widget agentsList(
                       color: const Color.fromARGB(255, 0, 0, 0)),
                 ),
                 Text(
-                  'Created On: 20 oct, 2022',
+                  date!,
                   textAlign: TextAlign.left,
                   style: TextStyle(
                     fontSize: 1.3.w,
@@ -324,7 +285,7 @@ Widget agentsList(
             onPressed: () {
               showDialog(
                   context: context,
-                  builder: (context) => PlayerLimitPopup(name, pic));
+                  builder: (context) => PlayerLimitPopup(name, pic, date));
             },
             icon: Icon(
               Icons.edit_note,

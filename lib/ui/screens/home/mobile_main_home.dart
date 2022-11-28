@@ -154,7 +154,7 @@ Widget userDetails() {
       ClipRRect(
         borderRadius: BorderRadius.circular(6.w),
         child: Image.network(
-          'https://t4.ftcdn.net/jpg/02/24/86/95/360_F_224869519_aRaeLneqALfPNBzg0xxMZXghtvBXkfIA.jpg',
+          'https://cdn-icons-png.flaticon.com/256/149/149071.png',
           height: 10.w,
           width: 10.w,
           fit: BoxFit.cover,
@@ -170,7 +170,7 @@ Widget userDetails() {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Aeimesh',
+              'Jay T',
               textAlign: TextAlign.left,
               style: TextStyle(
                   fontSize: 4.w,
@@ -178,7 +178,7 @@ Widget userDetails() {
                   color: const Color.fromARGB(255, 0, 0, 0)),
             ),
             Text(
-              '+91 854662548',
+              '+91 1234567890',
               textAlign: TextAlign.left,
               style: TextStyle(
                 fontSize: 2.8.w,

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:iconly/iconly.dart';
-import 'package:ms_sheet/data/models/agents_model.dart';
-import 'package:sizer/sizer.dart';
+import 'package:ms_sheet/global.dart' as global;
 import 'package:ms_sheet/ui/styles/color.dart';
 import 'package:ms_sheet/ui/styles/design.dart';
+import 'package:sizer/sizer.dart';
 
 class ShareHistory extends StatefulWidget {
   @override
@@ -11,37 +11,6 @@ class ShareHistory extends StatefulWidget {
 }
 
 class _SheetsState extends State<ShareHistory> {
-  final List<AgentsModel> agents = [
-    AgentsModel(
-      id: '1',
-      name: 'Cris Evans',
-      date: DateTime.now(),
-      picture:
-          'https://www.soycarmin.com/__export/1658099176495/sites/debate/img/2022/07/17/chris-evans-novia_crop1658098869098.jpg_943222218.jpg',
-    ),
-    AgentsModel(
-      id: '2',
-      name: 'Agent 2',
-      date: DateTime.now(),
-      picture:
-          'https://assets.myntassets.com/dpr_1.5,q_60,w_400,c_limit,fl_progressive/assets/images/16407468/2021/12/28/fce7ca1e-01ec-4c12-a90f-c7b75abda0e01640669480687-Difference-of-Opinion-Men-Tshirts-4021640669480120-1.jpg',
-    ),
-    AgentsModel(
-      id: '3',
-      name: 'Agent 3',
-      date: DateTime.now(),
-      picture:
-          'https://image.shutterstock.com/image-photo/casually-handsome-confident-young-man-260nw-439433326.jpg',
-    ),
-    AgentsModel(
-      id: '4',
-      name: 'Agent 4',
-      date: DateTime.now(),
-      picture:
-          'https://www.muscleandfitness.com/wp-content/uploads/2015/08/what_makes_a_man_more_manly_main0.jpg?quality=86&strip=all',
-    ),
-  ];
-
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -55,7 +24,7 @@ class _SheetsState extends State<ShareHistory> {
           children: [
             Expanded(
               child: Column(
-                children: agents.map((e) {
+                children: global.agents.map((e) {
                   return agentsList(e.picture, e.name, e.date);
                 }).toList(),
               ),
@@ -132,7 +101,7 @@ Widget topBar() {
   );
 }
 
-Widget agentsList(String? pic, String? name, DateTime? date) {
+Widget agentsList(String? pic, String? name, String? date) {
   return Container(
     // width: 50.w,
     margin: EdgeInsets.only(top: 1.w),
@@ -172,7 +141,7 @@ Widget agentsList(String? pic, String? name, DateTime? date) {
                       color: const Color.fromARGB(255, 0, 0, 0)),
                 ),
                 Text(
-                  'Created On: 20 oct, 2022',
+                  date!,
                   textAlign: TextAlign.left,
                   style: TextStyle(
                     fontSize: 1.3.w,

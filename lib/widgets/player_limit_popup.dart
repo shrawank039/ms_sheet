@@ -5,9 +5,10 @@ import '../ui/styles/color.dart';
 
 class PlayerLimitPopup extends StatelessWidget {
   final String name;
+  final String date;
   final String pic;
 
-  PlayerLimitPopup(this.name, this.pic);
+  PlayerLimitPopup(this.name, this.pic, this.date);
 
   @override
   Widget build(BuildContext context) {
@@ -75,7 +76,7 @@ class PlayerLimitPopup extends StatelessWidget {
                               color: const Color.fromARGB(255, 0, 0, 0)),
                         ),
                         Text(
-                          'Created On: 20 oct, 2022',
+                          date,
                           textAlign: TextAlign.left,
                           style: TextStyle(
                             fontSize: 1.3.w,

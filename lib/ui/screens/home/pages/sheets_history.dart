@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:iconly/iconly.dart';
-import 'package:ms_sheet/data/models/agents_model.dart';
+import 'package:ms_sheet/global.dart' as global;
 import 'package:ms_sheet/ui/screens/panels/main_panel.dart';
 import 'package:ms_sheet/ui/styles/color.dart';
 import 'package:ms_sheet/ui/styles/design.dart';
@@ -12,37 +12,6 @@ class SheetsHistory extends StatefulWidget {
 }
 
 class _SheetsHistoryState extends State<SheetsHistory> {
-  final List<AgentsModel> agents = [
-    AgentsModel(
-      id: '1',
-      name: 'Sheet 1',
-      date: DateTime.now(),
-      picture:
-          'https://play-lh.googleusercontent.com/2MmaqnAOoKUMtoJYqCa91T7rlHIM9Smj-TSdXHEvv9IQf--UfEGUhZmriGrpZ6PmTg',
-    ),
-    AgentsModel(
-      id: '2',
-      name: 'Sheet 2',
-      date: DateTime.now(),
-      picture:
-          'https://play-lh.googleusercontent.com/2MmaqnAOoKUMtoJYqCa91T7rlHIM9Smj-TSdXHEvv9IQf--UfEGUhZmriGrpZ6PmTg',
-    ),
-    AgentsModel(
-      id: '3',
-      name: 'Sheet 3',
-      date: DateTime.now(),
-      picture:
-          'https://play-lh.googleusercontent.com/2MmaqnAOoKUMtoJYqCa91T7rlHIM9Smj-TSdXHEvv9IQf--UfEGUhZmriGrpZ6PmTg',
-    ),
-    AgentsModel(
-      id: '4',
-      name: 'Sheet 4',
-      date: DateTime.now(),
-      picture:
-          'https://play-lh.googleusercontent.com/2MmaqnAOoKUMtoJYqCa91T7rlHIM9Smj-TSdXHEvv9IQf--UfEGUhZmriGrpZ6PmTg',
-    ),
-  ];
-
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -56,7 +25,7 @@ class _SheetsHistoryState extends State<SheetsHistory> {
           children: [
             Expanded(
               child: Column(
-                children: agents.map((e) {
+                children: global.sheets.map((e) {
                   return sheetsList(e.picture, e.name, e.date, context);
                 }).toList(),
               ),
@@ -134,7 +103,7 @@ Widget topBar() {
 }
 
 Widget sheetsList(
-    String? pic, String? name, DateTime? date, BuildContext context) {
+    String? pic, String? name, String? date, BuildContext context) {
   return Container(
     // width: 50.w,
     margin: EdgeInsets.only(top: 1.w),
@@ -174,7 +143,7 @@ Widget sheetsList(
                       color: const Color.fromARGB(255, 0, 0, 0)),
                 ),
                 Text(
-                  'Created On: 20 oct, 2022',
+                  date!,
                   textAlign: TextAlign.left,
                   style: TextStyle(
                     fontSize: 1.3.w,

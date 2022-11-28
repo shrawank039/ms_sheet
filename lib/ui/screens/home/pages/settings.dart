@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:iconly/iconly.dart';
-import 'package:ms_sheet/data/models/agents_model.dart';
 import 'package:ms_sheet/ui/screens/home/pages/settings/add_sheets.dart';
 import 'package:ms_sheet/ui/styles/color.dart';
 import 'package:ms_sheet/ui/styles/design.dart';
@@ -13,37 +12,6 @@ class Settings extends StatefulWidget {
 }
 
 class _SettingsState extends State<Settings> {
-  final List<AgentsModel> agents = [
-    AgentsModel(
-      id: '1',
-      name: 'Cris Evans',
-      date: DateTime.now(),
-      picture:
-          'https://www.soycarmin.com/__export/1658099176495/sites/debate/img/2022/07/17/chris-evans-novia_crop1658098869098.jpg_943222218.jpg',
-    ),
-    AgentsModel(
-      id: '2',
-      name: 'Arshad Ahmad',
-      date: DateTime.now(),
-      picture:
-          'https://assets.myntassets.com/dpr_1.5,q_60,w_400,c_limit,fl_progressive/assets/images/16407468/2021/12/28/fce7ca1e-01ec-4c12-a90f-c7b75abda0e01640669480687-Difference-of-Opinion-Men-Tshirts-4021640669480120-1.jpg',
-    ),
-    AgentsModel(
-      id: '3',
-      name: 'Aeimesh Khan',
-      date: DateTime.now(),
-      picture:
-          'https://image.shutterstock.com/image-photo/casually-handsome-confident-young-man-260nw-439433326.jpg',
-    ),
-    AgentsModel(
-      id: '4',
-      name: 'Imran Khan',
-      date: DateTime.now(),
-      picture:
-          'https://www.muscleandfitness.com/wp-content/uploads/2015/08/what_makes_a_man_more_manly_main0.jpg?quality=86&strip=all',
-    ),
-  ];
-
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -261,7 +229,7 @@ Widget userDetails() {
       ClipRRect(
         borderRadius: BorderRadius.circular(2.2.w),
         child: Image.network(
-          'https://t4.ftcdn.net/jpg/02/24/86/95/360_F_224869519_aRaeLneqALfPNBzg0xxMZXghtvBXkfIA.jpg',
+          'https://cdn-icons-png.flaticon.com/256/149/149071.png',
           height: 7.w,
           width: 7.w,
           fit: BoxFit.cover,
@@ -274,7 +242,7 @@ Widget userDetails() {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Aeimesh',
+              'Jay T',
               textAlign: TextAlign.left,
               style: TextStyle(
                   fontSize: 2.w,
@@ -282,7 +250,7 @@ Widget userDetails() {
                   color: const Color.fromARGB(255, 0, 0, 0)),
             ),
             Text(
-              '+91 854662548',
+              '+91 1234567890',
               textAlign: TextAlign.left,
               style: TextStyle(
                 fontSize: 1.5.w,
@@ -397,7 +365,7 @@ Widget settingButtons(IconData icon, String title, String subtitle) {
   );
 }
 
-Widget transactionList(String? pic, String? name, DateTime? date) {
+Widget transactionList(String? pic, String? name, String? date) {
   return Container(
     margin: EdgeInsets.only(top: 1.w),
     decoration: DesignConfig.boxDecorationContainerCardShadow(
@@ -436,7 +404,7 @@ Widget transactionList(String? pic, String? name, DateTime? date) {
                       color: const Color.fromARGB(255, 0, 0, 0)),
                 ),
                 Text(
-                  'Created On: 20 oct, 2022',
+                  date!,
                   textAlign: TextAlign.left,
                   style: TextStyle(
                     fontSize: 1.3.w,

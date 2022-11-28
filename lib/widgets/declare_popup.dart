@@ -3,7 +3,33 @@ import 'package:sizer/sizer.dart';
 
 import '../ui/styles/color.dart';
 
-class DeclarePopup extends StatelessWidget {
+class DeclarePopup extends StatefulWidget {
+  const DeclarePopup({super.key});
+
+  @override
+  State<DeclarePopup> createState() => _DeclarePopupState();
+}
+
+class _DeclarePopupState extends State<DeclarePopup> {
+  final resultController = TextEditingController();
+  final firstDigitController = TextEditingController();
+  final secondDigitController = TextEditingController();
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    resultController.dispose();
+    firstDigitController.dispose();
+    secondDigitController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Dialog(
@@ -54,6 +80,19 @@ class DeclarePopup extends StatelessWidget {
                     child: Padding(
                       padding: EdgeInsets.only(left: 1.w),
                       child: TextField(
+                        // maxLength: 2,
+                        controller: resultController,
+                        onChanged: (val) {
+                          if (resultController.text.length == 2) {
+                            setState(() {
+                              firstDigitController.text =
+                                  resultController.text[0];
+                              secondDigitController.text =
+                                  resultController.text[1];
+                            });
+                          }
+                        },
+                        keyboardType: TextInputType.number,
                         textAlign: TextAlign.center,
                         style: TextStyle(
                             fontSize: 3.w,
@@ -92,6 +131,9 @@ class DeclarePopup extends StatelessWidget {
                     child: Padding(
                       padding: EdgeInsets.only(left: 1.w),
                       child: TextField(
+                        controller: firstDigitController,
+                        //maxLength: 1,
+                        keyboardType: TextInputType.number,
                         textAlign: TextAlign.center,
                         style: TextStyle(
                             fontSize: 3.w,
@@ -103,7 +145,7 @@ class DeclarePopup extends StatelessWidget {
                           //   color: ColorsRes.darkGrey,
                           // ),
                           isDense: true,
-                          hintText: '00',
+                          hintText: '0',
                           hintStyle:
                               TextStyle(color: Color.fromARGB(50, 0, 0, 0)),
                           border:
@@ -126,6 +168,9 @@ class DeclarePopup extends StatelessWidget {
                     child: Padding(
                       padding: EdgeInsets.only(left: 1.w),
                       child: TextField(
+                        // maxLength: 1,
+                        controller: secondDigitController,
+                        keyboardType: TextInputType.number,
                         textAlign: TextAlign.center,
                         style: TextStyle(
                             fontSize: 3.w,
@@ -137,7 +182,7 @@ class DeclarePopup extends StatelessWidget {
                           //   color: ColorsRes.darkGrey,
                           // ),
                           isDense: true,
-                          hintText: '00',
+                          hintText: '0',
                           hintStyle:
                               TextStyle(color: Color.fromARGB(50, 0, 0, 0)),
                           border:
@@ -163,15 +208,24 @@ class DeclarePopup extends StatelessWidget {
                       elevation: 0,
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(1.6.w)),
-                      child: Container(
-                        height: 6.w,
-                        width: 25.w,
-                        alignment: Alignment.center,
-                        child: Text(
-                          'Un-Declare',
-                          textAlign: TextAlign.center,
-                          style:
-                              TextStyle(color: ColorsRes.white, fontSize: 2.w),
+                      child: InkWell(
+                        onTap: () {
+                          setState(() {
+                            firstDigitController.text = '';
+                            secondDigitController.text = '';
+                            resultController.text = '';
+                          });
+                        },
+                        child: Container(
+                          height: 6.w,
+                          width: 25.w,
+                          alignment: Alignment.center,
+                          child: Text(
+                            'Un-Declare',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                color: ColorsRes.white, fontSize: 2.w),
+                          ),
                         ),
                       ),
                     ),
@@ -183,15 +237,24 @@ class DeclarePopup extends StatelessWidget {
                       elevation: 0,
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(1.6.w)),
-                      child: Container(
-                        height: 6.w,
-                        width: 25.w,
-                        alignment: Alignment.center,
-                        child: Text(
-                          'Declare',
-                          textAlign: TextAlign.center,
-                          style:
-                              TextStyle(color: ColorsRes.white, fontSize: 2.w),
+                      child: InkWell(
+                        onTap: () {
+                          setState(() {
+                            firstDigitController.text = '';
+                            secondDigitController.text = '';
+                            resultController.text = '';
+                          });
+                        },
+                        child: Container(
+                          height: 6.w,
+                          width: 25.w,
+                          alignment: Alignment.center,
+                          child: Text(
+                            'Declare',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                color: ColorsRes.white, fontSize: 2.w),
+                          ),
                         ),
                       ),
                     ),

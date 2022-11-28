@@ -2,7 +2,7 @@ class AgentsModel {
   String? id;
   String? name;
   String? picture;
-  DateTime? date;
+  String? date;
 
   AgentsModel({
     this.id,
