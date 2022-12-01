@@ -20,7 +20,236 @@ class _SheetsState extends State<Wallet> {
         SizedBox(
           height: 3.w,
         ),
-        Row(
+        body(context)
+      ],
+    );
+  }
+}
+
+// Widgets -----------------------------------------------------------------------------------------------------------------------------------------------------------------
+Widget body(BuildContext context) {
+  bool mobile = MediaQuery.of(context).size.width < 640;
+
+  return mobile == true
+      ? Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Column(
+              children: [
+                Container(
+                    margin: EdgeInsets.only(top: 1.w),
+                    padding: EdgeInsets.only(top: 4.w, bottom: 2.w),
+                    decoration: DesignConfig.boxDecorationContainerCardShadow(
+                        ColorsRes.white,
+                        const Color.fromRGBO(44, 39, 46, 0.059),
+                        16.0,
+                        3,
+                        3,
+                        20,
+                        0),
+                    child: Column(
+                      children: [
+                        Row(
+                          children: [
+                            Expanded(
+                              child: Column(
+                                children: [
+                                  Text(
+                                    '1750.00',
+                                    style: TextStyle(
+                                        color: ColorsRes.mainBlue,
+                                        fontFamily: 'Spartan',
+                                        fontSize: 3.w,
+                                        fontWeight: FontWeight.w600),
+                                  ),
+                                  SizedBox(
+                                    height: 1.w,
+                                  ),
+                                  Text(
+                                    'In Amount',
+                                    style: TextStyle(
+                                      color: Color(0xFF979FC6),
+                                      fontSize: 2.w,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Container(
+                              height: 5.w,
+                              width: 1,
+                              color: ColorsRes.greyLightColor,
+                            ),
+                            Expanded(
+                              child: Column(
+                                children: [
+                                  Text(
+                                    '1200.00',
+                                    style: TextStyle(
+                                        color: ColorsRes.green,
+                                        fontFamily: 'Spartan',
+                                        fontSize: 3.w,
+                                        fontWeight: FontWeight.w600),
+                                  ),
+                                  SizedBox(
+                                    height: 1.w,
+                                  ),
+                                  Text(
+                                    'Out Amount',
+                                    style: TextStyle(
+                                      color: Color(0xFF979FC6),
+                                      fontSize: 2.w,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                        SizedBox(
+                          height: 3.w,
+                        ),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: GestureDetector(
+                                onTap: () {},
+                                child: Card(
+                                  margin:
+                                      EdgeInsets.symmetric(horizontal: 2.2.w),
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius:
+                                          BorderRadius.circular(1.2.w)),
+                                  color: Color(0xFFf9f9f9),
+                                  elevation: 0,
+                                  child: Container(
+                                    padding:
+                                        EdgeInsets.symmetric(vertical: 1.w),
+                                    alignment: Alignment.center,
+                                    child: const Text(
+                                      'View Reports',
+                                      style:
+                                          TextStyle(color: ColorsRes.mainBlue),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    )),
+                SizedBox(
+                  height: 3.w,
+                ),
+                Row(
+                  children: [
+                    Expanded(
+                      child: GestureDetector(
+                        onTap: (() {
+                          showDialog(
+                              context: context,
+                              builder: (context) => KhataEntryPopup());
+                        }),
+                        child: Container(
+                          padding: EdgeInsets.symmetric(
+                              horizontal: 1.6.w, vertical: 1.5.w),
+                          decoration:
+                              DesignConfig.boxDecorationContainerCardShadow(
+                                  ColorsRes.white,
+                                  Color.fromRGBO(44, 39, 46, 0.059),
+                                  16,
+                                  3,
+                                  3,
+                                  20,
+                                  0),
+                          child: Row(
+                            children: [
+                              Card(
+                                color: ColorsRes.mainBlue,
+                                elevation: 0,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(1.6.w),
+                                ),
+                                child: Padding(
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: 2.w, vertical: 1.w),
+                                  child: Text(
+                                    '₹',
+                                    style: TextStyle(
+                                        fontSize: 2.5.w,
+                                        color:
+                                            Color.fromARGB(255, 255, 255, 255)),
+                                  ),
+                                ),
+                              ),
+                              SizedBox(
+                                width: 1.3.w,
+                              ),
+                              Padding(
+                                padding: EdgeInsets.all(0.5.w),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      'Create New Entry',
+                                      textAlign: TextAlign.left,
+                                      style: TextStyle(
+                                          fontSize: 1.9.w,
+                                          fontWeight: FontWeight.w500,
+                                          color: Color.fromARGB(255, 0, 0, 0)),
+                                    ),
+                                    Text(
+                                      'Daily Entry',
+                                      textAlign: TextAlign.left,
+                                      style: TextStyle(
+                                        fontSize: 1.3.w,
+                                        fontWeight: FontWeight.w300,
+                                        color: Colors.grey,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              Expanded(child: Container()),
+                              Card(
+                                color: ColorsRes.lightBlue,
+                                elevation: 0,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(3.w),
+                                ),
+                                child: Padding(
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: 2.w, vertical: 1.w),
+                                  child: Text(
+                                    '+',
+                                    style: TextStyle(
+                                        fontSize: 2.5.w,
+                                        color: ColorsRes.mainBlue),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                )
+              ],
+            ),
+            SizedBox(
+              width: 3.w,
+            ),
+            Column(
+              children: global.agents.map((e) {
+                return transactionList(e.picture, e.name, e.date);
+              }).toList(),
+            ),
+          ],
+        )
+      : Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Expanded(
@@ -245,13 +474,8 @@ class _SheetsState extends State<Wallet> {
               ),
             ),
           ],
-        )
-      ],
-    );
-  }
+        );
 }
-
-// Widgets -----------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 Widget topBar() {
   return Row(

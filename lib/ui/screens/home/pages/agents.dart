@@ -38,7 +38,8 @@ class _SheetsState extends State<Agents> {
                     Expanded(
                       child: Column(
                         children: agents.map((e) {
-                          return agentsListMobile(e.picture, e.name, e.date);
+                          return agentsListMobile(
+                              e.picture, e.name, e.date, context);
                         }).toList(),
                       ),
                     ),
@@ -228,7 +229,8 @@ Widget agentsList(
   );
 }
 
-Widget agentsListMobile(String? pic, String? name, String? date) {
+Widget agentsListMobile(
+    String? pic, String? name, String? date, BuildContext context) {
   return Container(
     margin: EdgeInsets.only(top: 2.w),
     decoration: DesignConfig.boxDecorationContainerCardShadow(
@@ -285,7 +287,11 @@ Widget agentsListMobile(String? pic, String? name, String? date) {
             child: Container(),
           ),
           IconButton(
-            onPressed: () {},
+            onPressed: () {
+              showDialog(
+                  context: context,
+                  builder: (context) => const DeleteConfirmationPopup());
+            },
             icon: Icon(
               Icons.delete,
               color: ColorsRes.red,
@@ -328,224 +334,214 @@ class _CreateAgentSectionState extends State<CreateAgentSection> {
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      child: Container(
-        margin: EdgeInsets.only(top: 1.w),
-        padding: EdgeInsets.all(1.5.w),
-        decoration: DesignConfig.boxDecorationContainerCardShadow(
-            ColorsRes.white,
-            const Color.fromRGBO(44, 39, 46, 0.059),
-            16.0,
-            3,
-            3,
-            20,
-            0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                Expanded(
-                  child: DesignConfig.inputBoxDecorated(
-                      const Color(0xFFf9f9f9),
-                      1.5.w,
-                      2.2.w,
-                      'Enter client name',
-                      Icons.person,
-                      3.w,
-                      TextInputType.text),
-                ),
-                Expanded(
-                  child: DesignConfig.inputBoxDecorated(
-                      const Color(0xFFf9f9f9),
-                      1.5.w,
-                      2.2.w,
-                      'Enter mobile number',
-                      Icons.mobile_friendly,
-                      3.w,
-                      TextInputType.phone),
-                ),
-              ],
-            ),
-            Row(
-              children: [
-                Expanded(
-                  child: DesignConfig.inputBoxDecorated(
-                      const Color(0xFFf9f9f9),
-                      1.5.w,
-                      2.2.w,
-                      'Pair rate',
-                      Icons.monetization_on,
-                      3.w,
-                      TextInputType.number),
-                ),
-                Expanded(
-                  child: DesignConfig.inputBoxDecorated(
-                      const Color(0xFFf9f9f9),
-                      1.5.w,
-                      2.2.w,
-                      'In out rate',
-                      Icons.monetization_on,
-                      3.w,
-                      TextInputType.number),
-                ),
-                Expanded(
-                  child: DesignConfig.inputBoxDecorated(
-                      const Color(0xFFf9f9f9),
-                      1.5.w,
-                      2.2.w,
-                      'Commission',
-                      Icons.monetization_on,
-                      3.w,
-                      TextInputType.number),
-                ),
-                Expanded(
-                  child: DesignConfig.inputBoxDecorated(
-                      const Color(0xFFf9f9f9),
-                      1.5.w,
-                      2.2.w,
-                      'Patti',
-                      Icons.pattern,
-                      3.w,
-                      TextInputType.number),
-                ),
-              ],
-            ),
-            Row(
-              children: [
-                Expanded(
-                  child: DesignConfig.inputBoxDecorated(
-                      const Color(0xFFf9f9f9),
-                      1.5.w,
-                      2.2.w,
-                      'Bid limit',
-                      Icons.production_quantity_limits,
-                      3.w,
-                      TextInputType.number),
-                ),
-                Expanded(
-                  child: Card(
-                    margin: EdgeInsets.only(left: 1.w, right: 1.w, top: 2.w),
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(1.5.w)),
-                    elevation: 0,
-                    color: const Color(0xFFf9f9f9),
-                    child: Padding(
-                      padding: EdgeInsets.only(left: 1.w),
-                      child: DropdownButtonHideUnderline(
-                        child: DropdownButton2(
-                          dropdownDecoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(8),
-                            color: const Color(0xFFf9f9f9),
+    return Container(
+      margin: EdgeInsets.only(top: 1.w),
+      padding: EdgeInsets.all(1.5.w),
+      decoration: DesignConfig.boxDecorationContainerCardShadow(ColorsRes.white,
+          const Color.fromRGBO(44, 39, 46, 0.059), 16.0, 3, 3, 20, 0),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Expanded(
+                child: DesignConfig.inputBoxDecorated(
+                    const Color(0xFFf9f9f9),
+                    1.5.w,
+                    2.2.w,
+                    'Enter client name',
+                    Icons.person,
+                    3.w,
+                    TextInputType.text),
+              ),
+              Expanded(
+                child: DesignConfig.inputBoxDecorated(
+                    const Color(0xFFf9f9f9),
+                    1.5.w,
+                    2.2.w,
+                    'Enter mobile number',
+                    Icons.mobile_friendly,
+                    3.w,
+                    TextInputType.phone),
+              ),
+            ],
+          ),
+          Row(
+            children: [
+              Expanded(
+                child: DesignConfig.inputBoxDecorated(
+                    const Color(0xFFf9f9f9),
+                    1.5.w,
+                    2.2.w,
+                    'Pair rate',
+                    Icons.monetization_on,
+                    3.w,
+                    TextInputType.number),
+              ),
+              Expanded(
+                child: DesignConfig.inputBoxDecorated(
+                    const Color(0xFFf9f9f9),
+                    1.5.w,
+                    2.2.w,
+                    'In out rate',
+                    Icons.monetization_on,
+                    3.w,
+                    TextInputType.number),
+              ),
+              Expanded(
+                child: DesignConfig.inputBoxDecorated(
+                    const Color(0xFFf9f9f9),
+                    1.5.w,
+                    2.2.w,
+                    'Commission',
+                    Icons.monetization_on,
+                    3.w,
+                    TextInputType.number),
+              ),
+              Expanded(
+                child: DesignConfig.inputBoxDecorated(
+                    const Color(0xFFf9f9f9),
+                    1.5.w,
+                    2.2.w,
+                    'Patti',
+                    Icons.pattern,
+                    3.w,
+                    TextInputType.number),
+              ),
+            ],
+          ),
+          Row(
+            children: [
+              Expanded(
+                child: DesignConfig.inputBoxDecorated(
+                    const Color(0xFFf9f9f9),
+                    1.5.w,
+                    2.2.w,
+                    'Bid limit',
+                    Icons.production_quantity_limits,
+                    3.w,
+                    TextInputType.number),
+              ),
+              Expanded(
+                child: Card(
+                  margin: EdgeInsets.only(left: 1.w, right: 1.w, top: 2.w),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(1.5.w)),
+                  elevation: 0,
+                  color: const Color(0xFFf9f9f9),
+                  child: Padding(
+                    padding: EdgeInsets.only(left: 1.w),
+                    child: DropdownButtonHideUnderline(
+                      child: DropdownButton2(
+                        dropdownDecoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(8),
+                          color: const Color(0xFFf9f9f9),
+                        ),
+                        isExpanded: true,
+                        hint: Text(
+                          'Select Reference',
+                          style: TextStyle(
+                            fontSize: 2.2.w,
+                            color: const Color.fromARGB(255, 174, 174, 174),
                           ),
-                          isExpanded: true,
-                          hint: Text(
-                            'Select Reference',
-                            style: TextStyle(
-                              fontSize: 2.2.w,
-                              color: const Color.fromARGB(255, 174, 174, 174),
-                            ),
-                          ),
-                          items: agents
-                              .map((item) => DropdownMenuItem<String>(
-                                    value: item.name,
-                                    child: Text(
-                                      item.name.toString(),
-                                      style: const TextStyle(
-                                        fontSize: 14,
-                                      ),
+                        ),
+                        items: agents
+                            .map((item) => DropdownMenuItem<String>(
+                                  value: item.name,
+                                  child: Text(
+                                    item.name.toString(),
+                                    style: const TextStyle(
+                                      fontSize: 14,
                                     ),
-                                  ))
-                              .toList(),
-                          value: selectedValue,
-                          onChanged: (value) {
-                            setState(() {
-                              selectedValue = value as String;
-                            });
-                          },
-                          //itemHeight: 40,
-                          dropdownMaxHeight: 300,
-                          searchController: textEditingController,
-                          searchInnerWidget: Padding(
-                            padding: const EdgeInsets.only(
-                              top: 8,
-                              bottom: 4,
-                              right: 8,
-                              left: 8,
-                            ),
-                            child: TextFormField(
-                              controller: textEditingController,
-                              decoration: InputDecoration(
-                                isDense: true,
-                                // contentPadding: const EdgeInsets.symmetric(
-                                //   horizontal: 10,
-                                //   vertical: 8,
-                                // ),
-                                hintText: 'Search for agents...',
-                                hintStyle: const TextStyle(fontSize: 12),
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(8),
-                                ),
+                                  ),
+                                ))
+                            .toList(),
+                        value: selectedValue,
+                        onChanged: (value) {
+                          setState(() {
+                            selectedValue = value as String;
+                          });
+                        },
+                        //itemHeight: 40,
+                        dropdownMaxHeight: 300,
+                        searchController: textEditingController,
+                        searchInnerWidget: Padding(
+                          padding: const EdgeInsets.only(
+                            top: 8,
+                            bottom: 4,
+                            right: 8,
+                            left: 8,
+                          ),
+                          child: TextFormField(
+                            controller: textEditingController,
+                            decoration: InputDecoration(
+                              isDense: true,
+                              // contentPadding: const EdgeInsets.symmetric(
+                              //   horizontal: 10,
+                              //   vertical: 8,
+                              // ),
+                              hintText: 'Search for agents...',
+                              hintStyle: const TextStyle(fontSize: 12),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(8),
                               ),
                             ),
                           ),
-                          searchMatchFn: (item, searchValue) {
-                            return (item.value
-                                .toString()
-                                .contains(searchValue));
-                          },
-                          //This to clear the search value when you close the menu
-                          onMenuStateChange: (isOpen) {
-                            if (!isOpen) {
-                              textEditingController.clear();
-                            }
-                          },
                         ),
+                        searchMatchFn: (item, searchValue) {
+                          return (item.value.toString().contains(searchValue));
+                        },
+                        //This to clear the search value when you close the menu
+                        onMenuStateChange: (isOpen) {
+                          if (!isOpen) {
+                            textEditingController.clear();
+                          }
+                        },
                       ),
                     ),
                   ),
                 ),
-              ],
-            ),
-            SizedBox(
-              height: 2.w,
-            ),
-            Row(
-              children: [
-                Expanded(
-                  child: DesignConfig.inputBoxDecorated(
-                      const Color(0xFFf9f9f9),
-                      1.5.w,
-                      2.2.w,
-                      'Daily incentive',
-                      Icons.credit_card,
-                      3.w,
-                      TextInputType.number),
-                ),
-                SizedBox(
-                  width: 1.w,
-                ),
-                Card(
-                  margin: EdgeInsets.only(right: 1.w),
-                  color: ColorsRes.mainBlue,
-                  elevation: 0,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(1.6.w)),
-                  child: Container(
-                    height: 7.w,
-                    width: 30.w,
-                    alignment: Alignment.center,
-                    child: Text(
-                      'Add',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(color: ColorsRes.white, fontSize: 2.w),
-                    ),
+              ),
+            ],
+          ),
+          SizedBox(
+            height: 2.w,
+          ),
+          Row(
+            children: [
+              Expanded(
+                child: DesignConfig.inputBoxDecorated(
+                    const Color(0xFFf9f9f9),
+                    1.5.w,
+                    2.2.w,
+                    'Daily incentive',
+                    Icons.credit_card,
+                    3.w,
+                    TextInputType.number),
+              ),
+              SizedBox(
+                width: 1.w,
+              ),
+              Card(
+                margin: EdgeInsets.only(right: 1.w),
+                color: ColorsRes.mainBlue,
+                elevation: 0,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(1.6.w)),
+                child: Container(
+                  height: 7.w,
+                  width: 30.w,
+                  alignment: Alignment.center,
+                  child: Text(
+                    'Add',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(color: ColorsRes.white, fontSize: 2.w),
                   ),
                 ),
-              ],
-            )
-          ],
-        ),
+              ),
+            ],
+          )
+        ],
       ),
     );
   }
@@ -560,6 +556,15 @@ class CreateAgentSectionMobile extends StatefulWidget {
 }
 
 class _CreateAgentSectionMobileState extends State<CreateAgentSectionMobile> {
+  String? selectedValue;
+  final TextEditingController textEditingController = TextEditingController();
+
+  @override
+  void dispose() {
+    textEditingController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -666,14 +671,84 @@ class _CreateAgentSectionMobileState extends State<CreateAgentSectionMobile> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Expanded(
-                child: DesignConfig.inputBoxDecorated(
-                    const Color(0xFFf9f9f9),
-                    1.5.w,
-                    4.w,
-                    'Reference',
-                    Icons.person_add,
-                    5.w,
-                    TextInputType.text),
+                child: Card(
+                  margin: EdgeInsets.only(left: 1.w, right: 1.w, top: 2.w),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(1.5.w)),
+                  elevation: 0,
+                  color: const Color(0xFFf9f9f9),
+                  child: Padding(
+                    padding: EdgeInsets.only(left: 1.w),
+                    child: DropdownButtonHideUnderline(
+                      child: DropdownButton2(
+                        dropdownDecoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(8),
+                          color: const Color(0xFFf9f9f9),
+                        ),
+                        isExpanded: true,
+                        hint: Text(
+                          'Select Reference',
+                          style: TextStyle(
+                            fontSize: 4.0.w,
+                            color: const Color.fromARGB(255, 174, 174, 174),
+                          ),
+                        ),
+                        items: agents
+                            .map((item) => DropdownMenuItem<String>(
+                                  value: item.name,
+                                  child: Text(
+                                    item.name.toString(),
+                                    style: const TextStyle(
+                                      fontSize: 14,
+                                    ),
+                                  ),
+                                ))
+                            .toList(),
+                        value: selectedValue,
+                        onChanged: (value) {
+                          setState(() {
+                            selectedValue = value as String;
+                          });
+                        },
+                        //itemHeight: 40,
+                        dropdownMaxHeight: 300,
+                        searchController: textEditingController,
+                        searchInnerWidget: Padding(
+                          padding: const EdgeInsets.only(
+                            top: 8,
+                            bottom: 4,
+                            right: 8,
+                            left: 8,
+                          ),
+                          child: TextFormField(
+                            controller: textEditingController,
+                            decoration: InputDecoration(
+                              isDense: true,
+                              // contentPadding: const EdgeInsets.symmetric(
+                              //   horizontal: 10,
+                              //   vertical: 8,
+                              // ),
+                              hintText: 'Search for agents...',
+                              hintStyle: const TextStyle(fontSize: 12),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                            ),
+                          ),
+                        ),
+                        searchMatchFn: (item, searchValue) {
+                          return (item.value.toString().contains(searchValue));
+                        },
+                        //This to clear the search value when you close the menu
+                        onMenuStateChange: (isOpen) {
+                          if (!isOpen) {
+                            textEditingController.clear();
+                          }
+                        },
+                      ),
+                    ),
+                  ),
+                ),
               ),
               SizedBox(
                 width: 2.w,

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:iconly/iconly.dart';
 import 'package:ms_sheet/ui/screens/home/pages/agents.dart';
+import 'package:ms_sheet/ui/screens/home/pages/khata.dart';
 import 'package:ms_sheet/ui/screens/home/pages/sheets.dart';
 import 'package:ms_sheet/ui/styles/color.dart';
 import 'package:sizer/sizer.dart';
@@ -60,6 +61,7 @@ class _MobileHomeState extends State<MobileHome> {
                     Expanded(
                       child: GestureDetector(
                           onTap: () {
+                            controller.jumpToPage(0);
                             setState(() {
                               currentPage = 'Sheets';
                               controller = PageController(initialPage: 0);
@@ -78,6 +80,7 @@ class _MobileHomeState extends State<MobileHome> {
                     Expanded(
                       child: GestureDetector(
                           onTap: () {
+                            controller.jumpToPage(1);
                             setState(() {
                               currentPage = 'Agents';
                               controller = PageController(initialPage: 1);
@@ -95,6 +98,7 @@ class _MobileHomeState extends State<MobileHome> {
                     Expanded(
                       child: GestureDetector(
                           onTap: () {
+                            controller.jumpToPage(2);
                             setState(() {
                               currentPage = 'Wallet';
                               controller = PageController(initialPage: 2);
@@ -115,8 +119,6 @@ class _MobileHomeState extends State<MobileHome> {
           Expanded(
             child: Container(
               child: PageView(
-                /// [PageView.scrollDirection] defaults to [Axis.horizontal].
-                /// Use [Axis.vertical] to scroll vertically.
                 controller: controller,
                 onPageChanged: (value) {
                   setState(() {
@@ -132,9 +134,7 @@ class _MobileHomeState extends State<MobileHome> {
                 children: <Widget>[
                   Sheets(),
                   Agents(),
-                  Center(
-                    child: Container(child: Text('Third Page')),
-                  ),
+                  Wallet(),
                 ],
               ),
             ),

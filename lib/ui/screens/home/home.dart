@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:ms_sheet/ui/screens/home/mobile_main_home.dart';
 import 'package:ms_sheet/ui/screens/home/pc_main_home.dart';
+
+import '../../../widgets/bottom_navigation_widget.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -19,7 +20,7 @@ class _HomeState extends State<Home> {
           // Tablet = Medium (641px to 1007px)
           // Laptop = Large (1008px and larger)
           if (constraints.maxWidth < 640) {
-            return const MobileHome();
+            return BottomNavigationWidget();
           } else {
             return const PCHome();
           }

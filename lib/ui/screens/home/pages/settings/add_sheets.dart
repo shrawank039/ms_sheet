@@ -1,5 +1,8 @@
 import 'package:date_time_picker/date_time_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
+import 'package:ms_sheet/data/models/agents_model.dart';
+import 'package:ms_sheet/global.dart' as global;
 import 'package:ms_sheet/ui/styles/color.dart';
 import 'package:sizer/sizer.dart';
 
@@ -35,11 +38,8 @@ class CreateSheets extends StatefulWidget {
 }
 
 class _CreateSheetsState extends State<CreateSheets> {
-  String _valueChanged4 = '';
-  String _valueToValidate4 = '';
-  String _valueSaved4 = '';
-
-  late TextEditingController _controller4;
+  late TextEditingController _controllerTime;
+  late TextEditingController _controllerName;
 
   @override
   void initState() {
@@ -48,7 +48,8 @@ class _CreateSheetsState extends State<CreateSheets> {
 
     String lsHour = TimeOfDay.now().hour.toString().padLeft(2, '0');
     String lsMinute = TimeOfDay.now().minute.toString().padLeft(2, '0');
-    _controller4 = TextEditingController(text: '$lsHour:$lsMinute');
+    _controllerTime = TextEditingController(text: '');
+    _controllerName = TextEditingController(text: '');
   }
 
   @override
@@ -106,6 +107,7 @@ class _CreateSheetsState extends State<CreateSheets> {
                     child: Padding(
                       padding: EdgeInsets.only(left: 1.w),
                       child: TextField(
+                        controller: _controllerName,
                         style: TextStyle(
                             fontSize: 2.3.w,
                             fontFamily: 'Arial',
@@ -145,29 +147,19 @@ class _CreateSheetsState extends State<CreateSheets> {
                     child: Padding(
                       padding: EdgeInsets.only(left: 1.w),
                       child: DateTimePicker(
-                          type: DateTimePickerType.time,
-                          //timePickerEntryModeInput: true,
-                          controller: _controller4,
-                          //initialValue: '',
-                          icon: Icon(Icons.access_time),
-                          timeLabelText: "End Time",
-                          use24HourFormat: false,
-                          locale: Locale('en', 'IN'),
-                          onChanged: (val) {
-                            print('0' + val.toString());
-                            setState(() {
-                              _controller4.text = val;
-                            });
-                          },
-                          validator: (val) {
-                            print('1' + val.toString());
-                            setState(() => _controller4.text = val ?? '');
-                            return null;
-                          },
-                          onSaved: (val) {
-                            print('2' + val.toString());
-                            setState(() => _controller4.text = val ?? '');
-                          }),
+                        type: DateTimePickerType.time,
+                        controller: _controllerTime,
+                        icon: Icon(Icons.access_time),
+                        timeLabelText: "End Time",
+                        use24HourFormat: false,
+                        locale: Locale('en', 'IN'),
+                        onChanged: (val) {
+                          print('0' + val.toString());
+                          setState(() {
+                            _controllerTime.text = val;
+                          });
+                        },
+                      ),
                       /*DateTimePicker(
                         type: DateTimePickerType.date,
                         dateMask: 'd MMM, yyyy',
@@ -244,14 +236,31 @@ class _CreateSheetsState extends State<CreateSheets> {
                   elevation: 0,
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(1.6.w)),
-                  child: Container(
-                    height: 6.w,
-                    width: 25.w,
-                    alignment: Alignment.center,
-                    child: Text(
-                      'Add',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(color: ColorsRes.white, fontSize: 2.w),
+                  child: InkWell(
+                    onTap: () {
+                      if (_controllerName.text.isNotEmpty &&
+                          _controllerTime.text.isNotEmpty) {
+                        var model = AgentsModel();
+                        model.date = _controllerTime.text;
+                        model.name = _controllerName.text;
+                        model.picture =
+                            'https://cdn-icons-png.flaticon.com/256/281/281761.png';
+                        model.id = (global.sheets.length + 1).toString();
+                        global.sheets.add(model);
+                        SmartDialog.showToast("${_controllerName.text} Added");
+                      } else {
+                        SmartDialog.showToast("Please fill all data");
+                      }
+                    },
+                    child: Container(
+                      height: 6.w,
+                      width: 25.w,
+                      alignment: Alignment.center,
+                      child: Text(
+                        'Add',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(color: ColorsRes.white, fontSize: 2.w),
+                      ),
                     ),
                   ),
                 ),

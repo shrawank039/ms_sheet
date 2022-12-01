@@ -6,6 +6,8 @@ import 'package:ms_sheet/ui/styles/color.dart';
 import 'package:ms_sheet/ui/styles/design.dart';
 import 'package:sizer/sizer.dart';
 
+import '../../login/otp_page.dart';
+
 class Settings extends StatefulWidget {
   @override
   State<Settings> createState() => _SettingsState();
@@ -126,8 +128,14 @@ class _SettingsState extends State<Settings> {
                   SizedBox(
                     height: 1.5.w,
                   ),
-                  settingButtons(
-                      Icons.password, 'Change Password', 'Change you password'),
+                  InkWell(
+                    onTap: () {
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) => const Otp()));
+                    },
+                    child: settingButtons(Icons.password, 'Change Password',
+                        'Change you password'),
+                  ),
                   SizedBox(
                     height: 1.5.w,
                   ),
