@@ -1,12 +1,9 @@
-/*
-* File : Bottom Navigation widget
-* Version : 1.0.0
-* Description :
-* */
-
 import 'package:flutter/material.dart';
 import 'package:ms_sheet/ui/screens/home/mobile_main_home.dart';
 import 'package:ms_sheet/ui/screens/home/pages/settings.dart';
+import 'package:ms_sheet/ui/screens/home/pages/share_history.dart';
+
+import '../ui/screens/home/pages/Counters.dart';
 
 class BottomNavigationWidget extends StatefulWidget {
   @override
@@ -23,8 +20,8 @@ class _BottomNavigationWidgetState extends State<BottomNavigationWidget> {
 
   List<Widget> screens() => [
         MobileHome(),
-        Settings(),
-        Settings(),
+        Counters(),
+        ShareHistory(),
         Settings(),
       ];
 
@@ -41,15 +38,16 @@ class _BottomNavigationWidgetState extends State<BottomNavigationWidget> {
             /*----------- Build Bottom Navigation Tab here ---------------*/
             currentIndex: _currentIndex,
             backgroundColor: Colors.white,
-            selectedIconTheme: IconThemeData(color: Colors.grey),
-            selectedItemColor: Colors.black,
+            selectedIconTheme:
+                IconThemeData(color: Theme.of(context).colorScheme.secondary),
+            selectedItemColor: Theme.of(context).colorScheme.secondary,
             unselectedIconTheme: IconThemeData(color: Colors.grey),
             unselectedItemColor: Colors.grey,
             type: BottomNavigationBarType.fixed,
             onTap: onTapped,
             items: [
               BottomNavigationBarItem(
-                label: 'Home',
+                label: 'Local',
                 icon: Image.asset(
                   "assets/home.png",
                   color: _currentIndex == 0
@@ -57,11 +55,11 @@ class _BottomNavigationWidgetState extends State<BottomNavigationWidget> {
                       : Color.fromRGBO(153, 153, 153, 1),
                   height: 20,
                 ),
-                tooltip: 'Home',
+                tooltip: 'Local',
               ),
               BottomNavigationBarItem(
-                label: 'Location',
-                tooltip: 'Location',
+                label: 'Counter',
+                tooltip: 'Counter',
                 icon: Image.asset(
                   "assets/categories.png",
                   color: _currentIndex == 1
@@ -71,26 +69,26 @@ class _BottomNavigationWidgetState extends State<BottomNavigationWidget> {
                 ),
               ),
               BottomNavigationBarItem(
-                label: 'Bookings',
-                tooltip: 'Bookings',
+                label: 'Share',
+                tooltip: 'Share',
                 icon: Image.asset(
                   "assets/booking.png",
-                  color: _currentIndex == 3
+                  color: _currentIndex == 2
                       ? Theme.of(context).colorScheme.secondary
                       : Color.fromRGBO(153, 153, 153, 1),
                   height: 20,
                 ),
               ),
               BottomNavigationBarItem(
-                  label: 'Profile',
+                  label: 'Settings',
                   icon: Image.asset(
                     "assets/profile.png",
-                    color: _currentIndex == 4
+                    color: _currentIndex == 3
                         ? Theme.of(context).colorScheme.secondary
                         : Color.fromRGBO(153, 153, 153, 1),
                     height: 20,
                   ),
-                  tooltip: 'Profile')
+                  tooltip: 'Settings')
             ],
           ),
         ),
