@@ -262,7 +262,12 @@ class _MainPanelState extends State<MainPanel> {
                                     mainAxisSpacing: 5,
                                     crossAxisSpacing: 0,
                                     itemBuilder: (context, index) {
-                                      return pairList(index, 200, 2600);
+                                      for (int i = 0; i < 101; i++) {
+                                        if (global.numberPair[i]! > 0) {
+                                          return pairList(
+                                              index, i, global.numberPair[i]!);
+                                        }
+                                      }
                                     },
                                   ),
                                 ],
@@ -515,13 +520,13 @@ class _MainPanelState extends State<MainPanel> {
                                     InkWell(
                                       onTap: () {
                                         setState(() {
-                                          entryBox =
-                                              entryBoxController.text as int?;
-                                          entryAmt =
-                                              entryAmtController.text as int?;
-                                          global.numberPair[entryBoxController
-                                                  .text as int] =
-                                              entryAmtController.text as int;
+                                          entryBox = int.parse(
+                                              entryBoxController.text);
+                                          entryAmt = int.parse(
+                                              entryAmtController.text);
+                                          global.numberPair[entryBox!] =
+                                              entryAmt!;
+                                          print(entryAmt);
                                         });
                                       },
                                       child: DesignConfig.flatButtonWithIcon(
@@ -629,6 +634,10 @@ class _MainPanelState extends State<MainPanel> {
 }
 
 Widget numberBox(int index) {
+  final TextEditingController amtBoxController = TextEditingController();
+  if (global.numberPair[index + 1]! > 0) {
+    amtBoxController.text = global.numberPair[index + 1].toString();
+  }
   return Container(
     padding: EdgeInsets.only(left: 1.w),
     decoration: BoxDecoration(
@@ -641,6 +650,7 @@ Widget numberBox(int index) {
           style: TextStyle(fontSize: 0.8.h, color: Colors.grey),
         ),
         TextField(
+          controller: amtBoxController,
           textAlign: TextAlign.end,
           scribbleEnabled: true,
           style:
@@ -658,7 +668,7 @@ Widget numberBox(int index) {
   );
 }
 
-Widget pairList(int index, double pair, double amount) {
+Widget pairList(int index, int pair, int amount) {
   return Container(
     height: 5.5.w,
     decoration: DesignConfig.boxDecorationContainerCardShadow(
