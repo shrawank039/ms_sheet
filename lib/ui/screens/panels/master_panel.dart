@@ -76,6 +76,7 @@ class _MasterPanelState extends State<MasterPanel> {
                                     Expanded(
                                       child: AlignedGridView.count(
                                         shrinkWrap: true,
+                                        physics: NeverScrollableScrollPhysics(),
                                         crossAxisCount: 10,
                                         itemCount: 100,
                                         mainAxisSpacing: 0,
@@ -94,8 +95,9 @@ class _MasterPanelState extends State<MasterPanel> {
                                           child: SizedBox(
                                             width: 8.w,
                                             child: AlignedGridView.count(
-                                              scrollDirection: Axis.vertical,
                                               shrinkWrap: true,
+                                              physics:
+                                                  NeverScrollableScrollPhysics(),
                                               crossAxisCount: 1,
                                               itemCount: 10,
                                               mainAxisSpacing: 0,
@@ -127,6 +129,7 @@ class _MasterPanelState extends State<MasterPanel> {
                                     Expanded(
                                       child: AlignedGridView.count(
                                         shrinkWrap: true,
+                                        physics: NeverScrollableScrollPhysics(),
                                         crossAxisCount: 10,
                                         itemCount: 20,
                                         mainAxisSpacing: 0,
@@ -145,7 +148,8 @@ class _MasterPanelState extends State<MasterPanel> {
                                           child: SizedBox(
                                             width: 8.w,
                                             child: AlignedGridView.count(
-                                              scrollDirection: Axis.vertical,
+                                              physics:
+                                                  NeverScrollableScrollPhysics(),
                                               shrinkWrap: true,
                                               crossAxisCount: 1,
                                               itemCount: 2,
@@ -465,6 +469,8 @@ class _MasterPanelState extends State<MasterPanel> {
 }
 
 Widget numberBox(int index) {
+  final pointController = TextEditingController();
+
   return Container(
     padding: EdgeInsets.only(left: 1.w),
     decoration: BoxDecoration(
@@ -479,6 +485,7 @@ Widget numberBox(int index) {
         TextField(
           textAlign: TextAlign.end,
           scribbleEnabled: true,
+          controller: pointController,
           style:
               TextStyle(color: ColorsRes.mainBlue, fontWeight: FontWeight.w500),
           decoration: InputDecoration(
@@ -488,6 +495,7 @@ Widget numberBox(int index) {
             hoverColor: ColorsRes.lightBlue,
             border: OutlineInputBorder(borderSide: BorderSide.none),
           ),
+          onChanged: (text) {},
         ),
       ],
     ),
@@ -628,8 +636,8 @@ Widget controls() {
 }
 
 Widget clientsList(String? pic, String? name, String? date) {
+  var checkBox = false;
   return Container(
-    width: 50.w,
     margin: EdgeInsets.only(top: 1.w),
     decoration: DesignConfig.boxDecorationContainerCardShadow(
         ColorsRes.white, Color.fromRGBO(44, 39, 46, 0.059), 12.0, 3, 3, 20, 0),
@@ -652,41 +660,40 @@ Widget clientsList(String? pic, String? name, String? date) {
           SizedBox(
             width: 0.61.w,
           ),
-          Padding(
-            padding: EdgeInsets.all(1.w),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  name!,
-                  textAlign: TextAlign.left,
-                  style: TextStyle(
-                      fontSize: 1.4.w,
-                      fontWeight: FontWeight.w600,
-                      color: const Color.fromARGB(255, 0, 0, 0)),
-                ),
-                Row(
-                  children: [
-                    Text(
-                      'Total : 1200',
-                      textAlign: TextAlign.left,
-                      style: TextStyle(
-                        fontSize: 1.2.w,
-                        fontWeight: FontWeight.w300,
-                        color: Colors.grey,
-                      ),
+          Flexible(
+            child: Padding(
+              padding: EdgeInsets.all(1.w),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    name!,
+                    overflow: TextOverflow.ellipsis,
+                    textAlign: TextAlign.left,
+                    style: TextStyle(
+                        fontSize: 1.4.w,
+                        fontWeight: FontWeight.w600,
+                        color: const Color.fromARGB(255, 0, 0, 0)),
+                  ),
+                  Text(
+                    'Total : 1200',
+                    textAlign: TextAlign.left,
+                    style: TextStyle(
+                      fontSize: 1.2.w,
+                      fontWeight: FontWeight.w300,
+                      color: Colors.grey,
                     ),
-                  ],
-                ),
-              ],
+                  ),
+                ],
+              ),
             ),
           ),
           Expanded(
             child: Container(),
           ),
           Checkbox(
-            value: true,
+            value: checkBox,
             onChanged: (value) {},
           ),
         ],

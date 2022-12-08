@@ -468,9 +468,13 @@ Widget body(BuildContext context) {
             Expanded(
               flex: 3,
               child: Column(
-                children: global.agents.map((e) {
-                  return transactionList(e.picture, e.name, e.date);
-                }).toList(),
+                children: [
+                  Column(
+                    children: global.agents.map((e) {
+                      return transactionList(e.picture, e.name, e.date);
+                    }).toList(),
+                  ),
+                ],
               ),
             ),
           ],

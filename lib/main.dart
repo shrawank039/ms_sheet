@@ -1,15 +1,20 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:responsive_framework/responsive_wrapper.dart';
 import 'package:sizer/sizer.dart';
 
+import 'firebase_options.dart';
 import 'ui/screens/home/home.dart';
 
 GlobalKey globalKey = GlobalKey();
 
-void main() {
+void main() async {
   runApp(MsSheet());
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
 }
 
 class MsSheet extends StatefulWidget {

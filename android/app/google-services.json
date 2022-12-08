@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "764263533315",
+    "project_id": "ms-excel-sheet",
+    "storage_bucket": "ms-excel-sheet.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:764263533315:android:5d8fb0a09938d1501f7736",
+        "android_client_info": {
+          "package_name": "com.example.ms_sheet"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "764263533315-pv01aj13bn1kitar62cvd011pg39n97g.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDHYcfyqQeRe24CVDSYauwFKhv3R5-afcw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "764263533315-pv01aj13bn1kitar62cvd011pg39n97g.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "764263533315-euiq0tps1ohkmhpa1vsf4h3kk0qqro5u.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.msSheet"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

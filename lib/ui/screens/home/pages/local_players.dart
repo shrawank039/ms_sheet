@@ -74,7 +74,7 @@ class _SheetsState extends State<LocalPlayers> {
                         ),
                       ],
                     ),
-                    Row(
+                    /* Row(
                       children: [
                         Expanded(
                           child: DesignConfig.inputBoxDecorated(
@@ -97,7 +97,7 @@ class _SheetsState extends State<LocalPlayers> {
                               TextInputType.number),
                         ),
                       ],
-                    ),
+                    ),*/
                     SizedBox(
                       height: 2.w,
                     ),
