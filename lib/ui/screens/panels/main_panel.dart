@@ -92,6 +92,7 @@ class _MainPanelState extends State<MainPanel> {
                                   children: [
                                     Expanded(
                                       child: AlignedGridView.count(
+                                        physics: NeverScrollableScrollPhysics(),
                                         shrinkWrap: true,
                                         crossAxisCount: 10,
                                         itemCount: 100,
@@ -111,6 +112,8 @@ class _MainPanelState extends State<MainPanel> {
                                           child: SizedBox(
                                             width: 8.w,
                                             child: AlignedGridView.count(
+                                              physics:
+                                                  NeverScrollableScrollPhysics(),
                                               scrollDirection: Axis.vertical,
                                               shrinkWrap: true,
                                               crossAxisCount: 1,
@@ -118,12 +121,19 @@ class _MainPanelState extends State<MainPanel> {
                                               mainAxisSpacing: 0,
                                               crossAxisSpacing: 0,
                                               itemBuilder: (context, index) {
+                                                int total = 0;
+                                                for (int i = index * 10;
+                                                    i < index * 10 + 10;
+                                                    i++) {
+                                                  total = total +
+                                                      global.numberPair[i]!;
+                                                }
                                                 return Container(
                                                   alignment:
                                                       Alignment.centerLeft,
                                                   height: 5.5.w,
                                                   child: Text(
-                                                    "0",
+                                                    "$total",
                                                     style: TextStyle(
                                                         fontSize: 2.2.w),
                                                   ),
@@ -163,6 +173,8 @@ class _MainPanelState extends State<MainPanel> {
                                           child: SizedBox(
                                             width: 8.w,
                                             child: AlignedGridView.count(
+                                              physics:
+                                                  NeverScrollableScrollPhysics(),
                                               scrollDirection: Axis.vertical,
                                               shrinkWrap: true,
                                               crossAxisCount: 1,
@@ -262,12 +274,7 @@ class _MainPanelState extends State<MainPanel> {
                                     mainAxisSpacing: 5,
                                     crossAxisSpacing: 0,
                                     itemBuilder: (context, index) {
-                                      for (int i = 0; i < 101; i++) {
-                                        if (global.numberPair[i]! > 0) {
-                                          return pairList(
-                                              index, i, global.numberPair[i]!);
-                                        }
-                                      }
+                                      return pairList(index);
                                     },
                                   ),
                                 ],
@@ -520,13 +527,23 @@ class _MainPanelState extends State<MainPanel> {
                                     InkWell(
                                       onTap: () {
                                         setState(() {
-                                          entryBox = int.parse(
-                                              entryBoxController.text);
-                                          entryAmt = int.parse(
-                                              entryAmtController.text);
-                                          global.numberPair[entryBox!] =
-                                              entryAmt!;
-                                          print(entryAmt);
+                                          for (int i = 0;
+                                              i <
+                                                  entryBoxController
+                                                      .text.length;
+                                              i++) {
+                                            entryBox = int.parse(
+                                                entryBoxController.text[i] +
+                                                    entryBoxController
+                                                        .text[i + 1]);
+                                            entryAmt = int.parse(
+                                                entryAmtController.text);
+                                            global.numberPair[entryBox!] =
+                                                (global.numberPair[entryBox])! +
+                                                    entryAmt!;
+                                            i = i + 1;
+                                            print(entryAmt);
+                                          }
                                         });
                                       },
                                       child: DesignConfig.flatButtonWithIcon(
@@ -668,47 +685,54 @@ Widget numberBox(int index) {
   );
 }
 
-Widget pairList(int index, int pair, int amount) {
-  return Container(
-    height: 5.5.w,
-    decoration: DesignConfig.boxDecorationContainerCardShadow(
-      ColorsRes.white,
-      Color.fromRGBO(44, 39, 46, 0.059),
-      8.0,
-      3,
-      3,
-      10,
-      0,
-    ),
-    child: Padding(
-      padding: EdgeInsets.symmetric(horizontal: 1.w),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Expanded(
-              child: Text(
-            pair.toString().split(".")[0],
-            textAlign: TextAlign.center,
-            style: TextStyle(color: ColorsRes.black),
-          )),
-          Expanded(
-              child: Text(
-            amount.toString().split(".")[0],
-            textAlign: TextAlign.center,
-            style: TextStyle(color: ColorsRes.black),
-          )),
-          IconButton(
-            onPressed: () {},
-            icon: Icon(
-              Icons.delete,
-              size: 2.7.w,
-              color: ColorsRes.red,
-            ),
+Widget pairList(int index) {
+  for (int i = 0; i < 101; i++) {
+    if (global.numberPair[i]! > 0) {
+      return Container(
+        height: 5.5.w,
+        decoration: DesignConfig.boxDecorationContainerCardShadow(
+          ColorsRes.white,
+          Color.fromRGBO(44, 39, 46, 0.059),
+          8.0,
+          3,
+          3,
+          10,
+          0,
+        ),
+        child: Padding(
+          padding: EdgeInsets.symmetric(horizontal: 1.w),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Expanded(
+                  child: Text(
+                i.toString(),
+                textAlign: TextAlign.center,
+                style: TextStyle(color: ColorsRes.black),
+              )),
+              Expanded(
+                  child: Text(
+                global.numberPair[i].toString(),
+                textAlign: TextAlign.center,
+                style: TextStyle(color: ColorsRes.black),
+              )),
+              IconButton(
+                onPressed: () {
+                  print('del $index');
+                },
+                icon: Icon(
+                  Icons.delete,
+                  size: 2.7.w,
+                  color: ColorsRes.red,
+                ),
+              ),
+            ],
           ),
-        ],
-      ),
-    ),
-  );
+        ),
+      );
+    }
+  }
+  return const SizedBox();
 }
 
 Widget clientsList(String? pic, String? name, String? date) {
