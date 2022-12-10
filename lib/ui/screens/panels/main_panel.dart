@@ -1,28 +1,36 @@
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:ms_sheet/global.dart' as global;
 import 'package:ms_sheet/ui/screens/panels/master_panel.dart';
 import 'package:ms_sheet/ui/styles/color.dart';
+import 'package:ms_sheet/widgets/laddi_popup.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../../global.dart';
+import '../../../main.dart';
 import '../../styles/design.dart';
 
-class MainPanel extends StatefulWidget {
+class MainPanel extends ConsumerStatefulWidget {
   const MainPanel({super.key});
 
   @override
-  State<MainPanel> createState() => _MainPanelState();
+  ConsumerState<MainPanel> createState() => _MainPanelState();
 }
 
-class _MainPanelState extends State<MainPanel> {
+class _MainPanelState extends ConsumerState<MainPanel> {
   String? selectedValue;
   int? entryBox, entryAmt;
   final TextEditingController textEditingController = TextEditingController();
   final TextEditingController entryBoxController = TextEditingController();
   final TextEditingController entryAmtController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+  }
 
   @override
   void dispose() {
@@ -34,6 +42,7 @@ class _MainPanelState extends State<MainPanel> {
 
   @override
   Widget build(BuildContext context) {
+    ref.watch(counterProvider);
     return Scaffold(
       body: SafeArea(
         child: Padding(
@@ -297,15 +306,23 @@ class _MainPanelState extends State<MainPanel> {
                                 Row(
                                   children: [
                                     Expanded(
-                                      child: DesignConfig.flatButtonWithIcon(
-                                        ColorsRes.mainBlue,
-                                        1.6.w,
-                                        FontAwesomeIcons.landmark,
-                                        ColorsRes.white,
-                                        1.6.w,
-                                        'Laddi',
-                                        2.w,
-                                        ColorsRes.white,
+                                      child: InkWell(
+                                        onTap: () {
+                                          showDialog(
+                                              context: context,
+                                              builder: (context) =>
+                                                  const LaddiPopup());
+                                        },
+                                        child: DesignConfig.flatButtonWithIcon(
+                                          ColorsRes.mainBlue,
+                                          1.6.w,
+                                          FontAwesomeIcons.landmark,
+                                          ColorsRes.white,
+                                          1.6.w,
+                                          'Laddi',
+                                          2.w,
+                                          ColorsRes.white,
+                                        ),
                                       ),
                                     ),
                                     Expanded(
@@ -542,7 +559,6 @@ class _MainPanelState extends State<MainPanel> {
                                                 (global.numberPair[entryBox])! +
                                                     entryAmt!;
                                             i = i + 1;
-                                            print(entryAmt);
                                           }
                                         });
                                       },
