@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:sizer/sizer.dart';
 
 import '../ui/styles/styles.dart';
 
@@ -35,7 +36,7 @@ class _ButtonState extends State<Button> {
     return InkWell(
       onTap: widget.onTap,
       child: Container(
-        height: media.width * 0.12,
+        height: media.width * 0.1,
         width: (widget.width != null) ? widget.width : null,
         padding: EdgeInsets.only(
             left: media.width * twenty, right: media.width * twenty),
@@ -50,7 +51,7 @@ class _ButtonState extends State<Button> {
         child: Text(
           widget.text,
           style: GoogleFonts.lato(
-              fontSize: media.width * sixteen,
+              fontSize: 11.sp,
               color: (widget.textcolor != null) ? widget.textcolor : buttonText,
               fontWeight: FontWeight.bold,
               letterSpacing: 1),

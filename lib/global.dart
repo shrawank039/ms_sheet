@@ -1,4 +1,4 @@
-import 'data/models/agents_model.dart';
+import 'models/agents_model.dart';
 
 List<AgentsModel> agents = [
   AgentsModel(

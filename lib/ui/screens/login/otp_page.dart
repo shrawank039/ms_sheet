@@ -7,6 +7,7 @@ import 'package:otp_text_field/style.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../../helper/function.dart';
+import '../../../repositories/auth_repository.dart';
 import '../../../widgets/widgets.dart';
 import '../../loading.dart';
 import '../../styles/styles.dart';
@@ -62,15 +63,18 @@ class _OtpState extends State<Otp> {
 //auto verify otp
   verifyOtp() async {
     try {
-      // Sign the user in (or link) with the credential
       await FirebaseAuth.instance.signInWithCredential(credentials);
 
       var verify = true;
       credentials = null;
 
       if (verify == true) {
-        Navigator.pushReplacement(
-            context, MaterialPageRoute(builder: (context) => Home()));
+        var loginResponse = await AuthRepository()
+            .getLoginResponse('aeimesh@gmail.com', '123456');
+        if (loginResponse.success = true) {
+          Navigator.pushReplacement(
+              context, MaterialPageRoute(builder: (context) => Home()));
+        }
       }
     } on FirebaseAuthException catch (error) {
       if (error.code == 'invalid-verification-code') {
@@ -174,13 +178,15 @@ class _OtpState extends State<Otp> {
                               ),
                               SizedBox(height: media.height * 0.1),
                               Container(
+                                alignment: Alignment.center,
                                 child: OTPTextField(
                                   length: 6,
-                                  width: MediaQuery.of(context).size.width,
-                                  style: TextStyle(fontSize: 20.sp),
+                                  width: 80.w,
+                                  style: TextStyle(fontSize: 15.sp),
                                   textFieldAlignment:
                                       MainAxisAlignment.spaceAround,
-                                  fieldStyle: FieldStyle.underline,
+                                  fieldStyle: FieldStyle.box,
+                                  fieldWidth: 10.w,
                                   onCompleted: (pin) {
                                     setState(() {
                                       otpNumber = pin;
@@ -245,6 +251,8 @@ class _OtpState extends State<Otp> {
                                 height: media.height * 0.15,
                               ),
                               Container(
+                                width: media.width,
+                                height: 10.w,
                                 alignment: Alignment.center,
                                 child: Button(
                                   onTap: () async {
@@ -259,11 +267,18 @@ class _OtpState extends State<Otp> {
                                         var verify = true;
 
                                         if (verify == true) {
-                                          Navigator.pushReplacement(
-                                              context,
-                                              MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      Home()));
+                                          var loginResponse =
+                                              await AuthRepository()
+                                                  .getLoginResponse(
+                                                      'aeimesh@gmail.com',
+                                                      '123456');
+                                          if (loginResponse.success = true) {
+                                            Navigator.pushReplacement(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        Home()));
+                                          }
                                         }
                                       } else {
                                         // firebase code send true
@@ -279,11 +294,18 @@ class _OtpState extends State<Otp> {
 
                                           var verify = true;
                                           if (verify == true) {
-                                            Navigator.pushReplacement(
-                                                context,
-                                                MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        Home()));
+                                            var loginResponse =
+                                                await AuthRepository()
+                                                    .getLoginResponse(
+                                                        'aeimesh@gmail.com',
+                                                        '123456');
+                                            if (loginResponse.success = true) {
+                                              Navigator.pushReplacement(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          Home()));
+                                            }
                                           }
                                         } on FirebaseAuthException catch (error) {
                                           if (error.code == 'Invalid OTP') {

@@ -45,10 +45,12 @@ dependencies:
   dropdown_button2: ^1.9.1
   flutter_smart_dialog: ^4.5.4+1
   http: ^0.13.4
+  json_annotation: ^4.1.0
+  connectivity: ^3.0.6
   firebase_auth: ^4.1.5
   firebase_core: ^2.3.0
   shared_preferences: ^2.0.15
-  connectivity_plus: ^2.3.7
+  shared_value: ^2.1.0
   google_fonts: ^2.2.0
   lottie: ^1.4.1
   otp_text_field: ^1.1.3

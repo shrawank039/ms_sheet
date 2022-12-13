@@ -1,7 +1,7 @@
 PODS:
-  - connectivity_plus_macos (0.0.1):
+  - connectivity_macos (0.0.1):
     - FlutterMacOS
-    - ReachabilitySwift
+    - Reachability
   - Firebase/Auth (10.2.0):
     - Firebase/CoreOnly
     - FirebaseAuth (~> 10.2.0)
@@ -46,12 +46,12 @@ PODS:
   - path_provider_macos (0.0.1):
     - FlutterMacOS
   - PromisesObjC (2.1.1)
-  - ReachabilitySwift (5.0.0)
+  - Reachability (3.2)
   - shared_preferences_macos (0.0.1):
     - FlutterMacOS
 
 DEPENDENCIES:
-  - connectivity_plus_macos (from `Flutter/ephemeral/.symlinks/plugins/connectivity_plus_macos/macos`)
+  - connectivity_macos (from `Flutter/ephemeral/.symlinks/plugins/connectivity_macos/macos`)
   - firebase_auth (from `Flutter/ephemeral/.symlinks/plugins/firebase_auth/macos`)
   - firebase_core (from `Flutter/ephemeral/.symlinks/plugins/firebase_core/macos`)
   - FlutterMacOS (from `Flutter/ephemeral`)
@@ -67,11 +67,11 @@ SPEC REPOS:
     - GoogleUtilities
     - GTMSessionFetcher
     - PromisesObjC
-    - ReachabilitySwift
+    - Reachability
 
 EXTERNAL SOURCES:
-  connectivity_plus_macos:
-    :path: Flutter/ephemeral/.symlinks/plugins/connectivity_plus_macos/macos
+  connectivity_macos:
+    :path: Flutter/ephemeral/.symlinks/plugins/connectivity_macos/macos
   firebase_auth:
     :path: Flutter/ephemeral/.symlinks/plugins/firebase_auth/macos
   firebase_core:
@@ -84,7 +84,7 @@ EXTERNAL SOURCES:
     :path: Flutter/ephemeral/.symlinks/plugins/shared_preferences_macos/macos
 
 SPEC CHECKSUMS:
-  connectivity_plus_macos: 2af496fc37c2734bda2f1341bb01b56703cdadbf
+  connectivity_macos: 5dae6ee11d320fac7c05f0d08bd08fc32b5514d9
   Firebase: a3ea7eba4382afd83808376edb99acdaff078dcf
   firebase_auth: 89ed93a8d1d8f657fec8fe149bdeeb02e55c92d4
   firebase_core: f6f75d92dcdd5ef1b43876017affde02b7b402ec
@@ -96,7 +96,7 @@ SPEC CHECKSUMS:
   GTMSessionFetcher: c1edebe64e9fb4e8f6415d018edf1fd3eac074a1
   path_provider_macos: 7f02d5d549750547369e9c68223f954ef3539e72
   PromisesObjC: ab77feca74fa2823e7af4249b8326368e61014cb
-  ReachabilitySwift: 985039c6f7b23a1da463388634119492ff86c825
+  Reachability: 33e18b67625424e47b6cde6d202dce689ad7af96
   shared_preferences_macos: 33a283075a27b1bb86af262383983fc22dad33af
 
 PODFILE CHECKSUM: a884f6dd3f7494f3892ee6c81feea3a3abbf9153
