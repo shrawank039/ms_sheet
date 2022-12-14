@@ -2,13 +2,12 @@ import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
+import 'package:ms_sheet/global.dart' as global;
 
 import '../app_config.dart';
-import '../helper/shared_value_helper.dart';
 import '../models/login_response.dart';
 import '../models/password_confirm_response.dart';
 import '../models/signup_response.dart';
-import '../models/user_by_token.dart';
 
 class AuthRepository {
   Future<LoginResponse> getLoginResponse(
@@ -18,13 +17,9 @@ class AuthRepository {
       "password": "$password",
     });
 
-    Uri url = Uri.parse("${AppConfig.BASE_URL}/api/login");
+    Uri url = Uri.parse("${AppConfig.BASE_URL}/login");
     final response = await http.post(url,
-        headers: {
-          "Accept": "*/*",
-          "Content-Type": "application/json",
-        },
-        body: post_body);
+        headers: await global.getApiHeaders(true), body: post_body);
     print('getLoginResponse : ${response.body}');
     return loginResponseFromJson(response.body);
   }
@@ -92,17 +87,5 @@ class AuthRepository {
         body: post_body);
 
     return passwordConfirmResponseFromJson(response.body);
-  }
-
-  Future<UserByTokenResponse> getUserByTokenResponse() async {
-    var post_body = jsonEncode({"access_token": "${access_token.$}"});
-    Uri url = Uri.parse("${AppConfig.BASE_URL}/get-user-by-access_token");
-    final response = await http.post(url,
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: post_body);
-
-    return userByTokenResponseFromJson(response.body);
   }
 }

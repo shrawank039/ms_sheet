@@ -8,7 +8,6 @@ bool internet = true;
 String userUid = '';
 var verId = '';
 int? resendTokenId;
-bool phoneAuthCheck = false;
 dynamic credentials;
 
 phoneAuth(String phone) async {

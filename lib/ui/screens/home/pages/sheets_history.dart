@@ -1,13 +1,13 @@
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:iconly/iconly.dart';
-import 'package:ms_sheet/global.dart' as global;
 import 'package:ms_sheet/ui/screens/panels/main_panel.dart';
 import 'package:ms_sheet/ui/styles/color.dart';
 import 'package:ms_sheet/ui/styles/design.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../../../global.dart';
+import '../../../../repositories/sheets_repository.dart';
 
 class SheetsHistory extends StatefulWidget {
   @override
@@ -17,11 +17,27 @@ class SheetsHistory extends StatefulWidget {
 class _SheetsHistoryState extends State<SheetsHistory> {
   String? selectedValue;
   final TextEditingController textEditingController = TextEditingController();
+  List<dynamic> _sheetsList = [];
+
+  @override
+  void initState() {
+    super.initState();
+    getSheets();
+  }
 
   @override
   void dispose() {
     textEditingController.dispose();
     super.dispose();
+  }
+
+  void getSheets() async {
+    var getSheets = await SheetsRepository().getSheets();
+    if (getSheets.success == true) {
+      setState(() {
+        _sheetsList.addAll(getSheets.data!);
+      });
+    }
   }
 
   @override
@@ -154,8 +170,12 @@ class _SheetsHistoryState extends State<SheetsHistory> {
           children: [
             Expanded(
               child: Column(
-                children: global.sheets.map((e) {
-                  return sheetsList(e.picture, e.name, e.date, context);
+                children: _sheetsList.map((e) {
+                  return sheetsList(
+                      'https://cdn-icons-png.flaticon.com/256/281/281761.png',
+                      e.name,
+                      e.endTime,
+                      context);
                 }).toList(),
               ),
             ),
@@ -165,8 +185,6 @@ class _SheetsHistoryState extends State<SheetsHistory> {
     );
   }
 }
-
-// Widgets -----------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 Widget sheetsList(
     String? pic, String? name, String? date, BuildContext context) {

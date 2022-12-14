@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:ms_sheet/global.dart' as global;
+import 'package:ms_sheet/repositories/counters_repository.dart';
 import 'package:ms_sheet/ui/styles/color.dart';
 import 'package:ms_sheet/ui/styles/design.dart';
 import 'package:ms_sheet/widgets/player_limit_popup.dart';
@@ -11,6 +11,24 @@ class Counters extends StatefulWidget {
 }
 
 class _SheetsState extends State<Counters> {
+  List<dynamic> _countersList = [];
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getCounters();
+  }
+
+  void getCounters() async {
+    var getCounters = await CountersRepository().getCounters();
+    if (getCounters.success == true) {
+      setState(() {
+        _countersList.addAll(getCounters.data!);
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -23,8 +41,12 @@ class _SheetsState extends State<Counters> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Column(
-              children: global.agents.map((e) {
-                return agentsList(e.picture, e.name, e.date, context);
+              children: _countersList.map((e) {
+                return agentsList(
+                    'https://cdn-icons-png.flaticon.com/256/4128/4128176.png',
+                    e.name,
+                    e.createdAt,
+                    context);
               }).toList(),
             ),
             SizedBox(

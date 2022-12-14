@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:iconly/iconly.dart';
-import 'package:ms_sheet/global.dart' as global;
+import 'package:ms_sheet/repositories/local_player_repository.dart';
 import 'package:ms_sheet/ui/styles/color.dart';
 import 'package:ms_sheet/ui/styles/design.dart';
 import 'package:ms_sheet/widgets/player_limit_popup.dart';
@@ -12,6 +12,24 @@ class LocalPlayers extends StatefulWidget {
 }
 
 class _SheetsState extends State<LocalPlayers> {
+  List<dynamic> _playersList = [];
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getLocalPlayers();
+  }
+
+  void getLocalPlayers() async {
+    var getPlayers = await LocalPlayersRepository().getLocalPlayers();
+    if (getPlayers.success == true) {
+      setState(() {
+        _playersList.addAll(getPlayers.data!);
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -26,8 +44,12 @@ class _SheetsState extends State<LocalPlayers> {
             Expanded(
               flex: 3,
               child: Column(
-                children: global.agents.map((e) {
-                  return localPlayersList(e.picture, e.name, e.date, context);
+                children: _playersList.map((e) {
+                  return localPlayersList(
+                      'https://cdn-icons-png.flaticon.com/256/4128/4128176.png',
+                      e.name,
+                      e.createdAt,
+                      context);
                 }).toList(),
               ),
             ),
@@ -74,30 +96,6 @@ class _SheetsState extends State<LocalPlayers> {
                         ),
                       ],
                     ),
-                    /* Row(
-                      children: [
-                        Expanded(
-                          child: DesignConfig.inputBoxDecorated(
-                              const Color(0xFFf9f9f9),
-                              1.5.w,
-                              2.2.w,
-                              'Password',
-                              Icons.monetization_on,
-                              3.w,
-                              TextInputType.text),
-                        ),
-                        Expanded(
-                          child: DesignConfig.inputBoxDecorated(
-                              const Color(0xFFf9f9f9),
-                              1.5.w,
-                              2.2.w,
-                              'Limit',
-                              Icons.monetization_on,
-                              3.w,
-                              TextInputType.number),
-                        ),
-                      ],
-                    ),*/
                     SizedBox(
                       height: 2.w,
                     ),

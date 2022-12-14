@@ -1,5 +1,6 @@
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
+import 'package:ms_sheet/repositories/agents_repository.dart';
 import 'package:ms_sheet/ui/styles/color.dart';
 import 'package:ms_sheet/ui/styles/design.dart';
 import 'package:ms_sheet/widgets/delete_confirmation_popup.dart';
@@ -13,6 +14,24 @@ class Agents extends StatefulWidget {
 }
 
 class _SheetsState extends State<Agents> {
+  List<dynamic> _agentsList = [];
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getAgents();
+  }
+
+  void getAgents() async {
+    var getAgents = await AgentsRepository().getAgents();
+    if (getAgents.success == true) {
+      setState(() {
+        _agentsList.addAll(getAgents.data!);
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(
@@ -65,8 +84,12 @@ class _SheetsState extends State<Agents> {
                     ),
                     Expanded(
                       child: Column(
-                        children: agents.map((e) {
-                          return agentsList(e.picture, e.name, e.date, context);
+                        children: _agentsList.map((e) {
+                          return agentsList(
+                              'https://cdn-icons-png.flaticon.com/256/3135/3135715.png',
+                              e.name,
+                              e.createdAt,
+                              context);
                         }).toList(),
                       ),
                     ),

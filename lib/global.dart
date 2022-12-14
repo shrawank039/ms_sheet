@@ -1,4 +1,19 @@
+import 'package:shared_preferences/shared_preferences.dart';
+
 import 'models/agents_model.dart';
+
+var prefs;
+
+Future<Map<String, String>> getApiHeaders(bool authorizationRequired) async {
+  Map<String, String> apiHeader = <String, String>{};
+  prefs = await SharedPreferences.getInstance();
+  if (authorizationRequired) {
+    apiHeader.addAll({"Authorization": "Bearer ${prefs.get('token')}"});
+  }
+  apiHeader.addAll({"Content-Type": "application/json"});
+  apiHeader.addAll({"Accept": "application/json"});
+  return apiHeader;
+}
 
 List<AgentsModel> agents = [
   AgentsModel(

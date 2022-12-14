@@ -1,12 +1,14 @@
 import 'package:date_time_picker/date_time_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
+import 'package:iconly/iconly.dart';
 import 'package:ms_sheet/global.dart' as global;
-import 'package:ms_sheet/models/agents_model.dart';
 import 'package:ms_sheet/ui/styles/color.dart';
 import 'package:sizer/sizer.dart';
 
+import '../../../../../repositories/sheets_repository.dart';
 import '../../../../styles/design.dart';
+import '../../../panels/main_panel.dart';
 
 class AddSheets extends StatefulWidget {
   const AddSheets({super.key});
@@ -40,16 +42,25 @@ class CreateSheets extends StatefulWidget {
 class _CreateSheetsState extends State<CreateSheets> {
   late TextEditingController _controllerTime;
   late TextEditingController _controllerName;
+  List<dynamic> _sheetsList = [];
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
 
-    String lsHour = TimeOfDay.now().hour.toString().padLeft(2, '0');
-    String lsMinute = TimeOfDay.now().minute.toString().padLeft(2, '0');
+    getSheets();
     _controllerTime = TextEditingController(text: '');
     _controllerName = TextEditingController(text: '');
+  }
+
+  void getSheets() async {
+    var getSheets = await SheetsRepository().getSheets();
+    if (getSheets.success == true) {
+      setState(() {
+        _sheetsList.addAll(getSheets.data!);
+      });
+    }
   }
 
   @override
@@ -85,10 +96,9 @@ class _CreateSheetsState extends State<CreateSheets> {
                     style:
                         TextStyle(color: ColorsRes.darkGrey, fontSize: 2.0.w),
                   ),
-                  Expanded(
-                      child: SizedBox(
+                  SizedBox(
                     width: 2.w,
-                  )),
+                  ),
                 ],
               ),
             ),
@@ -160,73 +170,9 @@ class _CreateSheetsState extends State<CreateSheets> {
                           });
                         },
                       ),
-                      /*DateTimePicker(
-                        type: DateTimePickerType.date,
-                        dateMask: 'd MMM, yyyy',
-                        initialValue: DateTime.now().toString(),
-                        firstDate: DateTime(2000),
-                        lastDate: DateTime(2100),
-                        icon: Icon(Icons.event),
-                        dateLabelText: 'End Date',
-                        timeLabelText: "End",
-                        selectableDayPredicate: (date) {
-                          // Disable weekend days to select from the calendar
-                          if (date.weekday == 6 || date.weekday == 7) {
-                            return false;
-                          }
-
-                          return true;
-                        },
-                        onChanged: (val) => print(val),
-                        validator: (val) {
-                          print(val);
-                          return null;
-                        },
-                        onSaved: (val) => print(val),
-                      ),*/
                     ),
                   ),
                 )),
-                /*Expanded(
-                    child: Container(
-                  alignment: Alignment.center,
-                  // height: 9.w,
-                  child: Card(
-                    margin: EdgeInsets.only(left: 1.w, right: 1.w, top: 2.w),
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(1.5.w)),
-                    elevation: 0,
-                    color: ColorsRes.lightWeightColor,
-                    child: Padding(
-                      padding: EdgeInsets.only(left: 1.w),
-                      child:
-                      DateTimePicker(
-                        type: DateTimePickerType.date,
-                        dateMask: 'd MMM, yyyy',
-                        initialValue: DateTime.now().toString(),
-                        firstDate: DateTime(2000),
-                        lastDate: DateTime(2100),
-                        icon: Icon(Icons.event),
-                        dateLabelText: 'Declare Time',
-                        timeLabelText: "Declare Time",
-                        selectableDayPredicate: (date) {
-                          // Disable weekend days to select from the calendar
-                          if (date.weekday == 6 || date.weekday == 7) {
-                            return false;
-                          }
-
-                          return true;
-                        },
-                        onChanged: (val) => print(val),
-                        validator: (val) {
-                          print(val);
-                          return null;
-                        },
-                        onSaved: (val) => print(val),
-                      ),
-                    ),
-                  ),
-                )),*/
                 SizedBox(
                   width: 2.w,
                 ),
@@ -237,18 +183,25 @@ class _CreateSheetsState extends State<CreateSheets> {
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(1.6.w)),
                   child: InkWell(
-                    onTap: () {
+                    onTap: () async {
                       if (_controllerName.text.isNotEmpty &&
                           _controllerTime.text.isNotEmpty) {
-                        var model = AgentsModel();
-                        model.date = _controllerTime.text;
-                        model.name = _controllerName.text;
-                        model.picture =
-                            'https://cdn-icons-png.flaticon.com/256/281/281761.png';
-                        model.id = (global.sheets.length + 1).toString();
-                        global.sheets.add(model);
-                        SmartDialog.showToast("${_controllerName.text} Added");
+                        // var model = AgentsModel();
+                        // model.date = _controllerTime.text;
+                        // model.name = _controllerName.text;
+                        // model.picture =
+                        //     'https://cdn-icons-png.flaticon.com/256/281/281761.png';
+                        // model.id = (global.sheets.length + 1).toString();
+                        // global.sheets.add(model);
+                        var addSheet = await SheetsRepository().addSheets(
+                            _controllerName.text, _controllerTime.text);
+                        if (addSheet.success == true) {
+                          getSheets();
+                          SmartDialog.showToast(
+                              "${_controllerName.text} Added");
+                        }
                       } else {
+                        print('Bearer ${global.prefs.get('token')}');
                         SmartDialog.showToast("Please fill all data");
                       }
                     },
@@ -266,12 +219,106 @@ class _CreateSheetsState extends State<CreateSheets> {
                 ),
               ],
             ),
-            Row(
-              children: [],
-            )
+            SizedBox(
+              height: 2.w,
+            ),
+            ListView(
+              scrollDirection: Axis.vertical,
+              shrinkWrap: true,
+              children: _sheetsList.map((e) {
+                return sheetsList(
+                    'https://cdn-icons-png.flaticon.com/256/281/281761.png',
+                    e.name,
+                    e.endTime,
+                    context);
+              }).toList(),
+            ),
           ],
         ),
       ),
     );
   }
+}
+
+Widget sheetsList(
+    String? pic, String? name, String? date, BuildContext context) {
+  return Container(
+    // width: 50.w,
+    margin: EdgeInsets.only(top: 1.w),
+    decoration: DesignConfig.boxDecorationContainerCardShadow(
+        ColorsRes.white, Color.fromRGBO(44, 39, 46, 0.059), 12.0, 3, 3, 20, 0),
+    child: Padding(
+      padding: EdgeInsets.symmetric(horizontal: 1.2.w, vertical: 1.w),
+      child: Row(
+        children: [
+          SizedBox(
+            width: 0.5.w,
+          ),
+          ClipRRect(
+            borderRadius: BorderRadius.circular(8),
+            child: Image.network(
+              pic!,
+              height: 5.5.w,
+              width: 5.5.w,
+              fit: BoxFit.cover,
+            ),
+          ),
+          SizedBox(
+            width: 1.w,
+          ),
+          Padding(
+            padding: EdgeInsets.all(1.w),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  name!,
+                  textAlign: TextAlign.left,
+                  style: TextStyle(
+                      fontSize: 1.7.w,
+                      fontWeight: FontWeight.w600,
+                      color: const Color.fromARGB(255, 0, 0, 0)),
+                ),
+                Text(
+                  date!,
+                  textAlign: TextAlign.left,
+                  style: TextStyle(
+                    fontSize: 1.3.w,
+                    fontWeight: FontWeight.w300,
+                    color: Colors.grey,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Expanded(
+            child: Container(),
+          ),
+          // Image.asset(
+          //   'assets/icons/pin.png',
+          //   height: 3.w,
+          //   width: 3.w,
+          // ),
+          SizedBox(
+            width: 4.w,
+          ),
+          IconButton(
+            onPressed: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => MainPanel(),
+                  ));
+            },
+            icon: Icon(
+              IconlyBroken.arrow_right,
+              color: ColorsRes.mainBlue,
+              size: 3.w,
+            ),
+          ),
+        ],
+      ),
+    ),
+  );
 }

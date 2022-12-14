@@ -25,7 +25,7 @@ class LoginResponse {
   Map<String, dynamic> toJson() => {
         "result": success,
         "message": message,
-        "user": user == null ? null : user?.toJson(),
+        "data": user == null ? null : user?.toJson(),
       };
 }
 
@@ -34,33 +34,29 @@ class User {
     this.id,
     this.name,
     this.email,
-    this.avatar,
-    this.access_token,
-    this.phone,
+    this.token,
+    this.mobile_number,
   });
 
   int? id;
   String? name;
   String? email;
-  String? avatar;
-  String? access_token;
-  String? phone;
+  String? token;
+  String? mobile_number;
 
   factory User.fromJson(Map<String, dynamic> json) => User(
         id: json["id"],
         name: json["name"],
         email: json["email"],
-        avatar: json["avatar"],
-        access_token: json["token"],
-        phone: json["phone"],
+        token: json["token"],
+        mobile_number: json["mobile_number"],
       );
 
   Map<String, dynamic> toJson() => {
         "id": id,
         "name": name,
         "email": email,
-        "avatar": avatar,
-        "access_token": access_token,
-        "phone": phone,
+        "token": token,
+        "mobile_number": mobile_number,
       };
 }

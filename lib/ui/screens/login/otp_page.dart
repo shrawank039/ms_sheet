@@ -2,10 +2,12 @@ import 'dart:async';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:ms_sheet/global.dart' as global;
 import 'package:otp_text_field/otp_field.dart';
 import 'package:otp_text_field/style.dart';
 import 'package:sizer/sizer.dart';
 
+import '../../../helper/auth_helper.dart';
 import '../../../helper/function.dart';
 import '../../../repositories/auth_repository.dart';
 import '../../../widgets/widgets.dart';
@@ -63,7 +65,7 @@ class _OtpState extends State<Otp> {
 //auto verify otp
   verifyOtp() async {
     try {
-      await FirebaseAuth.instance.signInWithCredential(credentials);
+      // await FirebaseAuth.instance.signInWithCredential(credentials);
 
       var verify = true;
       credentials = null;
@@ -72,6 +74,8 @@ class _OtpState extends State<Otp> {
         var loginResponse = await AuthRepository()
             .getLoginResponse('aeimesh@gmail.com', '123456');
         if (loginResponse.success = true) {
+          AuthHelper().setUserData(loginResponse);
+          print('AuthHelper1 : Bearer ${global.prefs.get('token')}');
           Navigator.pushReplacement(
               context, MaterialPageRoute(builder: (context) => Home()));
         }
@@ -111,10 +115,6 @@ class _OtpState extends State<Otp> {
         child: ValueListenableBuilder(
             valueListenable: valueNotifierHome.value,
             builder: (context, value, child) {
-              if (credentials != null) {
-                _loading = true;
-                verifyOtp();
-              }
               return Stack(
                 children: [
                   Container(
@@ -262,10 +262,18 @@ class _OtpState extends State<Otp> {
                                         _loading = true;
                                         _error = '';
                                       });
-                                      //firebase code send false
-                                      if (phoneAuthCheck == false) {
-                                        var verify = true;
+                                      // firebase code send true
+                                      try {
+                                        PhoneAuthCredential credential =
+                                            PhoneAuthProvider.credential(
+                                                verificationId: verId,
+                                                smsCode: otpNumber);
 
+                                        // Sign the user in (or link) with the credential
+                                        await FirebaseAuth.instance
+                                            .signInWithCredential(credential);
+
+                                        var verify = true;
                                         if (verify == true) {
                                           var loginResponse =
                                               await AuthRepository()
@@ -273,6 +281,10 @@ class _OtpState extends State<Otp> {
                                                       'aeimesh@gmail.com',
                                                       '123456');
                                           if (loginResponse.success = true) {
+                                            AuthHelper()
+                                                .setUserData(loginResponse);
+                                            print(
+                                                'AuthHelper3 : Bearer ${global.prefs.get('access_token')}');
                                             Navigator.pushReplacement(
                                                 context,
                                                 MaterialPageRoute(
@@ -280,46 +292,17 @@ class _OtpState extends State<Otp> {
                                                         Home()));
                                           }
                                         }
-                                      } else {
-                                        // firebase code send true
-                                        try {
-                                          PhoneAuthCredential credential =
-                                              PhoneAuthProvider.credential(
-                                                  verificationId: verId,
-                                                  smsCode: otpNumber);
-
-                                          // Sign the user in (or link) with the credential
-                                          await FirebaseAuth.instance
-                                              .signInWithCredential(credential);
-
-                                          var verify = true;
-                                          if (verify == true) {
-                                            var loginResponse =
-                                                await AuthRepository()
-                                                    .getLoginResponse(
-                                                        'aeimesh@gmail.com',
-                                                        '123456');
-                                            if (loginResponse.success = true) {
-                                              Navigator.pushReplacement(
-                                                  context,
-                                                  MaterialPageRoute(
-                                                      builder: (context) =>
-                                                          Home()));
-                                            }
-                                          }
-                                        } on FirebaseAuthException catch (error) {
-                                          if (error.code == 'Invalid OTP') {
-                                            setState(() {
-                                              otpController.clear();
-                                              otpNumber = '';
-                                              _error = 'Wrong OTP';
-                                              _loading = false;
-                                            });
-                                          }
+                                      } on FirebaseAuthException catch (error) {
+                                        if (error.code == 'Invalid OTP') {
+                                          setState(() {
+                                            otpController.clear();
+                                            otpNumber = '';
+                                            _error = 'Wrong OTP';
+                                            _loading = false;
+                                          });
                                         }
                                       }
-                                    } else if (phoneAuthCheck == true &&
-                                        resendTime == 0 &&
+                                    } else if (resendTime == 0 &&
                                         otpNumber.length != 6) {
                                       setState(() {
                                         setState(() {
@@ -328,6 +311,11 @@ class _OtpState extends State<Otp> {
                                         timers();
                                       });
                                       phoneAuth('+91' + phnumber);
+                                    } else {
+                                      if (true) {
+                                        _loading = true;
+                                        verifyOtp();
+                                      }
                                     }
                                   },
                                   borcolor:
