@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:ms_sheet/repositories/counters_repository.dart';
 import 'package:ms_sheet/ui/styles/color.dart';
 import 'package:ms_sheet/ui/styles/design.dart';
@@ -12,15 +13,28 @@ class Counters extends StatefulWidget {
 
 class _SheetsState extends State<Counters> {
   List<dynamic> _countersList = [];
+  late TextEditingController _controllerName;
+  late TextEditingController _controllerMobile;
+  late TextEditingController _controllerPair;
+  late TextEditingController _controllerInOut;
+  late TextEditingController _controllerCommission;
+  late TextEditingController _controllerPatti;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     getCounters();
+    _controllerName = TextEditingController(text: '');
+    _controllerMobile = TextEditingController(text: '');
+    _controllerPair = TextEditingController(text: '');
+    _controllerInOut = TextEditingController(text: '');
+    _controllerCommission = TextEditingController(text: '');
+    _controllerPatti = TextEditingController(text: '');
   }
 
   void getCounters() async {
+    _countersList.clear();
     var getCounters = await CountersRepository().getCounters();
     if (getCounters.success == true) {
       setState(() {
@@ -77,7 +91,8 @@ class _SheetsState extends State<Counters> {
                               'Enter agent name',
                               Icons.person,
                               3.w,
-                              TextInputType.name),
+                              TextInputType.name,
+                              _controllerName),
                         ),
                         Expanded(
                           child: DesignConfig.inputBoxDecorated(
@@ -87,7 +102,8 @@ class _SheetsState extends State<Counters> {
                               'Enter mobile number',
                               Icons.mobile_friendly,
                               3.w,
-                              TextInputType.phone),
+                              TextInputType.phone,
+                              _controllerMobile),
                         ),
                       ],
                     ),
@@ -101,7 +117,8 @@ class _SheetsState extends State<Counters> {
                               'Pair rate',
                               Icons.monetization_on,
                               3.w,
-                              TextInputType.number),
+                              TextInputType.number,
+                              _controllerPair),
                         ),
                         Expanded(
                           child: DesignConfig.inputBoxDecorated(
@@ -111,7 +128,8 @@ class _SheetsState extends State<Counters> {
                               'In out rate',
                               Icons.monetization_on,
                               3.w,
-                              TextInputType.number),
+                              TextInputType.number,
+                              _controllerInOut),
                         ),
                         Expanded(
                           child: DesignConfig.inputBoxDecorated(
@@ -121,7 +139,8 @@ class _SheetsState extends State<Counters> {
                               'Commission',
                               Icons.monetization_on,
                               3.w,
-                              TextInputType.number),
+                              TextInputType.number,
+                              _controllerCommission),
                         ),
                         Expanded(
                           child: DesignConfig.inputBoxDecorated(
@@ -131,7 +150,8 @@ class _SheetsState extends State<Counters> {
                               'Patti',
                               Icons.pattern,
                               3.w,
-                              TextInputType.number),
+                              TextInputType.number,
+                              _controllerPatti),
                         ),
                       ],
                     ),
@@ -147,15 +167,47 @@ class _SheetsState extends State<Counters> {
                           elevation: 0,
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(1.6.w)),
-                          child: Container(
-                            height: 7.w,
-                            width: 30.w,
-                            alignment: Alignment.center,
-                            child: Text(
-                              'Add',
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                  color: ColorsRes.white, fontSize: 2.w),
+                          child: InkWell(
+                            onTap: () async {
+                              if (_controllerName.text.isNotEmpty &&
+                                  _controllerMobile.text.isNotEmpty &&
+                                  _controllerPair.text.isNotEmpty &&
+                                  _controllerInOut.text.isNotEmpty &&
+                                  _controllerCommission.text.isNotEmpty &&
+                                  _controllerPatti.text.isNotEmpty) {
+                                var addCounter = await CountersRepository()
+                                    .addCounters(
+                                        _controllerName.text,
+                                        _controllerMobile.text,
+                                        _controllerPair.text,
+                                        _controllerInOut.text,
+                                        _controllerCommission.text,
+                                        _controllerPatti.text);
+                                if (addCounter.success == true) {
+                                  getCounters();
+                                  _controllerName.clear();
+                                  _controllerMobile.clear();
+                                  _controllerPair.clear();
+                                  _controllerInOut.clear();
+                                  _controllerCommission.clear();
+                                  _controllerPatti.clear();
+                                  SmartDialog.showToast(
+                                      "${_controllerName.text} Added");
+                                }
+                              } else {
+                                SmartDialog.showToast("Please fill all data");
+                              }
+                            },
+                            child: Container(
+                              height: 7.w,
+                              width: 30.w,
+                              alignment: Alignment.center,
+                              child: Text(
+                                'Add',
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                    color: ColorsRes.white, fontSize: 2.w),
+                              ),
                             ),
                           ),
                         ),

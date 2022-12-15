@@ -148,7 +148,8 @@ class DesignConfig {
       String hint,
       IconData icon,
       double iconSize,
-      TextInputType inputType) {
+      TextInputType inputType,
+      TextEditingController controller) {
     return Container(
       alignment: Alignment.center,
       // height: 9.w,
@@ -161,6 +162,7 @@ class DesignConfig {
         child: Padding(
           padding: EdgeInsets.only(left: 1.w),
           child: TextField(
+            controller: controller,
             keyboardType: inputType,
             style: TextStyle(
                 fontSize: fontSize,

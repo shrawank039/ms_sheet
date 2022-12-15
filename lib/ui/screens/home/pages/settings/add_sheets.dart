@@ -55,6 +55,7 @@ class _CreateSheetsState extends State<CreateSheets> {
   }
 
   void getSheets() async {
+    _sheetsList.clear();
     var getSheets = await SheetsRepository().getSheets();
     if (getSheets.success == true) {
       setState(() {
@@ -186,16 +187,11 @@ class _CreateSheetsState extends State<CreateSheets> {
                     onTap: () async {
                       if (_controllerName.text.isNotEmpty &&
                           _controllerTime.text.isNotEmpty) {
-                        // var model = AgentsModel();
-                        // model.date = _controllerTime.text;
-                        // model.name = _controllerName.text;
-                        // model.picture =
-                        //     'https://cdn-icons-png.flaticon.com/256/281/281761.png';
-                        // model.id = (global.sheets.length + 1).toString();
-                        // global.sheets.add(model);
                         var addSheet = await SheetsRepository().addSheets(
                             _controllerName.text, _controllerTime.text);
                         if (addSheet.success == true) {
+                          _controllerName.clear();
+                          _controllerTime.clear();
                           getSheets();
                           SmartDialog.showToast(
                               "${_controllerName.text} Added");

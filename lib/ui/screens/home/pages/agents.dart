@@ -1,5 +1,6 @@
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:ms_sheet/repositories/agents_repository.dart';
 import 'package:ms_sheet/ui/styles/color.dart';
 import 'package:ms_sheet/ui/styles/design.dart';
@@ -8,14 +9,14 @@ import 'package:sizer/sizer.dart';
 
 import '../../../../global.dart';
 
+List<dynamic> _agentsList = [];
+
 class Agents extends StatefulWidget {
   @override
   State<Agents> createState() => _SheetsState();
 }
 
 class _SheetsState extends State<Agents> {
-  List<dynamic> _agentsList = [];
-
   @override
   void initState() {
     // TODO: implement initState
@@ -24,6 +25,7 @@ class _SheetsState extends State<Agents> {
   }
 
   void getAgents() async {
+    _agentsList.clear();
     var getAgents = await AgentsRepository().getAgents();
     if (getAgents.success == true) {
       setState(() {
@@ -348,11 +350,43 @@ class CreateAgentSection extends StatefulWidget {
 class _CreateAgentSectionState extends State<CreateAgentSection> {
   String? selectedValue;
   final TextEditingController textEditingController = TextEditingController();
+  late TextEditingController _controllerName;
+  late TextEditingController _controllerMobile;
+  late TextEditingController _controllerPair;
+  late TextEditingController _controllerInOut;
+  late TextEditingController _controllerCommission;
+  late TextEditingController _controllerPatti;
+  late TextEditingController _controllerReferenceComm;
+  late TextEditingController _controllerIncentive;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _controllerName = TextEditingController(text: '');
+    _controllerMobile = TextEditingController(text: '');
+    _controllerPair = TextEditingController(text: '');
+    _controllerInOut = TextEditingController(text: '');
+    _controllerCommission = TextEditingController(text: '');
+    _controllerPatti = TextEditingController(text: '');
+    _controllerReferenceComm = TextEditingController(text: '');
+    _controllerIncentive = TextEditingController(text: '');
+  }
 
   @override
   void dispose() {
     textEditingController.dispose();
     super.dispose();
+  }
+
+  void getAgents() async {
+    _agentsList.clear();
+    var getAgents = await AgentsRepository().getAgents();
+    if (getAgents.success == true) {
+      setState(() {
+        _agentsList.addAll(getAgents.data!);
+      });
+    }
   }
 
   @override
@@ -382,7 +416,8 @@ class _CreateAgentSectionState extends State<CreateAgentSection> {
                       'Enter client name',
                       Icons.person,
                       3.w,
-                      TextInputType.text),
+                      TextInputType.text,
+                      _controllerName),
                 ),
                 Expanded(
                   child: DesignConfig.inputBoxDecorated(
@@ -392,7 +427,8 @@ class _CreateAgentSectionState extends State<CreateAgentSection> {
                       'Enter mobile number',
                       Icons.mobile_friendly,
                       3.w,
-                      TextInputType.phone),
+                      TextInputType.phone,
+                      _controllerMobile),
                 ),
               ],
             ),
@@ -406,7 +442,8 @@ class _CreateAgentSectionState extends State<CreateAgentSection> {
                       'Pair rate',
                       Icons.monetization_on,
                       3.w,
-                      TextInputType.number),
+                      TextInputType.number,
+                      _controllerPair),
                 ),
                 Expanded(
                   child: DesignConfig.inputBoxDecorated(
@@ -416,7 +453,8 @@ class _CreateAgentSectionState extends State<CreateAgentSection> {
                       'In out rate',
                       Icons.monetization_on,
                       3.w,
-                      TextInputType.number),
+                      TextInputType.number,
+                      _controllerInOut),
                 ),
                 Expanded(
                   child: DesignConfig.inputBoxDecorated(
@@ -426,7 +464,8 @@ class _CreateAgentSectionState extends State<CreateAgentSection> {
                       'Commission',
                       Icons.monetization_on,
                       3.w,
-                      TextInputType.number),
+                      TextInputType.number,
+                      _controllerCommission),
                 ),
                 Expanded(
                   child: DesignConfig.inputBoxDecorated(
@@ -436,7 +475,8 @@ class _CreateAgentSectionState extends State<CreateAgentSection> {
                       'Patti',
                       Icons.pattern,
                       3.w,
-                      TextInputType.number),
+                      TextInputType.number,
+                      _controllerPatti),
                 ),
               ],
             ),
@@ -450,7 +490,8 @@ class _CreateAgentSectionState extends State<CreateAgentSection> {
                       'Reference Commission',
                       Icons.production_quantity_limits,
                       3.w,
-                      TextInputType.number),
+                      TextInputType.number,
+                      _controllerReferenceComm),
                 ),
                 Expanded(
                   child: Card(
@@ -549,7 +590,8 @@ class _CreateAgentSectionState extends State<CreateAgentSection> {
                       'Daily incentive',
                       Icons.credit_card,
                       3.w,
-                      TextInputType.number),
+                      TextInputType.number,
+                      _controllerIncentive),
                 ),
                 SizedBox(
                   width: 1.w,
@@ -560,14 +602,55 @@ class _CreateAgentSectionState extends State<CreateAgentSection> {
                   elevation: 0,
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(1.6.w)),
-                  child: Container(
-                    height: 7.w,
-                    width: 30.w,
-                    alignment: Alignment.center,
-                    child: Text(
-                      'Add',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(color: ColorsRes.white, fontSize: 2.w),
+                  child: InkWell(
+                    onTap: () async {
+                      if (_controllerName.text.isNotEmpty &&
+                          _controllerMobile.text.isNotEmpty &&
+                          _controllerPair.text.isNotEmpty &&
+                          _controllerInOut.text.isNotEmpty &&
+                          _controllerCommission.text.isNotEmpty &&
+                          _controllerPatti.text.isNotEmpty &&
+                          _controllerReferenceComm.text.isNotEmpty &&
+                          _controllerIncentive.text.isNotEmpty &&
+                          selectedValue!.isNotEmpty) {
+                        var addAgent = await AgentsRepository().addAgent(
+                            _controllerName.text,
+                            _controllerMobile.text,
+                            _controllerPair.text,
+                            _controllerInOut.text,
+                            _controllerCommission.text,
+                            _controllerPatti.text,
+                            selectedValue!,
+                            _controllerReferenceComm.text,
+                            _controllerIncentive.text);
+                        if (addAgent.success == true) {
+                          getAgents();
+                          _controllerName.clear();
+                          _controllerMobile.clear();
+                          _controllerPair.clear();
+                          _controllerInOut.clear();
+                          _controllerCommission.clear();
+                          _controllerPatti.clear();
+                          _controllerReferenceComm.clear();
+                          _controllerIncentive.clear();
+                          textEditingController.clear();
+                          selectedValue = '';
+                          SmartDialog.showToast(
+                              "${_controllerName.text} Added");
+                        }
+                      } else {
+                        SmartDialog.showToast("Please fill all data");
+                      }
+                    },
+                    child: Container(
+                      height: 7.w,
+                      width: 30.w,
+                      alignment: Alignment.center,
+                      child: Text(
+                        'Add',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(color: ColorsRes.white, fontSize: 2.w),
+                      ),
                     ),
                   ),
                 ),
@@ -591,11 +674,43 @@ class CreateAgentSectionMobile extends StatefulWidget {
 class _CreateAgentSectionMobileState extends State<CreateAgentSectionMobile> {
   String? selectedValue;
   final TextEditingController textEditingController = TextEditingController();
+  late TextEditingController _controllerName;
+  late TextEditingController _controllerMobile;
+  late TextEditingController _controllerPair;
+  late TextEditingController _controllerInOut;
+  late TextEditingController _controllerCommission;
+  late TextEditingController _controllerPatti;
+  late TextEditingController _controllerReferenceComm;
+  late TextEditingController _controllerIncentive;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _controllerName = TextEditingController(text: '');
+    _controllerMobile = TextEditingController(text: '');
+    _controllerPair = TextEditingController(text: '');
+    _controllerInOut = TextEditingController(text: '');
+    _controllerCommission = TextEditingController(text: '');
+    _controllerPatti = TextEditingController(text: '');
+    _controllerReferenceComm = TextEditingController(text: '');
+    _controllerIncentive = TextEditingController(text: '');
+  }
 
   @override
   void dispose() {
     textEditingController.dispose();
     super.dispose();
+  }
+
+  void getAgents() async {
+    _agentsList.clear();
+    var getAgents = await AgentsRepository().getAgents();
+    if (getAgents.success == true) {
+      setState(() {
+        _agentsList.addAll(getAgents.data!);
+      });
+    }
   }
 
   @override
@@ -617,7 +732,8 @@ class _CreateAgentSectionMobileState extends State<CreateAgentSectionMobile> {
                     'Agent name',
                     Icons.person,
                     5.w,
-                    TextInputType.text),
+                    TextInputType.text,
+                    _controllerName),
               ),
               Expanded(
                 child: DesignConfig.inputBoxDecorated(
@@ -627,7 +743,8 @@ class _CreateAgentSectionMobileState extends State<CreateAgentSectionMobile> {
                     'Mobile number',
                     Icons.mobile_friendly,
                     5.w,
-                    TextInputType.phone),
+                    TextInputType.phone,
+                    _controllerMobile),
               ),
             ],
           ),
@@ -641,7 +758,8 @@ class _CreateAgentSectionMobileState extends State<CreateAgentSectionMobile> {
                     'Pair rate',
                     Icons.monetization_on,
                     5.w,
-                    TextInputType.number),
+                    TextInputType.number,
+                    _controllerPair),
               ),
               Expanded(
                 child: DesignConfig.inputBoxDecorated(
@@ -651,7 +769,8 @@ class _CreateAgentSectionMobileState extends State<CreateAgentSectionMobile> {
                     'In out rate',
                     Icons.monetization_on,
                     5.w,
-                    TextInputType.number),
+                    TextInputType.number,
+                    _controllerInOut),
               ),
               Expanded(
                 child: DesignConfig.inputBoxDecorated(
@@ -661,7 +780,8 @@ class _CreateAgentSectionMobileState extends State<CreateAgentSectionMobile> {
                     'Commission',
                     Icons.monetization_on,
                     5.w,
-                    TextInputType.number),
+                    TextInputType.number,
+                    _controllerCommission),
               ),
             ],
           ),
@@ -675,17 +795,19 @@ class _CreateAgentSectionMobileState extends State<CreateAgentSectionMobile> {
                     'Patti',
                     Icons.pattern,
                     5.w,
-                    TextInputType.number),
+                    TextInputType.number,
+                    _controllerPatti),
               ),
               Expanded(
                 child: DesignConfig.inputBoxDecorated(
                     const Color(0xFFf9f9f9),
                     1.5.w,
                     4.w,
-                    'Bid limit',
+                    'Reference Commission',
                     Icons.production_quantity_limits,
                     5.w,
-                    TextInputType.number),
+                    TextInputType.number,
+                    _controllerReferenceComm),
               ),
               Expanded(
                 child: DesignConfig.inputBoxDecorated(
@@ -695,7 +817,8 @@ class _CreateAgentSectionMobileState extends State<CreateAgentSectionMobile> {
                     'Daily incentive',
                     Icons.credit_card,
                     5.w,
-                    TextInputType.number),
+                    TextInputType.number,
+                    _controllerIncentive),
               ),
             ],
           ),
@@ -793,14 +916,55 @@ class _CreateAgentSectionMobileState extends State<CreateAgentSectionMobile> {
                   elevation: 0,
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(2.5.w)),
-                  child: Container(
-                    height: 11.w,
-                    width: 30.w,
-                    alignment: Alignment.center,
-                    child: Text(
-                      'Add',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(color: ColorsRes.white, fontSize: 4.w),
+                  child: InkWell(
+                    onTap: () async {
+                      if (_controllerName.text.isNotEmpty &&
+                          _controllerMobile.text.isNotEmpty &&
+                          _controllerPair.text.isNotEmpty &&
+                          _controllerInOut.text.isNotEmpty &&
+                          _controllerCommission.text.isNotEmpty &&
+                          _controllerPatti.text.isNotEmpty &&
+                          _controllerReferenceComm.text.isNotEmpty &&
+                          _controllerIncentive.text.isNotEmpty &&
+                          selectedValue!.isNotEmpty) {
+                        var addAgent = await AgentsRepository().addAgent(
+                            _controllerName.text,
+                            _controllerMobile.text,
+                            _controllerPair.text,
+                            _controllerInOut.text,
+                            _controllerCommission.text,
+                            _controllerPatti.text,
+                            selectedValue!,
+                            _controllerReferenceComm.text,
+                            _controllerIncentive.text);
+                        if (addAgent.success == true) {
+                          getAgents();
+                          _controllerName.clear();
+                          _controllerMobile.clear();
+                          _controllerPair.clear();
+                          _controllerInOut.clear();
+                          _controllerCommission.clear();
+                          _controllerPatti.clear();
+                          _controllerReferenceComm.clear();
+                          _controllerIncentive.clear();
+                          textEditingController.clear();
+                          selectedValue = '';
+                          SmartDialog.showToast(
+                              "${_controllerName.text} Added");
+                        }
+                      } else {
+                        SmartDialog.showToast("Please fill all data");
+                      }
+                    },
+                    child: Container(
+                      height: 11.w,
+                      width: 30.w,
+                      alignment: Alignment.center,
+                      child: Text(
+                        'Add',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(color: ColorsRes.white, fontSize: 4.w),
+                      ),
                     ),
                   ),
                 ),

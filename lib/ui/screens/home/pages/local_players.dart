@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:iconly/iconly.dart';
 import 'package:ms_sheet/repositories/local_player_repository.dart';
 import 'package:ms_sheet/ui/styles/color.dart';
@@ -12,6 +13,8 @@ class LocalPlayers extends StatefulWidget {
 }
 
 class _SheetsState extends State<LocalPlayers> {
+  late TextEditingController _controllerMobile;
+  late TextEditingController _controllerName;
   List<dynamic> _playersList = [];
 
   @override
@@ -19,9 +22,12 @@ class _SheetsState extends State<LocalPlayers> {
     // TODO: implement initState
     super.initState();
     getLocalPlayers();
+    _controllerMobile = TextEditingController(text: '');
+    _controllerName = TextEditingController(text: '');
   }
 
   void getLocalPlayers() async {
+    _playersList.clear();
     var getPlayers = await LocalPlayersRepository().getLocalPlayers();
     if (getPlayers.success == true) {
       setState(() {
@@ -82,7 +88,8 @@ class _SheetsState extends State<LocalPlayers> {
                               'Enter agent name',
                               Icons.person,
                               3.w,
-                              TextInputType.name),
+                              TextInputType.name,
+                              _controllerName),
                         ),
                         Expanded(
                           child: DesignConfig.inputBoxDecorated(
@@ -92,7 +99,8 @@ class _SheetsState extends State<LocalPlayers> {
                               'Enter mobile number',
                               Icons.mobile_friendly,
                               3.w,
-                              TextInputType.phone),
+                              TextInputType.phone,
+                              _controllerMobile),
                         ),
                       ],
                     ),
@@ -108,15 +116,34 @@ class _SheetsState extends State<LocalPlayers> {
                           elevation: 0,
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(1.6.w)),
-                          child: Container(
-                            height: 7.w,
-                            width: 30.w,
-                            alignment: Alignment.center,
-                            child: Text(
-                              'Add',
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                  color: ColorsRes.white, fontSize: 2.w),
+                          child: InkWell(
+                            onTap: () async {
+                              if (_controllerName.text.isNotEmpty &&
+                                  _controllerMobile.text.isNotEmpty) {
+                                var addSheet = await LocalPlayersRepository()
+                                    .addLocalPlayers(_controllerName.text,
+                                        _controllerMobile.text, '123456', '10');
+                                if (addSheet.success == true) {
+                                  getLocalPlayers();
+                                  _controllerName.clear();
+                                  _controllerMobile.clear();
+                                  SmartDialog.showToast(
+                                      "${_controllerName.text} Added");
+                                }
+                              } else {
+                                SmartDialog.showToast("Please fill all data");
+                              }
+                            },
+                            child: Container(
+                              height: 7.w,
+                              width: 30.w,
+                              alignment: Alignment.center,
+                              child: Text(
+                                'Add',
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                    color: ColorsRes.white, fontSize: 2.w),
+                              ),
                             ),
                           ),
                         ),
