@@ -989,14 +989,14 @@ Widget clientsList(PanelResponseData data,
                       .replaceAll("\"", "")
                       .replaceAll("'", "")
                       .split(",");
-                  Map<String, dynamic> result = {};
+                  Map<int, int> result = {};
                   for (int i = 0; i < str.length; i++) {
                     List<String> s = str[i].split(":");
-                    result.putIfAbsent(s[0].trim(), () => s[1].trim());
+                    result.putIfAbsent(
+                        int.parse(s[0].trim()), () => int.parse(s[1].trim()));
                   }
-                  print('global.numberPair ${result}');
-                  global.numberPair = result.cast<int, int>();
-                  //ref.refresh(numberPairProvider);
+                  global.numberPair = result;
+                  ref.refresh(numberPairProvider);
                 },
                 icon: Icon(
                   Icons.edit_note,
