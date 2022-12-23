@@ -1,41 +1,32 @@
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
+import 'package:ms_sheet/providers/data_providers.dart';
 import 'package:ms_sheet/repositories/agents_repository.dart';
 import 'package:ms_sheet/ui/styles/color.dart';
 import 'package:ms_sheet/ui/styles/design.dart';
 import 'package:ms_sheet/widgets/delete_confirmation_popup.dart';
 import 'package:sizer/sizer.dart';
 
-import '../../../../global.dart';
+import '../../../../models/agents_response_entity.dart';
 
-List<dynamic> _agentsList = [];
-
-class Agents extends StatefulWidget {
+class Agents extends ConsumerStatefulWidget {
   @override
-  State<Agents> createState() => _SheetsState();
+  ConsumerState<Agents> createState() => _SheetsState();
 }
 
-class _SheetsState extends State<Agents> {
+class _SheetsState extends ConsumerState<Agents> {
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    getAgents();
-  }
-
-  void getAgents() async {
-    _agentsList.clear();
-    var getAgents = await AgentsRepository().getAgents();
-    if (getAgents.success == true) {
-      setState(() {
-        _agentsList.addAll(getAgents.data!);
-      });
-    }
   }
 
   @override
   Widget build(BuildContext context) {
+    final _data = ref.watch(agentsDataProvider);
+    print('agentsDataProvider : ${_data.value?.message}');
     return LayoutBuilder(
       builder: (BuildContext context, BoxConstraints constraints) {
         // Mobile = Small (smaller than 640px)
@@ -57,11 +48,23 @@ class _SheetsState extends State<Agents> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Expanded(
-                      child: Column(
-                        children: agents.map((e) {
-                          return agentsListMobile(
-                              e.picture, e.name, e.date, context);
-                        }).toList(),
+                      child: Consumer(
+                        builder: (BuildContext context, WidgetRef ref,
+                            Widget? child) {
+                          return _data.when(data: (dynamic data) {
+                            print(
+                                'agentsDataProvider 0 : ${_data.value?.data}');
+                            return Column(
+                              children: _data.value!.data!.map((e) {
+                                return agentsListMobile(e, context);
+                              }).toList(),
+                            );
+                          }, error: (Object error, StackTrace stackTrace) {
+                            return Text('Error');
+                          }, loading: () {
+                            return CircularProgressIndicator();
+                          });
+                        },
                       ),
                     ),
                   ],
@@ -85,14 +88,23 @@ class _SheetsState extends State<Agents> {
                       width: 3.w,
                     ),
                     Expanded(
-                      child: Column(
-                        children: _agentsList.map((e) {
-                          return agentsList(
-                              'https://cdn-icons-png.flaticon.com/256/3135/3135715.png',
-                              e.name,
-                              e.createdAt,
-                              context);
-                        }).toList(),
+                      child: Consumer(
+                        builder: (BuildContext context, WidgetRef ref,
+                            Widget? child) {
+                          return _data.when(data: (dynamic data) {
+                            print(
+                                'agentsDataProvider 0 : ${_data.value!.message}');
+                            return Column(
+                              children: _data.value!.data!.map((e) {
+                                return agentsList(e, context);
+                              }).toList(),
+                            );
+                          }, error: (Object error, StackTrace stackTrace) {
+                            return Text('Error');
+                          }, loading: () {
+                            return CircularProgressIndicator();
+                          });
+                        },
                       ),
                     ),
                   ],
@@ -171,8 +183,7 @@ Widget topBar() {
   );
 }
 
-Widget agentsList(
-    String? pic, String? name, String? date, BuildContext context) {
+Widget agentsList(AgentsResponseData data, BuildContext context) {
   return Container(
     margin: EdgeInsets.only(top: 1.w),
     decoration: DesignConfig.boxDecorationContainerCardShadow(
@@ -187,7 +198,7 @@ Widget agentsList(
           ClipRRect(
             borderRadius: BorderRadius.circular(8),
             child: Image.network(
-              pic!,
+              'https://cdn-icons-png.flaticon.com/256/3135/3135715.png',
               height: 5.5.w,
               width: 5.5.w,
               fit: BoxFit.cover,
@@ -203,7 +214,7 @@ Widget agentsList(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  name!,
+                  data.name!,
                   textAlign: TextAlign.left,
                   style: TextStyle(
                       fontSize: 1.7.w,
@@ -211,7 +222,7 @@ Widget agentsList(
                       color: const Color.fromARGB(255, 0, 0, 0)),
                 ),
                 Text(
-                  date!,
+                  data.createdAt!,
                   textAlign: TextAlign.left,
                   style: TextStyle(
                     fontSize: 1.3.w,
@@ -229,7 +240,8 @@ Widget agentsList(
             onPressed: () {
               showDialog(
                   context: context,
-                  builder: (context) => const DeleteConfirmationPopup());
+                  builder: (context) => DeleteConfirmationPopup(data.id!,
+                      'agent', const ExtraDataParameter(dataList: [])));
             },
             icon: Icon(
               Icons.delete,
@@ -255,7 +267,7 @@ Widget agentsList(
 }
 
 Widget agentsListMobile(
-    String? pic, String? name, String? date, BuildContext context) {
+    AgentsResponseData agentsResponseData, BuildContext context) {
   return Container(
     margin: EdgeInsets.only(top: 2.w),
     decoration: DesignConfig.boxDecorationContainerCardShadow(
@@ -270,7 +282,7 @@ Widget agentsListMobile(
           ClipRRect(
             borderRadius: BorderRadius.circular(8),
             child: Image.network(
-              pic!,
+              'https://cdn-icons-png.flaticon.com/256/4128/4128176.png',
               height: 12.w,
               width: 12.w,
               fit: BoxFit.cover,
@@ -286,7 +298,7 @@ Widget agentsListMobile(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  name!,
+                  agentsResponseData.name!,
                   textAlign: TextAlign.left,
                   style: TextStyle(
                       fontSize: 3.5.w,
@@ -297,7 +309,7 @@ Widget agentsListMobile(
                   height: 1.w,
                 ),
                 Text(
-                  date!,
+                  agentsResponseData.createdAt!,
                   textAlign: TextAlign.left,
                   style: TextStyle(
                     fontSize: 2.8.w,
@@ -315,7 +327,8 @@ Widget agentsListMobile(
             onPressed: () {
               showDialog(
                   context: context,
-                  builder: (context) => const DeleteConfirmationPopup());
+                  builder: (context) => const DeleteConfirmationPopup(
+                      0, 'agent', ExtraDataParameter(dataList: [])));
             },
             icon: Icon(
               Icons.delete,
@@ -340,15 +353,15 @@ Widget agentsListMobile(
   );
 }
 
-class CreateAgentSection extends StatefulWidget {
+class CreateAgentSection extends ConsumerStatefulWidget {
   const CreateAgentSection({super.key});
 
   @override
-  State<CreateAgentSection> createState() => _CreateAgentSectionState();
+  ConsumerState<CreateAgentSection> createState() => _CreateAgentSectionState();
 }
 
-class _CreateAgentSectionState extends State<CreateAgentSection> {
-  String? selectedValue;
+class _CreateAgentSectionState extends ConsumerState<CreateAgentSection> {
+  AgentsResponseData? selectedAgents;
   final TextEditingController textEditingController = TextEditingController();
   late TextEditingController _controllerName;
   late TextEditingController _controllerMobile;
@@ -379,18 +392,9 @@ class _CreateAgentSectionState extends State<CreateAgentSection> {
     super.dispose();
   }
 
-  void getAgents() async {
-    _agentsList.clear();
-    var getAgents = await AgentsRepository().getAgents();
-    if (getAgents.success == true) {
-      setState(() {
-        _agentsList.addAll(getAgents.data!);
-      });
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
+    final _data = ref.watch(agentsDataProvider);
     return Expanded(
       child: Container(
         margin: EdgeInsets.only(top: 1.w),
@@ -502,75 +506,89 @@ class _CreateAgentSectionState extends State<CreateAgentSection> {
                     color: const Color(0xFFf9f9f9),
                     child: Padding(
                       padding: EdgeInsets.only(left: 1.w),
-                      child: DropdownButtonHideUnderline(
-                        child: DropdownButton2(
-                          dropdownDecoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(8),
-                            color: const Color(0xFFf9f9f9),
-                          ),
-                          isExpanded: true,
-                          hint: Text(
-                            'Select Reference',
-                            style: TextStyle(
-                              fontSize: 2.2.w,
-                              color: const Color.fromARGB(255, 174, 174, 174),
-                            ),
-                          ),
-                          items: agents
-                              .map((item) => DropdownMenuItem<String>(
-                                    value: item.name,
-                                    child: Text(
-                                      item.name.toString(),
-                                      style: const TextStyle(
-                                        fontSize: 14,
+                      child: Consumer(
+                        builder: (BuildContext context, WidgetRef ref,
+                            Widget? child) {
+                          return _data.when(data: (dynamic data) {
+                            print('DropdownButton2 0 : ${_data.value!.data}');
+                            return DropdownButtonHideUnderline(
+                              child: DropdownButton2(
+                                dropdownDecoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(8),
+                                  color: const Color(0xFFf9f9f9),
+                                ),
+                                isExpanded: true,
+                                hint: Text(
+                                  'Select Reference',
+                                  style: TextStyle(
+                                    fontSize: 2.2.w,
+                                    color: const Color.fromARGB(
+                                        255, 174, 174, 174),
+                                  ),
+                                ),
+                                items: _data.value?.data!
+                                    .map((item) =>
+                                        DropdownMenuItem<AgentsResponseData>(
+                                          value: item,
+                                          child: Text(
+                                            item.name.toString(),
+                                            style: const TextStyle(
+                                              fontSize: 14,
+                                            ),
+                                          ),
+                                        ))
+                                    .toList(),
+                                value: selectedAgents,
+                                onChanged: (value) {
+                                  setState(() {
+                                    selectedAgents = value;
+                                  });
+                                },
+                                //itemHeight: 40,
+                                dropdownMaxHeight: 300,
+                                searchController: textEditingController,
+                                searchInnerWidget: Padding(
+                                  padding: const EdgeInsets.only(
+                                    top: 8,
+                                    bottom: 4,
+                                    right: 8,
+                                    left: 8,
+                                  ),
+                                  child: TextFormField(
+                                    controller: textEditingController,
+                                    decoration: InputDecoration(
+                                      isDense: true,
+                                      // contentPadding: const EdgeInsets.symmetric(
+                                      //   horizontal: 10,
+                                      //   vertical: 8,
+                                      // ),
+                                      hintText: 'Search for clients...',
+                                      hintStyle: const TextStyle(fontSize: 12),
+                                      border: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(8),
                                       ),
                                     ),
-                                  ))
-                              .toList(),
-                          value: selectedValue,
-                          onChanged: (value) {
-                            setState(() {
-                              selectedValue = value as String;
-                            });
-                          },
-                          //itemHeight: 40,
-                          dropdownMaxHeight: 300,
-                          searchController: textEditingController,
-                          searchInnerWidget: Padding(
-                            padding: const EdgeInsets.only(
-                              top: 8,
-                              bottom: 4,
-                              right: 8,
-                              left: 8,
-                            ),
-                            child: TextFormField(
-                              controller: textEditingController,
-                              decoration: InputDecoration(
-                                isDense: true,
-                                // contentPadding: const EdgeInsets.symmetric(
-                                //   horizontal: 10,
-                                //   vertical: 8,
-                                // ),
-                                hintText: 'Search for agents...',
-                                hintStyle: const TextStyle(fontSize: 12),
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(8),
+                                  ),
                                 ),
+                                searchMatchFn: (item, searchValue) {
+                                  return (item.value
+                                      .toString()
+                                      .contains(searchValue));
+                                },
+                                //This to clear the search value when you close the menu
+                                onMenuStateChange: (isOpen) {
+                                  if (!isOpen) {
+                                    textEditingController.clear();
+                                  }
+                                },
                               ),
-                            ),
-                          ),
-                          searchMatchFn: (item, searchValue) {
-                            return (item.value
-                                .toString()
-                                .contains(searchValue));
-                          },
-                          //This to clear the search value when you close the menu
-                          onMenuStateChange: (isOpen) {
-                            if (!isOpen) {
-                              textEditingController.clear();
-                            }
-                          },
-                        ),
+                            );
+                          }, error: (Object error, StackTrace stackTrace) {
+                            return Text('Error');
+                          }, loading: () {
+                            return CircularProgressIndicator();
+                          });
+                        },
                       ),
                     ),
                   ),
@@ -612,7 +630,7 @@ class _CreateAgentSectionState extends State<CreateAgentSection> {
                           _controllerPatti.text.isNotEmpty &&
                           _controllerReferenceComm.text.isNotEmpty &&
                           _controllerIncentive.text.isNotEmpty &&
-                          selectedValue!.isNotEmpty) {
+                          selectedAgents!.name!.isNotEmpty) {
                         var addAgent = await AgentsRepository().addAgent(
                             _controllerName.text,
                             _controllerMobile.text,
@@ -620,11 +638,10 @@ class _CreateAgentSectionState extends State<CreateAgentSection> {
                             _controllerInOut.text,
                             _controllerCommission.text,
                             _controllerPatti.text,
-                            selectedValue!,
+                            selectedAgents!.id!,
                             _controllerReferenceComm.text,
                             _controllerIncentive.text);
                         if (addAgent.success == true) {
-                          getAgents();
                           _controllerName.clear();
                           _controllerMobile.clear();
                           _controllerPair.clear();
@@ -634,7 +651,10 @@ class _CreateAgentSectionState extends State<CreateAgentSection> {
                           _controllerReferenceComm.clear();
                           _controllerIncentive.clear();
                           textEditingController.clear();
-                          selectedValue = '';
+                          setState(() {
+                            selectedAgents = null;
+                          });
+                          ref.refresh(agentsDataProvider);
                           SmartDialog.showToast(
                               "${_controllerName.text} Added");
                         }
@@ -663,16 +683,17 @@ class _CreateAgentSectionState extends State<CreateAgentSection> {
   }
 }
 
-class CreateAgentSectionMobile extends StatefulWidget {
+class CreateAgentSectionMobile extends ConsumerStatefulWidget {
   const CreateAgentSectionMobile({super.key});
 
   @override
-  State<CreateAgentSectionMobile> createState() =>
+  ConsumerState<CreateAgentSectionMobile> createState() =>
       _CreateAgentSectionMobileState();
 }
 
-class _CreateAgentSectionMobileState extends State<CreateAgentSectionMobile> {
-  String? selectedValue;
+class _CreateAgentSectionMobileState
+    extends ConsumerState<CreateAgentSectionMobile> {
+  AgentsResponseData? selectedAgentsM;
   final TextEditingController textEditingController = TextEditingController();
   late TextEditingController _controllerName;
   late TextEditingController _controllerMobile;
@@ -703,18 +724,9 @@ class _CreateAgentSectionMobileState extends State<CreateAgentSectionMobile> {
     super.dispose();
   }
 
-  void getAgents() async {
-    _agentsList.clear();
-    var getAgents = await AgentsRepository().getAgents();
-    if (getAgents.success == true) {
-      setState(() {
-        _agentsList.addAll(getAgents.data!);
-      });
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
+    final _data = ref.watch(agentsDataProvider);
     return Container(
       padding: EdgeInsets.all(2.w),
       decoration: DesignConfig.boxDecorationContainerCardShadow(ColorsRes.white,
@@ -835,73 +847,89 @@ class _CreateAgentSectionMobileState extends State<CreateAgentSectionMobile> {
                   color: const Color(0xFFf9f9f9),
                   child: Padding(
                     padding: EdgeInsets.only(left: 1.w),
-                    child: DropdownButtonHideUnderline(
-                      child: DropdownButton2(
-                        dropdownDecoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(8),
-                          color: const Color(0xFFf9f9f9),
-                        ),
-                        isExpanded: true,
-                        hint: Text(
-                          'Select Reference',
-                          style: TextStyle(
-                            fontSize: 4.0.w,
-                            color: const Color.fromARGB(255, 174, 174, 174),
-                          ),
-                        ),
-                        items: agents
-                            .map((item) => DropdownMenuItem<String>(
-                                  value: item.name,
-                                  child: Text(
-                                    item.name.toString(),
-                                    style: const TextStyle(
-                                      fontSize: 14,
+                    child: Consumer(
+                      builder:
+                          (BuildContext context, WidgetRef ref, Widget? child) {
+                        return _data.when(data: (dynamic data) {
+                          print('DropdownButton2 1 : ${_data.value!.data}');
+                          return DropdownButtonHideUnderline(
+                            child: DropdownButton2(
+                              dropdownDecoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(8),
+                                color: const Color(0xFFf9f9f9),
+                              ),
+                              isExpanded: true,
+                              hint: Text(
+                                'Select Reference',
+                                style: TextStyle(
+                                  fontSize: 2.2.w,
+                                  color:
+                                      const Color.fromARGB(255, 174, 174, 174),
+                                ),
+                              ),
+                              items: _data.value?.data!
+                                  .map((item) =>
+                                      DropdownMenuItem<AgentsResponseData>(
+                                        value: item,
+                                        child: Text(
+                                          item.name.toString(),
+                                          style: const TextStyle(
+                                            fontSize: 14,
+                                          ),
+                                        ),
+                                      ))
+                                  .toList(),
+                              value: selectedAgentsM,
+                              onChanged: (value) {
+                                setState(() {
+                                  selectedAgentsM = value;
+                                });
+                              },
+                              //itemHeight: 40,
+                              dropdownMaxHeight: 300,
+                              searchController: textEditingController,
+                              searchInnerWidget: Padding(
+                                padding: const EdgeInsets.only(
+                                  top: 8,
+                                  bottom: 4,
+                                  right: 8,
+                                  left: 8,
+                                ),
+                                child: TextFormField(
+                                  controller: textEditingController,
+                                  decoration: InputDecoration(
+                                    isDense: true,
+                                    // contentPadding: const EdgeInsets.symmetric(
+                                    //   horizontal: 10,
+                                    //   vertical: 8,
+                                    // ),
+                                    hintText: 'Search for clients...',
+                                    hintStyle: const TextStyle(fontSize: 12),
+                                    border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(8),
                                     ),
                                   ),
-                                ))
-                            .toList(),
-                        value: selectedValue,
-                        onChanged: (value) {
-                          setState(() {
-                            selectedValue = value as String;
-                          });
-                        },
-                        //itemHeight: 40,
-                        dropdownMaxHeight: 300,
-                        searchController: textEditingController,
-                        searchInnerWidget: Padding(
-                          padding: const EdgeInsets.only(
-                            top: 8,
-                            bottom: 4,
-                            right: 8,
-                            left: 8,
-                          ),
-                          child: TextFormField(
-                            controller: textEditingController,
-                            decoration: InputDecoration(
-                              isDense: true,
-                              // contentPadding: const EdgeInsets.symmetric(
-                              //   horizontal: 10,
-                              //   vertical: 8,
-                              // ),
-                              hintText: 'Search for agents...',
-                              hintStyle: const TextStyle(fontSize: 12),
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(8),
+                                ),
                               ),
+                              searchMatchFn: (item, searchValue) {
+                                return (item.value
+                                    .toString()
+                                    .contains(searchValue));
+                              },
+                              //This to clear the search value when you close the menu
+                              onMenuStateChange: (isOpen) {
+                                if (!isOpen) {
+                                  textEditingController.clear();
+                                }
+                              },
                             ),
-                          ),
-                        ),
-                        searchMatchFn: (item, searchValue) {
-                          return (item.value.toString().contains(searchValue));
-                        },
-                        //This to clear the search value when you close the menu
-                        onMenuStateChange: (isOpen) {
-                          if (!isOpen) {
-                            textEditingController.clear();
-                          }
-                        },
-                      ),
+                          );
+                        }, error: (Object error, StackTrace stackTrace) {
+                          return Text('Error');
+                        }, loading: () {
+                          return CircularProgressIndicator();
+                        });
+                      },
                     ),
                   ),
                 ),
@@ -926,7 +954,7 @@ class _CreateAgentSectionMobileState extends State<CreateAgentSectionMobile> {
                           _controllerPatti.text.isNotEmpty &&
                           _controllerReferenceComm.text.isNotEmpty &&
                           _controllerIncentive.text.isNotEmpty &&
-                          selectedValue!.isNotEmpty) {
+                          selectedAgentsM!.name!.isNotEmpty) {
                         var addAgent = await AgentsRepository().addAgent(
                             _controllerName.text,
                             _controllerMobile.text,
@@ -934,11 +962,14 @@ class _CreateAgentSectionMobileState extends State<CreateAgentSectionMobile> {
                             _controllerInOut.text,
                             _controllerCommission.text,
                             _controllerPatti.text,
-                            selectedValue!,
+                            selectedAgentsM!.id!,
                             _controllerReferenceComm.text,
                             _controllerIncentive.text);
                         if (addAgent.success == true) {
-                          getAgents();
+                          setState(() {
+                            selectedAgentsM = null;
+                          });
+                          ref.refresh(agentsDataProvider);
                           _controllerName.clear();
                           _controllerMobile.clear();
                           _controllerPair.clear();
@@ -948,11 +979,11 @@ class _CreateAgentSectionMobileState extends State<CreateAgentSectionMobile> {
                           _controllerReferenceComm.clear();
                           _controllerIncentive.clear();
                           textEditingController.clear();
-                          selectedValue = '';
                           SmartDialog.showToast(
                               "${_controllerName.text} Added");
                         }
                       } else {
+                        ref.refresh(agentsDataProvider);
                         SmartDialog.showToast("Please fill all data");
                       }
                     },

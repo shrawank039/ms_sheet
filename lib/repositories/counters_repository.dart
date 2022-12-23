@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
 import 'package:ms_sheet/global.dart' as global;
 import 'package:ms_sheet/models/counters_entity.dart';
@@ -38,4 +39,15 @@ class CountersRepository {
     print('getCounters : ${response.body}');
     return CountersEntity.fromJson(json.decode(response.body));
   }
+
+  Future<CountersEntity> deleteCounters(int id) async {
+    Uri url = Uri.parse("${AppConfig.BASE_URL}/counters/$id");
+    final response =
+        await http.delete(url, headers: await global.getApiHeaders(true));
+    print('deleteCounters : ${response.body}');
+    return CountersEntity.fromJson(json.decode(response.body));
+  }
 }
+
+var countersProvider =
+    Provider<CountersRepository>((ref) => CountersRepository());

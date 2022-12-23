@@ -3,7 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:ms_sheet/global.dart' as global;
 import 'package:sizer/sizer.dart';
 
-import '../main.dart';
 import '../ui/styles/color.dart';
 
 class LaddiPopup extends ConsumerStatefulWidget {
@@ -239,7 +238,6 @@ class _LaddiPopupState extends ConsumerState<LaddiPopup> {
                             fromController.text = '';
                             toController.text = '';
                             amtController.text = '';
-                            ref.read(counterProvider.notifier).state++;
                           });
                         },
                         child: Container(

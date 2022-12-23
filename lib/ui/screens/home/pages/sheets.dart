@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:iconly/iconly.dart';
+import 'package:intl/intl.dart';
+import 'package:ms_sheet/models/sheets_response_entity.dart';
 import 'package:ms_sheet/ui/screens/panels/main_panel.dart';
 import 'package:ms_sheet/ui/screens/panels/master_panel.dart';
 import 'package:ms_sheet/ui/styles/color.dart';
@@ -7,6 +9,13 @@ import 'package:ms_sheet/ui/styles/design.dart';
 import 'package:ms_sheet/widgets/declare_popup.dart';
 import 'package:responsive_grid/responsive_grid.dart';
 import 'package:sizer/sizer.dart';
+
+import '../../../../repositories/sheets_repository.dart';
+
+List<dynamic> _sheetsList = [];
+final now = DateTime.now();
+String dateToday = DateFormat.yMMMd('en_US').format(now);
+String dateOnly = DateFormat('yyyy-MM-dd').format(now);
 
 class Sheets extends StatefulWidget {
   const Sheets({super.key});
@@ -16,6 +25,23 @@ class Sheets extends StatefulWidget {
 }
 
 class _SheetsState extends State<Sheets> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getSheets();
+  }
+
+  void getSheets() async {
+    _sheetsList.clear();
+    var getSheets = await SheetsRepository().getSheets();
+    if (getSheets.success == true) {
+      setState(() {
+        _sheetsList.addAll(getSheets.data!);
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(
@@ -58,14 +84,8 @@ class _SheetsPCState extends State<SheetsPC> {
               rowMainAxisAlignment: MainAxisAlignment.start,
               desiredItemWidth: 38.w,
               minSpacing: 10,
-              children: [
-                1,
-                2,
-                3,
-                4,
-                5,
-              ].map((i) {
-                return SheetsCardPC();
+              children: _sheetsList.map((e) {
+                return SheetsCardPC(e, context);
               }).toList()),
         )
       ],
@@ -128,143 +148,134 @@ class _SheetsMobileState extends State<SheetsMobile> {
   }
 }
 
-class SheetsCardPC extends StatefulWidget {
-  const SheetsCardPC({super.key});
-
-  @override
-  State<SheetsCardPC> createState() => _SheetsCardPCState();
-}
-
-class _SheetsCardPCState extends State<SheetsCardPC> {
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      decoration: DesignConfig.boxDecorationContainerCardShadow(ColorsRes.white,
-          const Color.fromARGB(15, 28, 12, 34), 12.0, 3, 3, 20, 0),
-      //  height: 30.w,
-      alignment: const Alignment(0, 0),
-      child: Padding(
-        padding: EdgeInsets.all(2.w),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Image.asset(
-                  'assets/icons/sheetsButtonActive.png',
-                  height: 4.w,
-                  width: 4.w,
-                  fit: BoxFit.fitWidth,
-                ),
-                Expanded(child: Container()),
-                DesignConfig.flatButtonWithIcon(
-                  ColorsRes.lightGreen,
-                  1.4.w,
-                  Icons.airplane_ticket,
-                  ColorsRes.green,
-                  2.3.w,
-                  '27-11-2022',
-                  1.6.w,
-                  ColorsRes.green,
-                )
-              ],
-            ),
-            SizedBox(
-              height: 2.4.w,
-            ),
-            Row(
-              children: [
-                SizedBox(
-                  width: 0.5.w,
-                ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+Widget SheetsCardPC(SheetsResponseData data, BuildContext context) {
+  return Container(
+    decoration: DesignConfig.boxDecorationContainerCardShadow(ColorsRes.white,
+        const Color.fromARGB(15, 28, 12, 34), 12.0, 3, 3, 20, 0),
+    //  height: 30.w,
+    alignment: const Alignment(0, 0),
+    child: Padding(
+      padding: EdgeInsets.all(2.w),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Image.asset(
+                'assets/icons/sheetsButtonActive.png',
+                height: 4.w,
+                width: 4.w,
+                fit: BoxFit.fitWidth,
+              ),
+              Expanded(child: Container()),
+              DesignConfig.flatButtonWithIcon(
+                ColorsRes.lightGreen,
+                1.4.w,
+                Icons.airplane_ticket,
+                ColorsRes.green,
+                2.3.w,
+                dateToday,
+                1.6.w,
+                ColorsRes.green,
+              )
+            ],
+          ),
+          SizedBox(
+            height: 2.4.w,
+          ),
+          Row(
+            children: [
+              SizedBox(
+                width: 0.5.w,
+              ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    data.name!,
+                    style: TextStyle(
+                        color: ColorsRes.black,
+                        fontSize: 2.0.w,
+                        fontWeight: FontWeight.w500),
+                  ),
+                  Text(
+                    'Last Time: ${data.endTime}',
+                    style: TextStyle(
+                      color: ColorsRes.lightGrey,
+                      fontSize: 1.6.w,
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+          SizedBox(
+            height: 1.5.w,
+          ),
+          Row(
+            children: [
+              Expanded(
+                child: Row(
                   children: [
-                    Text(
-                      'NEW DELHI',
-                      style: TextStyle(
-                          color: ColorsRes.black,
-                          fontSize: 2.0.w,
-                          fontWeight: FontWeight.w500),
-                    ),
-                    Text(
-                      'Last Time: 11:00pm',
-                      style: TextStyle(
-                        color: ColorsRes.lightGrey,
-                        fontSize: 1.6.w,
+                    GestureDetector(
+                      onTap: () {
+                        showDialog(
+                            context: context,
+                            builder: (context) => DeclarePopup());
+                      },
+                      child: DesignConfig.flatButton(
+                        ColorsRes.lightBlue,
+                        1.4.w,
+                        'Declare',
+                        1.8.w,
+                        ColorsRes.mainBlue,
                       ),
                     ),
-                  ],
-                ),
-              ],
-            ),
-            SizedBox(
-              height: 1.5.w,
-            ),
-            Row(
-              children: [
-                Expanded(
-                  child: Row(
-                    children: [
-                      GestureDetector(
-                        onTap: () {
-                          showDialog(
-                              context: context,
-                              builder: (context) => DeclarePopup());
-                        },
-                        child: DesignConfig.flatButton(
-                          ColorsRes.lightBlue,
-                          1.4.w,
-                          'Declare',
-                          1.8.w,
-                          ColorsRes.mainBlue,
-                        ),
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => MasterPanel(),
+                            ));
+                      },
+                      child: DesignConfig.flatButton(
+                        ColorsRes.lightBlue,
+                        1.4.w,
+                        'Master',
+                        1.8.w,
+                        ColorsRes.mainBlue,
                       ),
-                      GestureDetector(
+                    ),
+                    Expanded(
+                      child: GestureDetector(
                         onTap: () {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => MasterPanel(),
+                                builder: (context) =>
+                                    MainPanel(data.id!, dateOnly),
                               ));
                         },
                         child: DesignConfig.flatButton(
-                          ColorsRes.lightBlue,
-                          1.4.w,
-                          'Master',
-                          1.8.w,
                           ColorsRes.mainBlue,
+                          1.4.w,
+                          'E-Panel',
+                          1.8.w,
+                          ColorsRes.white,
                         ),
                       ),
-                      Expanded(
-                        child: GestureDetector(
-                          onTap: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => MainPanel(),
-                                ));
-                          },
-                          child: DesignConfig.flatButton(
-                            ColorsRes.mainBlue,
-                            1.4.w,
-                            'E-Panel',
-                            1.8.w,
-                            ColorsRes.white,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
-              ],
-            )
-          ],
-        ),
+              ),
+            ],
+          )
+        ],
       ),
-    );
-  }
+    ),
+  );
 }
 
 class SheetsCardMoile extends StatefulWidget {

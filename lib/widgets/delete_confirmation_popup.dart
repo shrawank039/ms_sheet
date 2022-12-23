@@ -1,13 +1,25 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:ms_sheet/repositories/agents_repository.dart';
+import 'package:ms_sheet/repositories/counters_repository.dart';
+import 'package:ms_sheet/repositories/local_player_repository.dart';
+import 'package:ms_sheet/repositories/panel_repository.dart';
 import 'package:sizer/sizer.dart';
 
+import '../providers/data_providers.dart';
 import '../ui/styles/color.dart';
 
-class DeleteConfirmationPopup extends StatelessWidget {
-  const DeleteConfirmationPopup({super.key});
+class DeleteConfirmationPopup extends ConsumerWidget {
+  final int id;
+  final String type;
+  final ExtraDataParameter extraDataParameter;
+
+  const DeleteConfirmationPopup(this.id, this.type, this.extraDataParameter,
+      {super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final ExtraDataParameter extraData = extraDataParameter;
     return Dialog(
       clipBehavior: Clip.none,
       shape: RoundedRectangleBorder(
@@ -57,7 +69,37 @@ class DeleteConfirmationPopup extends StatelessWidget {
                     children: [
                       Container(
                         child: GestureDetector(
-                          onTap: (() => Navigator.of(context).pop()),
+                          onTap: (() async {
+                            var delete;
+                            if (type == 'agent') {
+                              delete =
+                                  await AgentsRepository().deleteAgents(id);
+                              if (delete.success == true) {
+                                Navigator.of(context).pop();
+                                ref.refresh(agentsDataProvider);
+                              }
+                            } else if (type == 'counter') {
+                              delete =
+                                  await CountersRepository().deleteCounters(id);
+                              if (delete.success == true) {
+                                Navigator.of(context).pop();
+                                ref.refresh(counterDataProvider);
+                              }
+                            } else if (type == 'local_player') {
+                              delete = await LocalPlayersRepository()
+                                  .deleteLocalPlayers(id);
+                              if (delete.success == true) {
+                                Navigator.of(context).pop();
+                                ref.refresh(localPlayerDataProvider);
+                              }
+                            } else if (type == 'panel') {
+                              delete = await PanelRepository().deletePanel(id);
+                              if (delete.success == true) {
+                                Navigator.of(context).pop();
+                                ref.refresh(panelDataProvider(extraData));
+                              }
+                            }
+                          }),
                           child: Card(
                             margin: EdgeInsets.only(right: 1.w, top: 1.5.w),
                             color: ColorsRes.red,

@@ -58,18 +58,19 @@ AgentsResponseData $AgentsResponseDataFromJson(Map<String, dynamic> json) {
   if (patti != null) {
     agentsResponseData.patti = patti;
   }
-  final String? bidLimit = jsonConvert.convert<String>(json['bid_limit']);
-  if (bidLimit != null) {
-    agentsResponseData.bidLimit = bidLimit;
+  final String? referenceCommission =
+      jsonConvert.convert<String>(json['reference_commission']);
+  if (referenceCommission != null) {
+    agentsResponseData.referenceCommission = referenceCommission;
   }
   final String? dailyIncentive =
       jsonConvert.convert<String>(json['daily_incentive']);
   if (dailyIncentive != null) {
     agentsResponseData.dailyIncentive = dailyIncentive;
   }
-  final String? preference = jsonConvert.convert<String>(json['preference']);
-  if (preference != null) {
-    agentsResponseData.preference = preference;
+  final String? referenceId = jsonConvert.convert<String>(json['reference_id']);
+  if (referenceId != null) {
+    agentsResponseData.referenceId = referenceId;
   }
   final String? createdAt = jsonConvert.convert<String>(json['created_at']);
   if (createdAt != null) {
@@ -87,9 +88,9 @@ Map<String, dynamic> $AgentsResponseDataToJson(AgentsResponseData entity) {
   data['in_out_rate'] = entity.inOutRate;
   data['commission'] = entity.commission;
   data['patti'] = entity.patti;
-  data['bid_limit'] = entity.bidLimit;
+  data['reference_commission'] = entity.referenceCommission;
   data['daily_incentive'] = entity.dailyIncentive;
-  data['preference'] = entity.preference;
+  data['reference_id'] = entity.referenceId;
   data['created_at'] = entity.createdAt;
   return data;
 }

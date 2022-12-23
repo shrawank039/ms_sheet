@@ -254,7 +254,7 @@ Widget sheetsList(
               Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => MainPanel(),
+                    builder: (context) => MainPanel(1, ''),
                   ));
             },
             icon: Icon(

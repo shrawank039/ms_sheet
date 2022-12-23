@@ -15,7 +15,7 @@ class AgentsRepository {
       String in_out_rate,
       String commission,
       String patti,
-      String reference,
+      int reference,
       String reference_commission,
       String daily_incentive) async {
     var postBody = jsonEncode({
@@ -25,9 +25,9 @@ class AgentsRepository {
       "in_out_rate": in_out_rate,
       "commission": commission,
       "patti": patti,
-      "bid_limit": reference_commission,
+      "reference_commission": reference_commission,
       "daily_incentive": daily_incentive,
-      "preference": reference,
+      "reference_id": reference,
     });
 
     Uri url = Uri.parse("${AppConfig.BASE_URL}/agents");
@@ -44,7 +44,14 @@ class AgentsRepository {
     print('getAgents : ${response.body}');
     return AgentsResponseEntity.fromJson(json.decode(response.body));
   }
+
+  Future<AgentsResponseEntity> deleteAgents(int id) async {
+    Uri url = Uri.parse("${AppConfig.BASE_URL}/agents/$id");
+    final response =
+        await http.delete(url, headers: await global.getApiHeaders(true));
+    print('getAgents : ${response.body}');
+    return AgentsResponseEntity.fromJson(json.decode(response.body));
+  }
 }
 
-//API SERVICE Provider
 final agentsProvider = Provider<AgentsRepository>((ref) => AgentsRepository());

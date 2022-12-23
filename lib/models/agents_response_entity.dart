@@ -34,11 +34,12 @@ class AgentsResponseData {
   String? inOutRate;
   String? commission;
   String? patti;
-  @JSONField(name: "bid_limit")
-  String? bidLimit;
+  @JSONField(name: "reference_commission")
+  String? referenceCommission;
   @JSONField(name: "daily_incentive")
   String? dailyIncentive;
-  String? preference;
+  @JSONField(name: "reference_id")
+  String? referenceId;
   @JSONField(name: "created_at")
   String? createdAt;
 

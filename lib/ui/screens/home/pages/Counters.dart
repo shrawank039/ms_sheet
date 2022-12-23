@@ -1,18 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
+import 'package:ms_sheet/models/counters_entity.dart';
 import 'package:ms_sheet/repositories/counters_repository.dart';
 import 'package:ms_sheet/ui/styles/color.dart';
 import 'package:ms_sheet/ui/styles/design.dart';
 import 'package:ms_sheet/widgets/player_limit_popup.dart';
 import 'package:sizer/sizer.dart';
 
-class Counters extends StatefulWidget {
+import '../../../../providers/data_providers.dart';
+import '../../../../widgets/delete_confirmation_popup.dart';
+
+class Counters extends ConsumerStatefulWidget {
   @override
-  State<Counters> createState() => _SheetsState();
+  ConsumerState<Counters> createState() => _SheetsState();
 }
 
-class _SheetsState extends State<Counters> {
-  List<dynamic> _countersList = [];
+class _SheetsState extends ConsumerState<Counters> {
   late TextEditingController _controllerName;
   late TextEditingController _controllerMobile;
   late TextEditingController _controllerPair;
@@ -24,7 +28,6 @@ class _SheetsState extends State<Counters> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    getCounters();
     _controllerName = TextEditingController(text: '');
     _controllerMobile = TextEditingController(text: '');
     _controllerPair = TextEditingController(text: '');
@@ -33,18 +36,9 @@ class _SheetsState extends State<Counters> {
     _controllerPatti = TextEditingController(text: '');
   }
 
-  void getCounters() async {
-    _countersList.clear();
-    var getCounters = await CountersRepository().getCounters();
-    if (getCounters.success == true) {
-      setState(() {
-        _countersList.addAll(getCounters.data!);
-      });
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
+    final _data = ref.watch(counterDataProvider);
     return Column(
       children: [
         topBar(),
@@ -54,14 +48,21 @@ class _SheetsState extends State<Counters> {
         Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Column(
-              children: _countersList.map((e) {
-                return agentsList(
-                    'https://cdn-icons-png.flaticon.com/256/4128/4128176.png',
-                    e.name,
-                    e.createdAt,
-                    context);
-              }).toList(),
+            Consumer(
+              builder: (BuildContext context, WidgetRef ref, Widget? child) {
+                return _data.when(data: (dynamic data) {
+                  print('agentsDataProvider 0 : ${_data.value!.data}');
+                  return Column(
+                    children: _data.value!.data!.map((e) {
+                      return agentsList(e, context);
+                    }).toList(),
+                  );
+                }, error: (Object error, StackTrace stackTrace) {
+                  return Text('Error');
+                }, loading: () {
+                  return CircularProgressIndicator();
+                });
+              },
             ),
             SizedBox(
               width: 3.w,
@@ -184,7 +185,7 @@ class _SheetsState extends State<Counters> {
                                         _controllerCommission.text,
                                         _controllerPatti.text);
                                 if (addCounter.success == true) {
-                                  getCounters();
+                                  ref.refresh(counterDataProvider);
                                   _controllerName.clear();
                                   _controllerMobile.clear();
                                   _controllerPair.clear();
@@ -289,8 +290,7 @@ Widget topBar() {
   );
 }
 
-Widget agentsList(
-    String? pic, String? name, String? date, BuildContext context) {
+Widget agentsList(CountersData countersData, BuildContext context) {
   return Container(
     width: 50.w,
     margin: EdgeInsets.only(top: 1.w),
@@ -306,7 +306,7 @@ Widget agentsList(
           ClipRRect(
             borderRadius: BorderRadius.circular(8),
             child: Image.network(
-              pic!,
+              'https://cdn-icons-png.flaticon.com/256/4128/4128176.png',
               height: 5.5.w,
               width: 5.5.w,
               fit: BoxFit.cover,
@@ -322,7 +322,7 @@ Widget agentsList(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  name!,
+                  countersData.name!,
                   textAlign: TextAlign.left,
                   style: TextStyle(
                       fontSize: 1.7.w,
@@ -330,7 +330,7 @@ Widget agentsList(
                       color: const Color.fromARGB(255, 0, 0, 0)),
                 ),
                 Text(
-                  date!,
+                  countersData.createdAt!,
                   textAlign: TextAlign.left,
                   style: TextStyle(
                     fontSize: 1.3.w,
@@ -345,7 +345,14 @@ Widget agentsList(
             child: Container(),
           ),
           IconButton(
-            onPressed: () {},
+            onPressed: () {
+              showDialog(
+                  context: context,
+                  builder: (context) => DeleteConfirmationPopup(
+                      countersData.id!,
+                      'counter',
+                      const ExtraDataParameter(dataList: [])));
+            },
             icon: Icon(
               Icons.delete,
               color: ColorsRes.red,
@@ -359,7 +366,10 @@ Widget agentsList(
             onPressed: () {
               showDialog(
                   context: context,
-                  builder: (context) => PlayerLimitPopup(name, pic, date));
+                  builder: (context) => PlayerLimitPopup(
+                      countersData.name!,
+                      'https://cdn-icons-png.flaticon.com/256/4128/4128176.png',
+                      countersData.createdAt!));
             },
             icon: Icon(
               Icons.edit_note,

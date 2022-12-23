@@ -1,8 +1,10 @@
 import 'package:date_time_picker/date_time_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:iconly/iconly.dart';
 import 'package:ms_sheet/global.dart' as global;
+import 'package:ms_sheet/providers/data_providers.dart';
 import 'package:ms_sheet/ui/styles/color.dart';
 import 'package:sizer/sizer.dart';
 
@@ -32,40 +34,29 @@ class _AddSheetsState extends State<AddSheets> {
   }
 }
 
-class CreateSheets extends StatefulWidget {
+class CreateSheets extends ConsumerStatefulWidget {
   const CreateSheets({super.key});
 
   @override
-  State<CreateSheets> createState() => _CreateSheetsState();
+  ConsumerState<CreateSheets> createState() => _CreateSheetsState();
 }
 
-class _CreateSheetsState extends State<CreateSheets> {
+class _CreateSheetsState extends ConsumerState<CreateSheets> {
   late TextEditingController _controllerTime;
   late TextEditingController _controllerName;
-  List<dynamic> _sheetsList = [];
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
 
-    getSheets();
     _controllerTime = TextEditingController(text: '');
     _controllerName = TextEditingController(text: '');
   }
 
-  void getSheets() async {
-    _sheetsList.clear();
-    var getSheets = await SheetsRepository().getSheets();
-    if (getSheets.success == true) {
-      setState(() {
-        _sheetsList.addAll(getSheets.data!);
-      });
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
+    final _data = ref.watch(sheetDataProvider);
     return Expanded(
       child: Container(
         margin: EdgeInsets.only(top: 1.w),
@@ -79,7 +70,6 @@ class _CreateSheetsState extends State<CreateSheets> {
             20,
             0),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
           children: [
             Padding(
               padding: EdgeInsets.only(left: 1.0.w, right: 1.w),
@@ -190,9 +180,8 @@ class _CreateSheetsState extends State<CreateSheets> {
                         var addSheet = await SheetsRepository().addSheets(
                             _controllerName.text, _controllerTime.text);
                         if (addSheet.success == true) {
-                          _controllerName.clear();
-                          _controllerTime.clear();
-                          getSheets();
+                          _controllerName.text = '';
+                          _controllerTime.text = '';
                           SmartDialog.showToast(
                               "${_controllerName.text} Added");
                         }
@@ -200,6 +189,7 @@ class _CreateSheetsState extends State<CreateSheets> {
                         print('Bearer ${global.prefs.get('token')}');
                         SmartDialog.showToast("Please fill all data");
                       }
+                      ref.refresh(sheetDataProvider);
                     },
                     child: Container(
                       height: 6.w,
@@ -216,18 +206,29 @@ class _CreateSheetsState extends State<CreateSheets> {
               ],
             ),
             SizedBox(
-              height: 2.w,
+              height: 3.w,
             ),
-            ListView(
-              scrollDirection: Axis.vertical,
-              shrinkWrap: true,
-              children: _sheetsList.map((e) {
-                return sheetsList(
-                    'https://cdn-icons-png.flaticon.com/256/281/281761.png',
-                    e.name,
-                    e.endTime,
-                    context);
-              }).toList(),
+            Consumer(
+              builder: (BuildContext context, WidgetRef ref, Widget? child) {
+                return _data.when(data: (dynamic data) {
+                  print('agentsDataProvider 0 : ${_data.value!.data}');
+                  return ListView(
+                    shrinkWrap: true,
+                    scrollDirection: Axis.vertical,
+                    children: _data.value!.data!.map((e) {
+                      return sheetsList(
+                          'https://cdn-icons-png.flaticon.com/256/281/281761.png',
+                          e.name,
+                          e.endTime,
+                          context);
+                    }).toList(),
+                  );
+                }, error: (Object error, StackTrace stackTrace) {
+                  return Text('Error');
+                }, loading: () {
+                  return CircularProgressIndicator();
+                });
+              },
             ),
           ],
         ),
@@ -304,7 +305,7 @@ Widget sheetsList(
               Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => MainPanel(),
+                    builder: (context) => MainPanel(1, ''),
                   ));
             },
             icon: Icon(

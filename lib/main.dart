@@ -10,7 +10,6 @@ import 'firebase_options.dart';
 import 'ui/screens/home/home.dart';
 
 GlobalKey globalKey = GlobalKey();
-final counterProvider = StateProvider((ref) => 0);
 
 void main() async {
   runApp(ProviderScope(child: MsSheet()));

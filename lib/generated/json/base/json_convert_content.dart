@@ -7,6 +7,8 @@ import 'package:flutter/material.dart' show debugPrint;
 import 'package:ms_sheet/models/agents_response_entity.dart';
 import 'package:ms_sheet/models/counters_entity.dart';
 import 'package:ms_sheet/models/local_players_entity.dart';
+import 'package:ms_sheet/models/panel_response_entity.dart';
+import 'package:ms_sheet/models/sheets_response_entity.dart';
 
 JsonConvert jsonConvert = JsonConvert();
 typedef JsonConvertFunction<T> = T Function(Map<String, dynamic> json);
@@ -19,6 +21,10 @@ class JsonConvert {
     (CountersData).toString(): CountersData.fromJson,
     (LocalPlayersEntity).toString(): LocalPlayersEntity.fromJson,
     (LocalPlayersData).toString(): LocalPlayersData.fromJson,
+    (PanelResponseEntity).toString(): PanelResponseEntity.fromJson,
+    (PanelResponseData).toString(): PanelResponseData.fromJson,
+    (SheetsResponseEntity).toString(): SheetsResponseEntity.fromJson,
+    (SheetsResponseData).toString(): SheetsResponseData.fromJson,
   };
 
   T? convert<T>(dynamic value) {
@@ -131,6 +137,30 @@ class JsonConvert {
       return data
           .map<LocalPlayersData>(
               (Map<String, dynamic> e) => LocalPlayersData.fromJson(e))
+          .toList() as M;
+    }
+    if (<PanelResponseEntity>[] is M) {
+      return data
+          .map<PanelResponseEntity>(
+              (Map<String, dynamic> e) => PanelResponseEntity.fromJson(e))
+          .toList() as M;
+    }
+    if (<PanelResponseData>[] is M) {
+      return data
+          .map<PanelResponseData>(
+              (Map<String, dynamic> e) => PanelResponseData.fromJson(e))
+          .toList() as M;
+    }
+    if (<SheetsResponseEntity>[] is M) {
+      return data
+          .map<SheetsResponseEntity>(
+              (Map<String, dynamic> e) => SheetsResponseEntity.fromJson(e))
+          .toList() as M;
+    }
+    if (<SheetsResponseData>[] is M) {
+      return data
+          .map<SheetsResponseData>(
+              (Map<String, dynamic> e) => SheetsResponseData.fromJson(e))
           .toList() as M;
     }
 

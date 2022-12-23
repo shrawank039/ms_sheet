@@ -1,43 +1,37 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:iconly/iconly.dart';
+import 'package:ms_sheet/models/local_players_entity.dart';
+import 'package:ms_sheet/providers/data_providers.dart';
 import 'package:ms_sheet/repositories/local_player_repository.dart';
 import 'package:ms_sheet/ui/styles/color.dart';
 import 'package:ms_sheet/ui/styles/design.dart';
 import 'package:ms_sheet/widgets/player_limit_popup.dart';
 import 'package:sizer/sizer.dart';
 
-class LocalPlayers extends StatefulWidget {
+import '../../../../widgets/delete_confirmation_popup.dart';
+
+class LocalPlayers extends ConsumerStatefulWidget {
   @override
-  State<LocalPlayers> createState() => _SheetsState();
+  ConsumerState<LocalPlayers> createState() => _SheetsState();
 }
 
-class _SheetsState extends State<LocalPlayers> {
+class _SheetsState extends ConsumerState<LocalPlayers> {
   late TextEditingController _controllerMobile;
   late TextEditingController _controllerName;
-  List<dynamic> _playersList = [];
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    getLocalPlayers();
     _controllerMobile = TextEditingController(text: '');
     _controllerName = TextEditingController(text: '');
   }
 
-  void getLocalPlayers() async {
-    _playersList.clear();
-    var getPlayers = await LocalPlayersRepository().getLocalPlayers();
-    if (getPlayers.success == true) {
-      setState(() {
-        _playersList.addAll(getPlayers.data!);
-      });
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
+    final _data = ref.watch(localPlayerDataProvider);
     return Column(
       children: [
         topBar(),
@@ -49,14 +43,21 @@ class _SheetsState extends State<LocalPlayers> {
           children: [
             Expanded(
               flex: 3,
-              child: Column(
-                children: _playersList.map((e) {
-                  return localPlayersList(
-                      'https://cdn-icons-png.flaticon.com/256/4128/4128176.png',
-                      e.name,
-                      e.createdAt,
-                      context);
-                }).toList(),
+              child: Consumer(
+                builder: (BuildContext context, WidgetRef ref, Widget? child) {
+                  return _data.when(data: (dynamic data) {
+                    print('agentsDataProvider 0 : ${_data.value!.data}');
+                    return Column(
+                      children: _data.value!.data!.map((e) {
+                        return localPlayersList(e, context);
+                      }).toList(),
+                    );
+                  }, error: (Object error, StackTrace stackTrace) {
+                    return Text('Error');
+                  }, loading: () {
+                    return CircularProgressIndicator();
+                  });
+                },
               ),
             ),
             SizedBox(
@@ -124,7 +125,7 @@ class _SheetsState extends State<LocalPlayers> {
                                     .addLocalPlayers(_controllerName.text,
                                         _controllerMobile.text, '123456', '10');
                                 if (addSheet.success == true) {
-                                  getLocalPlayers();
+                                  ref.refresh(localPlayerDataProvider);
                                   _controllerName.clear();
                                   _controllerMobile.clear();
                                   SmartDialog.showToast(
@@ -233,8 +234,7 @@ Widget topBar() {
   );
 }
 
-Widget localPlayersList(
-    String? pic, String? name, String? date, BuildContext context) {
+Widget localPlayersList(LocalPlayersData playersData, BuildContext context) {
   return Container(
     margin: EdgeInsets.only(top: 1.w),
     decoration: DesignConfig.boxDecorationContainerCardShadow(
@@ -249,7 +249,7 @@ Widget localPlayersList(
           ClipRRect(
             borderRadius: BorderRadius.circular(8),
             child: Image.network(
-              pic!,
+              'https://cdn-icons-png.flaticon.com/256/4128/4128176.png',
               height: 5.5.w,
               width: 5.5.w,
               fit: BoxFit.cover,
@@ -265,7 +265,7 @@ Widget localPlayersList(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  name!,
+                  playersData.name!,
                   textAlign: TextAlign.left,
                   style: TextStyle(
                       fontSize: 1.7.w,
@@ -273,7 +273,7 @@ Widget localPlayersList(
                       color: const Color.fromARGB(255, 0, 0, 0)),
                 ),
                 Text(
-                  date!,
+                  playersData.createdAt!,
                   textAlign: TextAlign.left,
                   style: TextStyle(
                     fontSize: 1.3.w,
@@ -288,7 +288,12 @@ Widget localPlayersList(
             child: Container(),
           ),
           IconButton(
-            onPressed: () {},
+            onPressed: () {
+              showDialog(
+                  context: context,
+                  builder: (context) => DeleteConfirmationPopup(playersData.id!,
+                      'local_player', const ExtraDataParameter(dataList: [])));
+            },
             icon: Icon(
               IconlyBold.delete,
               color: ColorsRes.red,
@@ -313,7 +318,10 @@ Widget localPlayersList(
             onPressed: () {
               showDialog(
                   context: context,
-                  builder: (context) => PlayerLimitPopup(name, pic, date));
+                  builder: (context) => PlayerLimitPopup(
+                      playersData.name!,
+                      'https://cdn-icons-png.flaticon.com/256/4128/4128176.png',
+                      playersData.createdAt!));
             },
             icon: Icon(
               IconlyBold.editSquare,
