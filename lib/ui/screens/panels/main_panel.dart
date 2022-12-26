@@ -669,25 +669,23 @@ class _MainPanelState extends ConsumerState<MainPanel> {
                                       ),
                                       InkWell(
                                         onTap: () {
-                                          setState(() {
-                                            for (int i = 0;
-                                                i <
+                                          for (int i = 0;
+                                              i <
+                                                  entryBoxController
+                                                      .text.length;
+                                              i++) {
+                                            entryBox = int.parse(
+                                                entryBoxController.text[i] +
                                                     entryBoxController
-                                                        .text.length;
-                                                i++) {
-                                              entryBox = int.parse(
-                                                  entryBoxController.text[i] +
-                                                      entryBoxController
-                                                          .text[i + 1]);
-                                              entryAmt = int.parse(
-                                                  entryAmtController.text);
-                                              global.numberPair[entryBox!] =
-                                                  (global.numberPair[
-                                                          entryBox])! +
-                                                      entryAmt!;
-                                              i = i + 1;
-                                            }
-                                          });
+                                                        .text[i + 1]);
+                                            entryAmt = int.parse(
+                                                entryAmtController.text);
+                                            global.numberPair[entryBox!] =
+                                                (global.numberPair[entryBox])! +
+                                                    entryAmt!;
+                                            i = i + 1;
+                                          }
+                                          ref.refresh(numberPairProvider);
                                         },
                                         child: DesignConfig.flatButtonWithIcon(
                                           ColorsRes.mainBlue,
@@ -777,7 +775,7 @@ class _MainPanelState extends ConsumerState<MainPanel> {
                                           context,
                                           MaterialPageRoute(
                                               builder: (context) =>
-                                                  MasterPanel()));
+                                                  MasterPanel(0, '')));
                                     },
                                     child: DesignConfig.flatButtonWithIcon(
                                       ColorsRes.mainBlue,
@@ -874,14 +872,20 @@ Widget pairList(int index) {
                 textAlign: TextAlign.center,
                 style: TextStyle(color: ColorsRes.black),
               )),
-              IconButton(
-                onPressed: () {},
-                icon: Icon(
-                  Icons.delete,
-                  size: 2.7.w,
-                  color: ColorsRes.red,
-                ),
-              ),
+              Consumer(builder: (_, WidgetRef ref, __) {
+                return IconButton(
+                  onPressed: () {
+                    print('deletePair : ${index}');
+                    global.numberPair[index] = 0;
+                    ref.refresh(numberPairProvider);
+                  },
+                  icon: Icon(
+                    Icons.delete,
+                    size: 2.7.w,
+                    color: ColorsRes.red,
+                  ),
+                );
+              })
             ],
           ),
         ),

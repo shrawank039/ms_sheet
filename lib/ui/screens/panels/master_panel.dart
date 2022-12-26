@@ -1,22 +1,31 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:ms_sheet/global.dart' as global;
 import 'package:ms_sheet/ui/styles/color.dart';
 import 'package:sizer/sizer.dart';
 
+import '../../../models/panel_response_entity.dart';
+import '../../../providers/data_providers.dart';
 import '../../styles/design.dart';
 
-class MasterPanel extends StatefulWidget {
-  const MasterPanel({super.key});
+class MasterPanel extends ConsumerStatefulWidget {
+  final int sheet_id;
+  final String date;
+  const MasterPanel(this.sheet_id, this.date, {super.key});
 
   @override
-  State<MasterPanel> createState() => _MasterPanelState();
+  ConsumerState<MasterPanel> createState() => _MasterPanelState();
 }
 
-class _MasterPanelState extends State<MasterPanel> {
+class _MasterPanelState extends ConsumerState<MasterPanel> {
   @override
   Widget build(BuildContext context) {
+    final ExtraDataParameter extraDataParameter =
+        ExtraDataParameter(dataList: [widget.sheet_id, widget.date]);
+
+    final _data = ref.watch(panelDataProvider(extraDataParameter));
+
     return Scaffold(
       body: SafeArea(
         child: Padding(
@@ -238,11 +247,25 @@ class _MasterPanelState extends State<MasterPanel> {
                                   '  Clients',
                                   textAlign: TextAlign.start,
                                 ),
-                                Column(
-                                  children: global.clients.map((e) {
-                                    return clientsList(
-                                        e.picture, e.name, e.date);
-                                  }).toList(),
+                                Consumer(
+                                  builder: (BuildContext context, WidgetRef ref,
+                                      Widget? child) {
+                                    return _data.when(data: (dynamic data) {
+                                      print(
+                                          'agentsDataProvider 0 : ${_data.value!.data}');
+                                      return Column(
+                                        children: _data.value!.data!.map((e) {
+                                          return clientsList(
+                                              e, extraDataParameter, context);
+                                        }).toList(),
+                                      );
+                                    }, error:
+                                        (Object error, StackTrace stackTrace) {
+                                      return Text('Error');
+                                    }, loading: () {
+                                      return CircularProgressIndicator();
+                                    });
+                                  },
                                 ),
                                 Expanded(
                                     child: SizedBox(
@@ -254,7 +277,7 @@ class _MasterPanelState extends State<MasterPanel> {
                           SizedBox(
                             width: 1.w,
                           ),
-                          Expanded(
+                          /*Expanded(
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
@@ -298,7 +321,7 @@ class _MasterPanelState extends State<MasterPanel> {
                                 )),
                               ],
                             ),
-                          ),
+                          ),*/
                         ],
                       ),
                     ),
@@ -635,8 +658,10 @@ Widget controls() {
   );
 }
 
-Widget clientsList(String? pic, String? name, String? date) {
+Widget clientsList(PanelResponseData data,
+    ExtraDataParameter extraDataParameter, BuildContext context) {
   var checkBox = false;
+  String selected = "";
   return Container(
     margin: EdgeInsets.only(top: 1.w),
     decoration: DesignConfig.boxDecorationContainerCardShadow(
@@ -651,7 +676,7 @@ Widget clientsList(String? pic, String? name, String? date) {
           ClipRRect(
             borderRadius: BorderRadius.circular(8),
             child: Image.network(
-              pic!,
+              'https://cdn-icons-png.flaticon.com/256/4128/4128176.png',
               height: 3.w,
               width: 3.w,
               fit: BoxFit.cover,
@@ -668,7 +693,7 @@ Widget clientsList(String? pic, String? name, String? date) {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    name!,
+                    data.name!,
                     overflow: TextOverflow.ellipsis,
                     textAlign: TextAlign.left,
                     style: TextStyle(
@@ -694,7 +719,9 @@ Widget clientsList(String? pic, String? name, String? date) {
           ),
           Checkbox(
             value: checkBox,
-            onChanged: (value) {},
+            onChanged: (value) {
+              checkBox = true;
+            },
           ),
         ],
       ),

@@ -38,7 +38,7 @@ final panelDataProvider = FutureProvider.autoDispose
   return ref.watch(panelProvider).getPanel(data.dataList[0], data.dataList[1]);
 });
 
-final numberPairProvider = Provider<Map<int, int>>((ref) {
+final numberPairProvider = FutureProvider.autoDispose<Map<int, int>>((ref) {
   return global.numberPair;
 });
 

@@ -237,7 +237,8 @@ Widget SheetsCardPC(SheetsResponseData data, BuildContext context) {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => MasterPanel(),
+                              builder: (context) =>
+                                  MasterPanel(data.id!, dateOnly),
                             ));
                       },
                       child: DesignConfig.flatButton(
