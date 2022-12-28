@@ -115,9 +115,7 @@ class _MainPanelState extends ConsumerState<MainPanel> {
                 Expanded(
                   child: Container(
                     padding: EdgeInsets.only(
-                        top: 1.w, left: 3.w, right: 3.w, bottom: 2.5.w),
-                    //width: 30.w,
-                    //height: 200,
+                        top: 1.w, left: 3.w, right: 3.w, bottom: 1.w),
                     decoration: DesignConfig.boxDecorationContainerCardShadow(
                       ColorsRes.white,
                       Color.fromRGBO(44, 39, 46, 0.059),
@@ -300,7 +298,7 @@ class _MainPanelState extends ConsumerState<MainPanel> {
                                       Container(
                                         width: 9.w,
                                         alignment: Alignment.centerLeft,
-                                        //height: 5.5.w,
+                                        height: 5.5.w,
                                         child: Text(
                                           "$total",
                                           style: TextStyle(
@@ -520,7 +518,7 @@ class _MainPanelState extends ConsumerState<MainPanel> {
                                                       });
                                                     },
                                                     //itemHeight: 40,
-                                                    dropdownMaxHeight: 300,
+                                                    //dropdownMaxHeight: 300,
                                                     searchController:
                                                         textEditingController,
                                                     searchInnerWidget: Padding(

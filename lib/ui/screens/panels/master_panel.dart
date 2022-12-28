@@ -48,8 +48,6 @@ class _MasterPanelState extends ConsumerState<MasterPanel> {
                 child: Container(
                   padding: EdgeInsets.only(
                       top: 1.w, left: 3.w, right: 3.w, bottom: 1.w),
-                  //width: 30.w,
-                  //height: 200,
                   decoration: DesignConfig.boxDecorationContainerCardShadow(
                     ColorsRes.white,
                     Color.fromRGBO(44, 39, 46, 0.059),
