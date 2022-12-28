@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:ms_sheet/global.dart' as global;
 import 'package:ms_sheet/ui/styles/color.dart';
 import 'package:sizer/sizer.dart';
 
@@ -9,9 +10,13 @@ import '../../../models/panel_response_entity.dart';
 import '../../../providers/data_providers.dart';
 import '../../styles/design.dart';
 
+var _selectedList;
+var checkBox;
+
 class MasterPanel extends ConsumerStatefulWidget {
   final int sheet_id;
   final String date;
+
   const MasterPanel(this.sheet_id, this.date, {super.key});
 
   @override
@@ -25,6 +30,13 @@ class _MasterPanelState extends ConsumerState<MasterPanel> {
         ExtraDataParameter(dataList: [widget.sheet_id, widget.date]);
 
     final _data = ref.watch(panelDataProvider(extraDataParameter));
+
+    final _dataNumberPair = ref.watch(numberPairProvider);
+
+    var total = 0;
+    for (int i = 0; i < global.numberPair.length; i++) {
+      total += global.numberPair[i]!;
+    }
 
     return Scaffold(
       body: SafeArea(
@@ -112,12 +124,19 @@ class _MasterPanelState extends ConsumerState<MasterPanel> {
                                               mainAxisSpacing: 0,
                                               crossAxisSpacing: 0,
                                               itemBuilder: (context, index) {
+                                                int total = 0;
+                                                for (int i = index * 10;
+                                                    i < index * 10 + 10;
+                                                    i++) {
+                                                  total = total +
+                                                      global.numberPair[i]!;
+                                                }
                                                 return Container(
                                                   alignment:
                                                       Alignment.centerLeft,
                                                   height: 5.5.w,
                                                   child: Text(
-                                                    "0",
+                                                    "$total",
                                                     style: TextStyle(
                                                         fontSize: 2.2.w),
                                                   ),
@@ -165,12 +184,20 @@ class _MasterPanelState extends ConsumerState<MasterPanel> {
                                               mainAxisSpacing: 0,
                                               crossAxisSpacing: 0,
                                               itemBuilder: (context, index) {
+                                                int total = 0;
+                                                for (int i = index * 10;
+                                                    i < index * 10 + 10;
+                                                    i++) {
+                                                  total = total +
+                                                      global
+                                                          .numberPair[i + 100]!;
+                                                }
                                                 return Container(
                                                   alignment:
                                                       Alignment.centerLeft,
                                                   height: 5.5.w,
                                                   child: Text(
-                                                    "0",
+                                                    "$total",
                                                     style: TextStyle(
                                                         fontSize: 2.2.w),
                                                   ),
@@ -207,7 +234,7 @@ class _MasterPanelState extends ConsumerState<MasterPanel> {
                             alignment: Alignment.centerLeft,
                             //height: 5.5.w,
                             child: Text(
-                              "0",
+                              "$total",
                               style: TextStyle(
                                   fontSize: 2.2.w,
                                   color: ColorsRes.mainBlue,
@@ -251,12 +278,14 @@ class _MasterPanelState extends ConsumerState<MasterPanel> {
                                   builder: (BuildContext context, WidgetRef ref,
                                       Widget? child) {
                                     return _data.when(data: (dynamic data) {
-                                      print(
-                                          'agentsDataProvider 0 : ${_data.value!.data}');
                                       return Column(
                                         children: _data.value!.data!.map((e) {
+                                          var data = convertPair(e);
                                           return clientsList(
-                                              e, extraDataParameter, context);
+                                              e,
+                                              extraDataParameter,
+                                              data,
+                                              context);
                                         }).toList(),
                                       );
                                     }, error:
@@ -492,8 +521,10 @@ class _MasterPanelState extends ConsumerState<MasterPanel> {
 }
 
 Widget numberBox(int index) {
-  final pointController = TextEditingController();
-
+  final TextEditingController pointController = TextEditingController();
+  if (global.numberPair[index + 1]! > 0) {
+    pointController.text = global.numberPair[index + 1].toString();
+  }
   return Container(
     padding: EdgeInsets.only(left: 1.w),
     decoration: BoxDecoration(
@@ -509,14 +540,14 @@ Widget numberBox(int index) {
           textAlign: TextAlign.end,
           scribbleEnabled: true,
           controller: pointController,
-          style:
-              TextStyle(color: ColorsRes.mainBlue, fontWeight: FontWeight.w500),
+          style: const TextStyle(
+              color: ColorsRes.mainBlue, fontWeight: FontWeight.w500),
           decoration: InputDecoration(
             isCollapsed: true,
             contentPadding:
                 EdgeInsets.only(left: 1.2.w, top: 0.5.w, bottom: 0.5.w),
             hoverColor: ColorsRes.lightBlue,
-            border: OutlineInputBorder(borderSide: BorderSide.none),
+            border: const OutlineInputBorder(borderSide: BorderSide.none),
           ),
           onChanged: (text) {},
         ),
@@ -526,141 +557,232 @@ Widget numberBox(int index) {
 }
 
 Widget controls() {
-  return Column(
-    children: [
-      Row(
-        children: [
-          SizedBox(
-            width: 1.2.w,
-          ),
-          Expanded(
-            child: DesignConfig.inputBoxDecoratedBordered(
-              const Color(0xFFf9f9f9),
-              1.5.w,
-              2.2.w,
-              'Cutting Up',
-              Icons.mobile_friendly,
-              3.w,
+  int? cuttingUp, cuttingDown, dabbaUp, dabbaDown, percent;
+  final TextEditingController cuttingUpController = TextEditingController();
+  final TextEditingController cuttingDownController = TextEditingController();
+  final TextEditingController dabbaUpController = TextEditingController();
+  final TextEditingController dabbaDownController = TextEditingController();
+  final TextEditingController percentController = TextEditingController();
+  final Function(String) callback;
+
+  return Consumer(
+      builder: (BuildContext context, WidgetRef ref, Widget? child) {
+    return Column(
+      children: [
+        Row(
+          children: [
+            SizedBox(
+              width: 1.2.w,
             ),
-          ),
-          Expanded(
-            child: DesignConfig.inputBoxDecoratedBordered(
-              const Color(0xFFf9f9f9),
-              1.5.w,
-              2.2.w,
-              'Cutting Down',
-              Icons.mobile_friendly,
-              3.w,
+            Expanded(
+              child: DesignConfig.inputBoxDecoratedBordered(
+                const Color(0xFFf9f9f9),
+                1.5.w,
+                2.2.w,
+                'Cutting Up',
+                Icons.mobile_friendly,
+                3.w,
+                TextInputType.number,
+                cuttingUpController,
+                (value) {
+                  if (value == '') {
+                    value = '0';
+                  }
+                  global.numberPair = convertPair(_selectedList);
+                  for (int i = 0; i < global.numberPair.length; i++) {
+                    if (global.numberPair[i]! > 0) {
+                      global.numberPair[i] =
+                          (global.numberPair[i]! - int.parse(value));
+                    }
+                  }
+                  ref.refresh(numberPairProvider);
+                  print('on changed $_selectedList');
+                },
+              ),
             ),
-          ),
-          Expanded(
-            child: DesignConfig.inputBoxDecoratedBordered(
-              const Color(0xFFf9f9f9),
-              1.5.w,
-              2.2.w,
-              '100%',
-              Icons.mobile_friendly,
-              3.w,
+            Expanded(
+              child: DesignConfig.inputBoxDecoratedBordered(
+                const Color(0xFFf9f9f9),
+                1.5.w,
+                2.2.w,
+                'Cutting Down',
+                Icons.mobile_friendly,
+                3.w,
+                TextInputType.number,
+                cuttingDownController,
+                (value) {
+                  if (value == '') {
+                    value = '0';
+                  }
+                  global.numberPair = convertPair(_selectedList);
+                  for (int i = 0; i < global.numberPair.length; i++) {
+                    if (global.numberPair[i]! <= int.parse(value)) {
+                      global.numberPair[i] = 0;
+                    }
+                  }
+                  ref.refresh(numberPairProvider);
+                  print('on changed $_selectedList');
+                },
+              ),
             ),
-          ),
-          Expanded(
-            child: DesignConfig.inputBoxDecoratedBordered(
-              const Color(0xFFf9f9f9),
-              1.5.w,
-              2.2.w,
-              'Dabba Up',
-              Icons.mobile_friendly,
-              3.w,
+            Expanded(
+              child: DesignConfig.inputBoxDecoratedBordered(
+                const Color(0xFFf9f9f9),
+                1.5.w,
+                2.2.w,
+                '100%',
+                Icons.mobile_friendly,
+                3.w,
+                TextInputType.number,
+                percentController,
+                (value) {
+                  if (value == '') {
+                    value = '0';
+                  }
+                  global.numberPair = convertPair(_selectedList);
+                  for (int i = 0; i < global.numberPair.length; i++) {
+                    if (global.numberPair[i]! > 0) {
+                      int percent = int.parse(value);
+                      var finalValue = (global.numberPair[i]! * percent) / 100;
+                      global.numberPair[i] = finalValue.toInt();
+                    }
+                  }
+                  ref.refresh(numberPairProvider);
+                  print('on changed $_selectedList');
+                },
+              ),
             ),
-          ),
-          Expanded(
-            child: DesignConfig.inputBoxDecoratedBordered(
-              const Color(0xFFf9f9f9),
-              1.5.w,
-              2.2.w,
-              'Dabba Down',
-              Icons.mobile_friendly,
-              3.w,
+            Expanded(
+              child: DesignConfig.inputBoxDecoratedBordered(
+                const Color(0xFFf9f9f9),
+                1.5.w,
+                2.2.w,
+                'Dabba Up',
+                Icons.mobile_friendly,
+                3.w,
+                TextInputType.number,
+                dabbaUpController,
+                (value) {
+                  if (value == '') {
+                    value = '0';
+                  }
+                  global.numberPair = convertPair(_selectedList);
+                  for (int i = 0; i < global.numberPair.length; i++) {
+                    if (global.numberPair[i]! >= int.parse(value)) {
+                      global.numberPair[i] = 0;
+                    }
+                  }
+                  ref.refresh(numberPairProvider);
+                  print('on changed $_selectedList');
+                },
+              ),
             ),
-          ),
-          SizedBox(
-            width: 5.w,
-          )
-        ],
-      ),
-      SizedBox(
-        height: 1.5.w,
-      ),
-      Row(
-        children: [
-          Expanded(
-            child: Row(
-              children: [
-                Expanded(
-                  child: DesignConfig.flatButtonWithCheckBox(
-                    ColorsRes.lightBlue,
-                    1.5.w,
-                    ColorsRes.mainBlue,
-                    "Round",
-                    2.w,
-                    ColorsRes.mainBlue,
+            Expanded(
+              child: DesignConfig.inputBoxDecoratedBordered(
+                const Color(0xFFf9f9f9),
+                1.5.w,
+                2.2.w,
+                'Dabba Down',
+                Icons.mobile_friendly,
+                3.w,
+                TextInputType.number,
+                dabbaDownController,
+                (value) {
+                  if (value == '') {
+                    value = '0';
+                  }
+                  global.numberPair = convertPair(_selectedList);
+                  for (int i = 0; i < global.numberPair.length; i++) {
+                    if (global.numberPair[i]! <= int.parse(value)) {
+                      global.numberPair[i] = 0;
+                    }
+                  }
+                  ref.refresh(numberPairProvider);
+                  print('on changed $_selectedList');
+                },
+              ),
+            ),
+            SizedBox(
+              width: 5.w,
+            )
+          ],
+        ),
+        SizedBox(
+          height: 1.5.w,
+        ),
+        Row(
+          children: [
+            Expanded(
+              child: Row(
+                children: [
+                  Expanded(
+                    child: DesignConfig.flatButtonWithCheckBox(
+                      ColorsRes.lightBlue,
+                      1.5.w,
+                      ColorsRes.mainBlue,
+                      "Round",
+                      2.w,
+                      ColorsRes.mainBlue,
+                    ),
                   ),
-                ),
-                Expanded(
-                  child: DesignConfig.flatButtonWithCheckBox(
-                    ColorsRes.lightBlue,
-                    1.5.w,
-                    ColorsRes.mainBlue,
-                    "In/Out",
-                    2.w,
-                    ColorsRes.mainBlue,
+                  Expanded(
+                    child: DesignConfig.flatButtonWithCheckBox(
+                      ColorsRes.lightBlue,
+                      1.5.w,
+                      ColorsRes.mainBlue,
+                      "In/Out",
+                      2.w,
+                      ColorsRes.mainBlue,
+                    ),
                   ),
-                ),
-                Expanded(
-                  child: DesignConfig.flatButtonWithCheckBox(
-                    ColorsRes.lightBlue,
-                    1.5.w,
-                    ColorsRes.mainBlue,
-                    "Comm",
-                    2.w,
-                    ColorsRes.mainBlue,
+                  Expanded(
+                    child: DesignConfig.flatButtonWithCheckBox(
+                      ColorsRes.lightBlue,
+                      1.5.w,
+                      ColorsRes.mainBlue,
+                      "Comm",
+                      2.w,
+                      ColorsRes.mainBlue,
+                    ),
                   ),
-                ),
-                Expanded(
-                  child: DesignConfig.flatButtonWithCheckBox(
-                    ColorsRes.lightBlue,
-                    1.5.w,
-                    ColorsRes.mainBlue,
-                    "Patti",
-                    2.w,
-                    ColorsRes.mainBlue,
+                  Expanded(
+                    child: DesignConfig.flatButtonWithCheckBox(
+                      ColorsRes.lightBlue,
+                      1.5.w,
+                      ColorsRes.mainBlue,
+                      "Patti",
+                      2.w,
+                      ColorsRes.mainBlue,
+                    ),
                   ),
-                ),
-                SizedBox(
-                  width: 5.w,
-                )
-              ],
+                  SizedBox(
+                    width: 5.w,
+                  )
+                ],
+              ),
             ),
-          ),
-          // DesignConfig.flatButtonWithIcon(
-          //   ColorsRes.mainBlue,
-          //   1.6.w,
-          //   Icons.create,
-          //   ColorsRes.white,
-          //   2.6.w,
-          //   'Create',
-          //   2.w,
-          //   ColorsRes.white,
-          // ),
-        ],
-      ),
-    ],
-  );
+            // DesignConfig.flatButtonWithIcon(
+            //   ColorsRes.mainBlue,
+            //   1.6.w,
+            //   Icons.create,
+            //   ColorsRes.white,
+            //   2.6.w,
+            //   'Create',
+            //   2.w,
+            //   ColorsRes.white,
+            // ),
+          ],
+        ),
+      ],
+    );
+  });
 }
 
-Widget clientsList(PanelResponseData data,
-    ExtraDataParameter extraDataParameter, BuildContext context) {
-  var checkBox = false;
+Widget clientsList(
+    PanelResponseData data,
+    ExtraDataParameter extraDataParameter,
+    Map<int, int> pair,
+    BuildContext context) {
   String selected = "";
   return Container(
     margin: EdgeInsets.only(top: 1.w),
@@ -717,14 +839,35 @@ Widget clientsList(PanelResponseData data,
           Expanded(
             child: Container(),
           ),
-          Checkbox(
-            value: checkBox,
-            onChanged: (value) {
-              checkBox = true;
-            },
-          ),
+          Consumer(builder: (_, WidgetRef ref, __) {
+            return Checkbox(
+              value: checkBox == data.id ? true : false,
+              onChanged: (value) {
+                checkBox = data.id!;
+                global.numberPair = pair;
+                _selectedList = data;
+                print('agentsDataProvider 0 : ${global.numberPair}');
+                ref.refresh(numberPairProvider);
+              },
+            );
+          }),
         ],
       ),
     ),
   );
+}
+
+Map<int, int> convertPair(PanelResponseData data) {
+  List<String> str = data.pair!
+      .replaceAll("{", "")
+      .replaceAll("}", "")
+      .replaceAll("\"", "")
+      .replaceAll("'", "")
+      .split(",");
+  Map<int, int> result = {};
+  for (int i = 0; i < str.length; i++) {
+    List<String> s = str[i].split(":");
+    result.putIfAbsent(int.parse(s[0].trim()), () => int.parse(s[1].trim()));
+  }
+  return result;
 }

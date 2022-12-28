@@ -162,6 +162,7 @@ class DesignConfig {
         child: Padding(
           padding: EdgeInsets.only(left: 1.w),
           child: TextField(
+            onChanged: (input) {},
             controller: controller,
             keyboardType: inputType,
             style: TextStyle(
@@ -181,13 +182,15 @@ class DesignConfig {
   }
 
   static Container inputBoxDecoratedBordered(
-    Color BgColor,
-    double radius,
-    double fontSize,
-    String hint,
-    IconData icon,
-    double iconSize,
-  ) {
+      Color BgColor,
+      double radius,
+      double fontSize,
+      String hint,
+      IconData icon,
+      double iconSize,
+      TextInputType inputType,
+      TextEditingController controller,
+      Function(String) onClick) {
     return Container(
       alignment: Alignment.center,
       // height: 9.w,
@@ -201,6 +204,9 @@ class DesignConfig {
         child: Padding(
           padding: EdgeInsets.only(left: 1.w),
           child: TextField(
+            onChanged: (value) {
+              onClick(value);
+            },
             style: TextStyle(
                 fontSize: fontSize,
                 fontFamily: 'Arial',

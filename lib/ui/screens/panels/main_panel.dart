@@ -257,12 +257,20 @@ class _MainPanelState extends ConsumerState<MainPanel> {
                                                 mainAxisSpacing: 0,
                                                 crossAxisSpacing: 0,
                                                 itemBuilder: (context, index) {
+                                                  int total = 0;
+                                                  for (int i = index * 10;
+                                                      i < index * 10 + 10;
+                                                      i++) {
+                                                    total = total +
+                                                        global.numberPair[
+                                                            i + 100]!;
+                                                  }
                                                   return Container(
                                                     alignment:
                                                         Alignment.centerLeft,
                                                     height: 5.5.w,
                                                     child: Text(
-                                                      "0",
+                                                      "$total",
                                                       style: TextStyle(
                                                           fontSize: 2.2.w),
                                                     ),
@@ -669,21 +677,45 @@ class _MainPanelState extends ConsumerState<MainPanel> {
                                       ),
                                       InkWell(
                                         onTap: () {
-                                          for (int i = 0;
-                                              i <
-                                                  entryBoxController
-                                                      .text.length;
-                                              i++) {
-                                            entryBox = int.parse(
-                                                entryBoxController.text[i] +
+                                          if (entryBoxController
+                                              .text.length.isEven) {
+                                            for (int i = 0;
+                                                i <
                                                     entryBoxController
-                                                        .text[i + 1]);
-                                            entryAmt = int.parse(
-                                                entryAmtController.text);
-                                            global.numberPair[entryBox!] =
-                                                (global.numberPair[entryBox])! +
-                                                    entryAmt!;
-                                            i = i + 1;
+                                                        .text.length;
+                                                i++) {
+                                              entryBox = int.parse(
+                                                  entryBoxController.text[i] +
+                                                      entryBoxController
+                                                          .text[i + 1]);
+                                              entryAmt = int.parse(
+                                                  entryAmtController.text);
+                                              global.numberPair[entryBox!] =
+                                                  (global.numberPair[
+                                                          entryBox])! +
+                                                      entryAmt!;
+                                              i = i + 1;
+                                            }
+                                          } else {
+                                            for (int i = 0;
+                                                i <
+                                                    entryBoxController
+                                                        .text.length;
+                                                i++) {
+                                              entryBox = int.parse(
+                                                  entryBoxController.text[i] +
+                                                      entryBoxController
+                                                          .text[i + 1] +
+                                                      entryBoxController
+                                                          .text[i + 2]);
+                                              entryAmt = int.parse(
+                                                  entryAmtController.text);
+                                              global.numberPair[entryBox!] =
+                                                  (global.numberPair[
+                                                          entryBox])! +
+                                                      entryAmt!;
+                                              i = i + 2;
+                                            }
                                           }
                                           ref.refresh(numberPairProvider);
                                         },
@@ -807,9 +839,9 @@ class _MainPanelState extends ConsumerState<MainPanel> {
 }
 
 Widget numberBox(int index) {
-  final TextEditingController amtBoxController = TextEditingController();
+  final TextEditingController pointController = TextEditingController();
   if (global.numberPair[index + 1]! > 0) {
-    amtBoxController.text = global.numberPair[index + 1].toString();
+    pointController.text = global.numberPair[index + 1].toString();
   }
   return Container(
     padding: EdgeInsets.only(left: 1.w),
@@ -823,7 +855,7 @@ Widget numberBox(int index) {
           style: TextStyle(fontSize: 0.8.h, color: Colors.grey),
         ),
         TextField(
-          controller: amtBoxController,
+          controller: pointController,
           textAlign: TextAlign.end,
           scribbleEnabled: true,
           style:
@@ -842,7 +874,7 @@ Widget numberBox(int index) {
 }
 
 Widget pairList(int index) {
-  for (int i = index; i < 101; i++) {
+  for (int i = index; i < 121; i++) {
     if (global.numberPair[i]! > 0) {
       return Container(
         height: 5.5.w,
