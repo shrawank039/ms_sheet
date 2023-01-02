@@ -110,766 +110,725 @@ class _MainPanelState extends ConsumerState<MainPanel> {
           onKey: _handleKeyEvent,
           child: Padding(
             padding: EdgeInsets.all(1.5.w),
-            child: Stack(
-              fit: StackFit.expand,
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Row(
-                  children: [
-                    Expanded(
-                      child: Container(
-                        padding: EdgeInsets.only(
-                            top: 1.w, left: 3.w, right: 3.w, bottom: 1.w),
-                        decoration:
-                            DesignConfig.boxDecorationContainerCardShadow(
-                          ColorsRes.white,
-                          Color.fromRGBO(44, 39, 46, 0.059),
-                          12.0,
-                          3,
-                          3,
-                          20,
-                          0,
+                Expanded(
+                  child: Container(
+                    padding: EdgeInsets.only(
+                        top: 1.w, left: 3.w, right: 3.w, bottom: 1.w),
+                    decoration: DesignConfig.boxDecorationContainerCardShadow(
+                      ColorsRes.white,
+                      Color.fromRGBO(44, 39, 46, 0.059),
+                      12.0,
+                      3,
+                      3,
+                      20,
+                      0,
+                    ),
+                    //Creating the Sheet
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          children: [
+                            IconButton(
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                },
+                                icon: Icon(Icons.arrow_back)),
+                            SizedBox(
+                              width: 1.w,
+                            ),
+                            Text(
+                              'Draw :',
+                              style: TextStyle(
+                                  color: ColorsRes.darkGrey, fontSize: 2.5.w),
+                            ),
+                            Text(
+                              'Delhi',
+                              style: TextStyle(
+                                  color: ColorsRes.mainBlue, fontSize: 2.5.w),
+                            ),
+                          ],
                         ),
-                        //Creating the Sheet
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
+                        Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Row(
-                              children: [
-                                IconButton(
-                                    onPressed: () {
-                                      Navigator.pop(context);
-                                    },
-                                    icon: Icon(Icons.arrow_back)),
-                                SizedBox(
-                                  width: 1.w,
-                                ),
-                                Text(
-                                  'Draw :',
-                                  style: TextStyle(
-                                      color: ColorsRes.darkGrey,
-                                      fontSize: 2.5.w),
-                                ),
-                                Text(
-                                  'Delhi',
-                                  style: TextStyle(
-                                      color: ColorsRes.mainBlue,
-                                      fontSize: 2.5.w),
-                                ),
-                              ],
-                            ),
-                            Row(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Expanded(
-                                  child: Column(
+                            Expanded(
+                              child: Column(
+                                children: [
+                                  Row(
                                     children: [
-                                      Row(
-                                        children: [
-                                          Expanded(
-                                            child: AlignedGridView.count(
-                                              physics:
-                                                  NeverScrollableScrollPhysics(),
-                                              shrinkWrap: true,
-                                              crossAxisCount: 10,
-                                              itemCount: 100,
-                                              mainAxisSpacing: 0,
-                                              crossAxisSpacing: 0,
-                                              itemBuilder: (context, index) {
-                                                print(
-                                                    '_dataNumberPair 0 : ${_dataNumberPair}');
-                                                return numberBox(index);
-                                              },
-                                            ),
-                                          ),
-                                          Column(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            children: [
-                                              Padding(
-                                                padding: EdgeInsets.all(1.w),
-                                                child: SizedBox(
-                                                  width: 8.w,
-                                                  child: AlignedGridView.count(
-                                                    physics:
-                                                        NeverScrollableScrollPhysics(),
-                                                    scrollDirection:
-                                                        Axis.vertical,
-                                                    shrinkWrap: true,
-                                                    crossAxisCount: 1,
-                                                    itemCount: 10,
-                                                    mainAxisSpacing: 0,
-                                                    crossAxisSpacing: 0,
-                                                    itemBuilder:
-                                                        (context, index) {
-                                                      int total = 0;
-                                                      for (int i = index * 10;
-                                                          i < index * 10 + 10;
-                                                          i++) {
-                                                        total = total +
-                                                            global
-                                                                .numberPair[i]!;
-                                                      }
-                                                      return Container(
-                                                        alignment: Alignment
-                                                            .centerLeft,
-                                                        height: 5.5.w,
-                                                        child: Text(
-                                                          "$total",
-                                                          style: TextStyle(
-                                                              fontSize: 2.2.w),
-                                                        ),
-                                                      );
-                                                    },
-                                                  ),
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ],
-                                      ),
-
-                                      // SizedBox(
-                                      //   height: 2.w,
-                                      // ),
-                                      Row(
-                                        children: [
-                                          Expanded(
-                                            child: AlignedGridView.count(
-                                              shrinkWrap: true,
-                                              crossAxisCount: 10,
-                                              itemCount: 20,
-                                              mainAxisSpacing: 0,
-                                              crossAxisSpacing: 0,
-                                              itemBuilder: (context, index) {
-                                                return numberBox(index + 100);
-                                              },
-                                            ),
-                                          ),
-                                          Column(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            children: [
-                                              Padding(
-                                                padding: EdgeInsets.all(1.w),
-                                                child: SizedBox(
-                                                  width: 8.w,
-                                                  child: AlignedGridView.count(
-                                                    physics:
-                                                        NeverScrollableScrollPhysics(),
-                                                    scrollDirection:
-                                                        Axis.vertical,
-                                                    shrinkWrap: true,
-                                                    crossAxisCount: 1,
-                                                    itemCount: 2,
-                                                    mainAxisSpacing: 0,
-                                                    crossAxisSpacing: 0,
-                                                    itemBuilder:
-                                                        (context, index) {
-                                                      int total = 0;
-                                                      for (int i = index * 10;
-                                                          i < index * 10 + 10;
-                                                          i++) {
-                                                        total = total +
-                                                            global.numberPair[
-                                                                i + 100]!;
-                                                      }
-                                                      return Container(
-                                                        alignment: Alignment
-                                                            .centerLeft,
-                                                        height: 5.5.w,
-                                                        child: Text(
-                                                          "$total",
-                                                          style: TextStyle(
-                                                              fontSize: 2.2.w),
-                                                        ),
-                                                      );
-                                                    },
-                                                  ),
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ],
-                                      ),
-                                      Row(
-                                        children: [
-                                          Expanded(
-                                            child: Container(
-                                              width: 2.w,
-                                            ),
-                                          ),
-                                          Text(
-                                            "Total: ",
-                                            style: TextStyle(
-                                                fontSize: 2.2.w,
-                                                color: ColorsRes.darkGrey,
-                                                fontWeight: FontWeight.w400),
-                                          ),
-                                          Container(
-                                            width: 9.w,
-                                            alignment: Alignment.centerLeft,
-                                            height: 5.5.w,
-                                            child: Text(
-                                              "$total",
-                                              style: TextStyle(
-                                                  fontSize: 2.2.w,
-                                                  color: ColorsRes.mainBlue,
-                                                  fontWeight: FontWeight.w600),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                Container(
-                                  width: 25.w,
-                                  child: Padding(
-                                    padding: EdgeInsets.only(left: 2.w),
-                                    child: Column(
-                                      children: [
-                                        Padding(
-                                          padding: EdgeInsets.symmetric(
-                                              horizontal: 1.w),
-                                          child: Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            children: [
-                                              const Expanded(
-                                                  child: Text(
-                                                "Pair",
-                                                textAlign: TextAlign.center,
-                                                style: TextStyle(
-                                                    color: ColorsRes.grayColor),
-                                              )),
-                                              const Expanded(
-                                                  child: Text(
-                                                "Amount",
-                                                textAlign: TextAlign.center,
-                                                style: TextStyle(
-                                                    color: ColorsRes.grayColor),
-                                              )),
-                                              SizedBox(
-                                                width: 4.w,
-                                              )
-                                            ],
-                                          ),
-                                        ),
-                                        SizedBox(
-                                          height: 2.w,
-                                        ),
-                                        ListView.builder(
+                                      Expanded(
+                                        child: AlignedGridView.count(
+                                          physics:
+                                              NeverScrollableScrollPhysics(),
                                           shrinkWrap: true,
-                                          itemCount: global.numberPair.length,
+                                          crossAxisCount: 10,
+                                          itemCount: 100,
+                                          mainAxisSpacing: 0,
+                                          crossAxisSpacing: 0,
                                           itemBuilder: (context, index) {
-                                            return pairList(index);
+                                            print(
+                                                '_dataNumberPair 0 : ${_dataNumberPair}');
+                                            return numberBox(index);
                                           },
                                         ),
-                                      ],
-                                    ),
-                                  ),
-                                )
-                              ],
-                            ),
-                            // Expanded(
-                            //   child: SizedBox(
-                            //     height: 2.w,
-                            //   ),
-                            // ),
-                            // All buttons to update the sheet
-                            Row(
-                              children: [
-                                Expanded(
-                                  child: Column(
-                                    children: [
-                                      Row(
+                                      ),
+                                      Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
                                         children: [
-                                          Expanded(
-                                            child: InkWell(
-                                              onTap: () {
-                                                showDialog(
-                                                    context: context,
-                                                    builder: (context) =>
-                                                        const LaddiPopup());
-                                              },
-                                              child: DesignConfig
-                                                  .flatButtonWithIcon(
-                                                ColorsRes.mainBlue,
-                                                1.6.w,
-                                                FontAwesomeIcons.landmark,
-                                                ColorsRes.white,
-                                                1.6.w,
-                                                'Laddi',
-                                                2.w,
-                                                ColorsRes.white,
-                                              ),
-                                            ),
-                                          ),
-                                          Expanded(
-                                            child:
-                                                DesignConfig.flatButtonWithIcon(
-                                              ColorsRes.mainBlue,
-                                              1.6.w,
-                                              FontAwesomeIcons.paste,
-                                              ColorsRes.white,
-                                              1.6.w,
-                                              'C/P',
-                                              2.w,
-                                              ColorsRes.white,
-                                            ),
-                                          ),
-                                          InkWell(
-                                            onTap: () async {
-                                              if (selectedAgents != null) {
-                                                var addPanel =
-                                                    await PanelRepository()
-                                                        .addPanel(
-                                                            widget.sheet_id,
-                                                            selectedAgents!.id!,
-                                                            widget.date,
-                                                            global.numberPair
-                                                                .toString());
-                                                if (addPanel.success == true) {
-                                                  SmartDialog.showToast(
-                                                      "${selectedAgents!.name} Added");
-                                                  setState(() {
-                                                    selectedAgents = null;
-                                                  });
-                                                  ref.refresh(panelDataProvider(
-                                                      extraDataParameter));
-                                                }
-                                              } else {
-                                                SmartDialog.showToast(
-                                                    "Fill all the data first!!!");
-                                              }
-                                            },
-                                            child: Expanded(
-                                              child: DesignConfig
-                                                  .flatButtonWithIcon(
-                                                ColorsRes.green,
-                                                1.6.w,
-                                                FontAwesomeIcons.floppyDisk,
-                                                ColorsRes.white,
-                                                1.6.w,
-                                                'Save',
-                                                2.w,
-                                                ColorsRes.white,
-                                              ),
-                                            ),
-                                          ),
-                                          Expanded(
-                                            child:
-                                                DesignConfig.flatButtonWithIcon(
-                                              ColorsRes.red,
-                                              1.6.w,
-                                              FontAwesomeIcons.xmark,
-                                              ColorsRes.white,
-                                              1.6.w,
-                                              'Cancel',
-                                              2.w,
-                                              ColorsRes.white,
-                                            ),
-                                          ),
-                                          Card(
-                                            margin: EdgeInsets.only(
-                                                left: 1.w,
-                                                right: 1.w,
-                                                top: 1.w),
-                                            shape: RoundedRectangleBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(
-                                                        1.5.w)),
-                                            elevation: 0,
-                                            color: const Color(0xFFf9f9f9),
-                                            child: Padding(
-                                              padding:
-                                                  EdgeInsets.only(left: 1.w),
-                                              child: Consumer(
-                                                builder: (BuildContext context,
-                                                    WidgetRef ref,
-                                                    Widget? child) {
-                                                  return _data.when(data:
-                                                      (dynamic data) {
-                                                    print(
-                                                        'DropdownButton2 0 : ${_data.value!.data}');
-                                                    return DropdownButtonHideUnderline(
-                                                      child: DropdownButton2(
-                                                        dropdownDecoration:
-                                                            BoxDecoration(
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(8),
-                                                          color: const Color(
-                                                              0xFFf9f9f9),
-                                                        ),
-                                                        isExpanded: false,
-                                                        hint: Text(
-                                                          'Select Client',
-                                                          style: TextStyle(
-                                                            fontSize: 2.2.w,
-                                                            color: const Color
-                                                                    .fromARGB(
-                                                                255,
-                                                                174,
-                                                                174,
-                                                                174),
-                                                          ),
-                                                        ),
-                                                        items: _dataAgents
-                                                            .value?.data!
-                                                            .map((item) =>
-                                                                DropdownMenuItem<
-                                                                    AgentsResponseData>(
-                                                                  value: item,
-                                                                  child: Text(
-                                                                    item.name
-                                                                        .toString(),
-                                                                    style:
-                                                                        const TextStyle(
-                                                                      fontSize:
-                                                                          14,
-                                                                    ),
-                                                                  ),
-                                                                ))
-                                                            .toList(),
-                                                        value: selectedAgents,
-                                                        onChanged: (value) {
-                                                          setState(() {
-                                                            selectedAgents =
-                                                                value;
-                                                          });
-                                                        },
-                                                        //itemHeight: 40,
-                                                        //dropdownMaxHeight: 300,
-                                                        searchController:
-                                                            textEditingController,
-                                                        searchInnerWidget:
-                                                            Padding(
-                                                          padding:
-                                                              const EdgeInsets
-                                                                  .only(
-                                                            top: 8,
-                                                            bottom: 4,
-                                                            right: 8,
-                                                            left: 8,
-                                                          ),
-                                                          child: TextFormField(
-                                                            controller:
-                                                                textEditingController,
-                                                            decoration:
-                                                                InputDecoration(
-                                                              isDense: true,
-                                                              // contentPadding: const EdgeInsets.symmetric(
-                                                              //   horizontal: 10,
-                                                              //   vertical: 8,
-                                                              // ),
-                                                              hintText:
-                                                                  'Search for clients...',
-                                                              hintStyle:
-                                                                  const TextStyle(
-                                                                      fontSize:
-                                                                          12),
-                                                              border:
-                                                                  OutlineInputBorder(
-                                                                borderRadius:
-                                                                    BorderRadius
-                                                                        .circular(
-                                                                            8),
-                                                              ),
-                                                            ),
-                                                          ),
-                                                        ),
-                                                        searchMatchFn: (item,
-                                                            searchValue) {
-                                                          return (item.value
-                                                              .toString()
-                                                              .contains(
-                                                                  searchValue));
-                                                        },
-                                                        //This to clear the search value when you close the menu
-                                                        onMenuStateChange:
-                                                            (isOpen) {
-                                                          if (!isOpen) {
-                                                            textEditingController
-                                                                .clear();
-                                                          }
-                                                        },
-                                                      ),
-                                                    );
-                                                  }, error: (Object error,
-                                                      StackTrace stackTrace) {
-                                                    return Text('Error');
-                                                  }, loading: () {
-                                                    return CircularProgressIndicator();
-                                                  });
+                                          Padding(
+                                            padding: EdgeInsets.all(1.w),
+                                            child: SizedBox(
+                                              width: 8.w,
+                                              child: AlignedGridView.count(
+                                                physics:
+                                                    NeverScrollableScrollPhysics(),
+                                                scrollDirection: Axis.vertical,
+                                                shrinkWrap: true,
+                                                crossAxisCount: 1,
+                                                itemCount: 10,
+                                                mainAxisSpacing: 0,
+                                                crossAxisSpacing: 0,
+                                                itemBuilder: (context, index) {
+                                                  int total = 0;
+                                                  for (int i = index * 10;
+                                                      i < index * 10 + 10;
+                                                      i++) {
+                                                    total = total +
+                                                        global.numberPair[i]!;
+                                                  }
+                                                  return Container(
+                                                    alignment:
+                                                        Alignment.centerLeft,
+                                                    height: 5.5.w,
+                                                    child: Text(
+                                                      "$total",
+                                                      style: TextStyle(
+                                                          fontSize: 2.2.w),
+                                                    ),
+                                                  );
                                                 },
                                               ),
                                             ),
                                           ),
                                         ],
                                       ),
-                                      Row(
+                                    ],
+                                  ),
+
+                                  // SizedBox(
+                                  //   height: 2.w,
+                                  // ),
+                                  Row(
+                                    children: [
+                                      Expanded(
+                                        child: AlignedGridView.count(
+                                          shrinkWrap: true,
+                                          crossAxisCount: 10,
+                                          itemCount: 20,
+                                          mainAxisSpacing: 0,
+                                          crossAxisSpacing: 0,
+                                          itemBuilder: (context, index) {
+                                            return numberBox(index + 100);
+                                          },
+                                        ),
+                                      ),
+                                      Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
                                         children: [
-                                          SizedBox(
-                                            width: 1.2.w,
-                                          ),
-                                          Expanded(
-                                            child: Card(
-                                              color: ColorsRes.lightWeightColor,
-                                              elevation: 0,
-                                              shape: RoundedRectangleBorder(
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          1.5.w)),
-                                              child: Padding(
-                                                padding: EdgeInsets.symmetric(
-                                                  vertical: 0.7.h,
-                                                  horizontal: 2.w,
-                                                ),
-                                                child: Row(
-                                                  children: [
-                                                    Expanded(
-                                                      child: TextField(
-                                                        controller:
-                                                            entryBoxController,
-                                                        textAlign:
-                                                            TextAlign.start,
-                                                        scribbleEnabled: true,
-                                                        style: const TextStyle(
-                                                            color: ColorsRes
-                                                                .mainBlue,
-                                                            fontWeight:
-                                                                FontWeight
-                                                                    .w500),
-                                                        decoration:
-                                                            InputDecoration(
-                                                          hintText:
-                                                              'Enter box no.',
-                                                          isCollapsed: true,
-                                                          contentPadding:
-                                                              EdgeInsets.only(
-                                                                  left: 1.2.w,
-                                                                  top: 0.5.w,
-                                                                  bottom:
-                                                                      0.5.w),
-                                                          hoverColor: ColorsRes
-                                                              .lightBlue,
-                                                          border:
-                                                              const OutlineInputBorder(
-                                                                  borderSide:
-                                                                      BorderSide
-                                                                          .none),
-                                                        ),
-                                                      ),
+                                          Padding(
+                                            padding: EdgeInsets.all(1.w),
+                                            child: SizedBox(
+                                              width: 8.w,
+                                              child: AlignedGridView.count(
+                                                physics:
+                                                    NeverScrollableScrollPhysics(),
+                                                scrollDirection: Axis.vertical,
+                                                shrinkWrap: true,
+                                                crossAxisCount: 1,
+                                                itemCount: 2,
+                                                mainAxisSpacing: 0,
+                                                crossAxisSpacing: 0,
+                                                itemBuilder: (context, index) {
+                                                  int total = 0;
+                                                  for (int i = index * 10;
+                                                      i < index * 10 + 10;
+                                                      i++) {
+                                                    total = total +
+                                                        global.numberPair[
+                                                            i + 100]!;
+                                                  }
+                                                  return Container(
+                                                    alignment:
+                                                        Alignment.centerLeft,
+                                                    height: 5.5.w,
+                                                    child: Text(
+                                                      "$total",
+                                                      style: TextStyle(
+                                                          fontSize: 2.2.w),
                                                     ),
-                                                  ],
-                                                ),
+                                                  );
+                                                },
                                               ),
-                                            ),
-                                          ),
-                                          Container(
-                                            width: 20.w,
-                                            child: Card(
-                                              color: ColorsRes.lightWeightColor,
-                                              elevation: 0,
-                                              shape: RoundedRectangleBorder(
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          1.5.w)),
-                                              child: Padding(
-                                                padding: EdgeInsets.symmetric(
-                                                  vertical: 0.7.h,
-                                                  horizontal: 2.w,
-                                                ),
-                                                child: TextField(
-                                                  controller:
-                                                      entryAmtController,
-                                                  textAlign: TextAlign.start,
-                                                  scribbleEnabled: true,
-                                                  style: const TextStyle(
-                                                      color: ColorsRes.mainBlue,
-                                                      fontWeight:
-                                                          FontWeight.w500),
-                                                  decoration: InputDecoration(
-                                                    hintText: 'Amount',
-                                                    isCollapsed: true,
-                                                    contentPadding:
-                                                        EdgeInsets.only(
-                                                            left: 1.2.w,
-                                                            top: 0.5.w,
-                                                            bottom: 0.5.w),
-                                                    hoverColor:
-                                                        ColorsRes.lightBlue,
-                                                    border:
-                                                        const OutlineInputBorder(
-                                                            borderSide:
-                                                                BorderSide
-                                                                    .none),
-                                                  ),
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                          InkWell(
-                                            onTap: () {
-                                              if (entryBoxController
-                                                  .text.length.isEven) {
-                                                for (int i = 0;
-                                                    i <
-                                                        entryBoxController
-                                                            .text.length;
-                                                    i++) {
-                                                  entryBox = int.parse(
-                                                      entryBoxController
-                                                              .text[i] +
-                                                          entryBoxController
-                                                              .text[i + 1]);
-                                                  entryAmt = int.parse(
-                                                      entryAmtController.text);
-                                                  global.numberPair[entryBox!] =
-                                                      (global.numberPair[
-                                                              entryBox])! +
-                                                          entryAmt!;
-                                                  i = i + 1;
-                                                }
-                                              } else {
-                                                for (int i = 0;
-                                                    i <
-                                                        entryBoxController
-                                                            .text.length;
-                                                    i++) {
-                                                  entryBox = int.parse(
-                                                      entryBoxController
-                                                              .text[i] +
-                                                          entryBoxController
-                                                              .text[i + 1] +
-                                                          entryBoxController
-                                                              .text[i + 2]);
-                                                  entryAmt = int.parse(
-                                                      entryAmtController.text);
-                                                  global.numberPair[entryBox!] =
-                                                      (global.numberPair[
-                                                              entryBox])! +
-                                                          entryAmt!;
-                                                  i = i + 2;
-                                                }
-                                              }
-                                              ref.refresh(numberPairProvider);
-                                            },
-                                            child:
-                                                DesignConfig.flatButtonWithIcon(
-                                              ColorsRes.mainBlue,
-                                              1.6.w,
-                                              Icons.done,
-                                              ColorsRes.white,
-                                              2.6.w,
-                                              'Enter',
-                                              2.w,
-                                              ColorsRes.white,
                                             ),
                                           ),
                                         ],
                                       ),
                                     ],
                                   ),
-                                ),
-                              ],
+                                  Row(
+                                    children: [
+                                      Expanded(
+                                        child: Container(
+                                          width: 2.w,
+                                        ),
+                                      ),
+                                      Text(
+                                        "Total: ",
+                                        style: TextStyle(
+                                            fontSize: 2.2.w,
+                                            color: ColorsRes.darkGrey,
+                                            fontWeight: FontWeight.w400),
+                                      ),
+                                      Container(
+                                        width: 9.w,
+                                        alignment: Alignment.centerLeft,
+                                        height: 5.5.w,
+                                        child: Text(
+                                          "$total",
+                                          style: TextStyle(
+                                              fontSize: 2.2.w,
+                                              color: ColorsRes.mainBlue,
+                                              fontWeight: FontWeight.w600),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
                             ),
+                            Container(
+                              width: 25.w,
+                              child: Padding(
+                                padding: EdgeInsets.only(left: 2.w),
+                                child: Column(
+                                  children: [
+                                    Padding(
+                                      padding:
+                                          EdgeInsets.symmetric(horizontal: 1.w),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          const Expanded(
+                                              child: Text(
+                                            "Pair",
+                                            textAlign: TextAlign.center,
+                                            style: TextStyle(
+                                                color: ColorsRes.grayColor),
+                                          )),
+                                          const Expanded(
+                                              child: Text(
+                                            "Amount",
+                                            textAlign: TextAlign.center,
+                                            style: TextStyle(
+                                                color: ColorsRes.grayColor),
+                                          )),
+                                          SizedBox(
+                                            width: 4.w,
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      height: 2.w,
+                                    ),
+                                    ListView.builder(
+                                      shrinkWrap: true,
+                                      itemCount: global.numberPair.length,
+                                      itemBuilder: (context, index) {
+                                        return pairList(index);
+                                      },
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            )
                           ],
                         ),
-                      ),
-                    ),
-                    Container(
-                      width: 40.w,
-                      padding: EdgeInsets.only(left: 2.w),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Text(
-                            '  Clients',
-                            textAlign: TextAlign.start,
-                          ),
-                          Consumer(
-                            builder: (BuildContext context, WidgetRef ref,
-                                Widget? child) {
-                              return _data.when(data: (dynamic data) {
-                                print(
-                                    'agentsDataProvider 0 : ${_data.value!.data}');
-                                return Column(
-                                  children: _data.value!.data!.map((e) {
-                                    return clientsList(
-                                        e, extraDataParameter, context);
-                                  }).toList(),
-                                );
-                              }, error: (Object error, StackTrace stackTrace) {
-                                return Text('Error');
-                              }, loading: () {
-                                return CircularProgressIndicator();
-                              });
-                            },
-                          ),
-                          Expanded(
-                              child: SizedBox(
-                            height: 2.w,
-                          )),
-                          Row(
-                            children: [
-                              Expanded(
-                                child: Container(
-                                  padding: EdgeInsets.symmetric(vertical: 1.w),
-                                  decoration: DesignConfig
-                                      .boxDecorationContainerCardShadow(
-                                    ColorsRes.white,
-                                    Color.fromRGBO(44, 39, 46, 0.059),
-                                    16.0,
-                                    3,
-                                    3,
-                                    20,
-                                    0,
-                                  ),
-                                  child: Row(
+                        // Expanded(
+                        //   child: SizedBox(
+                        //     height: 2.w,
+                        //   ),
+                        // ),
+                        // All buttons to update the sheet
+                        Row(
+                          children: [
+                            Expanded(
+                              child: Column(
+                                children: [
+                                  Row(
                                     children: [
-                                      DesignConfig.flatButtonWithIcon(
-                                        ColorsRes.lightBlue,
-                                        1.6.w,
-                                        FontAwesomeIcons.print,
-                                        ColorsRes.mainBlue,
-                                        2.6.w,
-                                        'Print',
-                                        2.w,
-                                        ColorsRes.mainBlue,
+                                      Expanded(
+                                        child: InkWell(
+                                          onTap: () {
+                                            showDialog(
+                                                context: context,
+                                                builder: (context) =>
+                                                    const LaddiPopup());
+                                          },
+                                          child:
+                                              DesignConfig.flatButtonWithIcon(
+                                            ColorsRes.mainBlue,
+                                            1.6.w,
+                                            FontAwesomeIcons.landmark,
+                                            ColorsRes.white,
+                                            1.6.w,
+                                            'Laddi',
+                                            2.w,
+                                            ColorsRes.white,
+                                          ),
+                                        ),
                                       ),
-                                      GestureDetector(
+                                      Expanded(
+                                        child: DesignConfig.flatButtonWithIcon(
+                                          ColorsRes.mainBlue,
+                                          1.6.w,
+                                          FontAwesomeIcons.paste,
+                                          ColorsRes.white,
+                                          1.6.w,
+                                          'C/P',
+                                          2.w,
+                                          ColorsRes.white,
+                                        ),
+                                      ),
+                                      InkWell(
+                                        onTap: () async {
+                                          if (selectedAgents != null) {
+                                            var addPanel =
+                                                await PanelRepository()
+                                                    .addPanel(
+                                                        widget.sheet_id,
+                                                        selectedAgents!.id!,
+                                                        widget.date,
+                                                        global.numberPair
+                                                            .toString());
+                                            if (addPanel.success == true) {
+                                              SmartDialog.showToast(
+                                                  "${selectedAgents!.name} Added");
+                                              setState(() {
+                                                selectedAgents = null;
+                                              });
+                                              ref.refresh(panelDataProvider(
+                                                  extraDataParameter));
+                                            }
+                                          } else {
+                                            SmartDialog.showToast(
+                                                "Fill all the data first!!!");
+                                          }
+                                        },
+                                        child: Container(
+                                          child:
+                                              DesignConfig.flatButtonWithIcon(
+                                            ColorsRes.green,
+                                            1.6.w,
+                                            FontAwesomeIcons.floppyDisk,
+                                            ColorsRes.white,
+                                            1.6.w,
+                                            'Save',
+                                            2.w,
+                                            ColorsRes.white,
+                                          ),
+                                        ),
+                                      ),
+                                      Expanded(
+                                        child: DesignConfig.flatButtonWithIcon(
+                                          ColorsRes.red,
+                                          1.6.w,
+                                          FontAwesomeIcons.xmark,
+                                          ColorsRes.white,
+                                          1.6.w,
+                                          'Cancel',
+                                          2.w,
+                                          ColorsRes.white,
+                                        ),
+                                      ),
+                                      Card(
+                                        margin: EdgeInsets.only(
+                                            left: 1.w, right: 1.w, top: 1.w),
+                                        shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(1.5.w)),
+                                        elevation: 0,
+                                        color: const Color(0xFFf9f9f9),
+                                        child: Padding(
+                                          padding: EdgeInsets.only(left: 1.w),
+                                          child: Consumer(
+                                            builder: (BuildContext context,
+                                                WidgetRef ref, Widget? child) {
+                                              return _data.when(
+                                                  data: (dynamic data) {
+                                                print(
+                                                    'DropdownButton2 0 : ${_data.value!.data}');
+                                                return DropdownButtonHideUnderline(
+                                                  child: DropdownButton2(
+                                                    dropdownDecoration:
+                                                        BoxDecoration(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              8),
+                                                      color: const Color(
+                                                          0xFFf9f9f9),
+                                                    ),
+                                                    isExpanded: false,
+                                                    hint: Text(
+                                                      'Select Client',
+                                                      style: TextStyle(
+                                                        fontSize: 2.2.w,
+                                                        color: const Color
+                                                                .fromARGB(
+                                                            255, 174, 174, 174),
+                                                      ),
+                                                    ),
+                                                    items: _dataAgents
+                                                        .value?.data!
+                                                        .map((item) =>
+                                                            DropdownMenuItem<
+                                                                AgentsResponseData>(
+                                                              value: item,
+                                                              child: Text(
+                                                                item.name
+                                                                    .toString(),
+                                                                style:
+                                                                    const TextStyle(
+                                                                  fontSize: 14,
+                                                                ),
+                                                              ),
+                                                            ))
+                                                        .toList(),
+                                                    value: selectedAgents,
+                                                    onChanged: (value) {
+                                                      setState(() {
+                                                        selectedAgents = value;
+                                                      });
+                                                    },
+                                                    //itemHeight: 40,
+                                                    //dropdownMaxHeight: 300,
+                                                    searchController:
+                                                        textEditingController,
+                                                    searchInnerWidget: Padding(
+                                                      padding:
+                                                          const EdgeInsets.only(
+                                                        top: 8,
+                                                        bottom: 4,
+                                                        right: 8,
+                                                        left: 8,
+                                                      ),
+                                                      child: TextFormField(
+                                                        controller:
+                                                            textEditingController,
+                                                        decoration:
+                                                            InputDecoration(
+                                                          isDense: true,
+                                                          // contentPadding: const EdgeInsets.symmetric(
+                                                          //   horizontal: 10,
+                                                          //   vertical: 8,
+                                                          // ),
+                                                          hintText:
+                                                              'Search for clients...',
+                                                          hintStyle:
+                                                              const TextStyle(
+                                                                  fontSize: 12),
+                                                          border:
+                                                              OutlineInputBorder(
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        8),
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    searchMatchFn:
+                                                        (item, searchValue) {
+                                                      return (item.value
+                                                          .toString()
+                                                          .contains(
+                                                              searchValue));
+                                                    },
+                                                    //This to clear the search value when you close the menu
+                                                    onMenuStateChange:
+                                                        (isOpen) {
+                                                      if (!isOpen) {
+                                                        textEditingController
+                                                            .clear();
+                                                      }
+                                                    },
+                                                  ),
+                                                );
+                                              }, error: (Object error,
+                                                      StackTrace stackTrace) {
+                                                return Text('Error');
+                                              }, loading: () {
+                                                return CircularProgressIndicator();
+                                              });
+                                            },
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  Row(
+                                    children: [
+                                      SizedBox(
+                                        width: 1.2.w,
+                                      ),
+                                      Expanded(
+                                        child: Card(
+                                          color: ColorsRes.lightWeightColor,
+                                          elevation: 0,
+                                          shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(1.5.w)),
+                                          child: Padding(
+                                            padding: EdgeInsets.symmetric(
+                                              vertical: 0.7.h,
+                                              horizontal: 2.w,
+                                            ),
+                                            child: Row(
+                                              children: [
+                                                Expanded(
+                                                  child: TextField(
+                                                    controller:
+                                                        entryBoxController,
+                                                    textAlign: TextAlign.start,
+                                                    scribbleEnabled: true,
+                                                    style: const TextStyle(
+                                                        color:
+                                                            ColorsRes.mainBlue,
+                                                        fontWeight:
+                                                            FontWeight.w500),
+                                                    decoration: InputDecoration(
+                                                      hintText: 'Enter box no.',
+                                                      isCollapsed: true,
+                                                      contentPadding:
+                                                          EdgeInsets.only(
+                                                              left: 1.2.w,
+                                                              top: 0.5.w,
+                                                              bottom: 0.5.w),
+                                                      hoverColor:
+                                                          ColorsRes.lightBlue,
+                                                      border:
+                                                          const OutlineInputBorder(
+                                                              borderSide:
+                                                                  BorderSide
+                                                                      .none),
+                                                    ),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                      Container(
+                                        width: 20.w,
+                                        child: Card(
+                                          color: ColorsRes.lightWeightColor,
+                                          elevation: 0,
+                                          shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(1.5.w)),
+                                          child: Padding(
+                                            padding: EdgeInsets.symmetric(
+                                              vertical: 0.7.h,
+                                              horizontal: 2.w,
+                                            ),
+                                            child: TextField(
+                                              controller: entryAmtController,
+                                              textAlign: TextAlign.start,
+                                              scribbleEnabled: true,
+                                              style: const TextStyle(
+                                                  color: ColorsRes.mainBlue,
+                                                  fontWeight: FontWeight.w500),
+                                              decoration: InputDecoration(
+                                                hintText: 'Amount',
+                                                isCollapsed: true,
+                                                contentPadding: EdgeInsets.only(
+                                                    left: 1.2.w,
+                                                    top: 0.5.w,
+                                                    bottom: 0.5.w),
+                                                hoverColor: ColorsRes.lightBlue,
+                                                border:
+                                                    const OutlineInputBorder(
+                                                        borderSide:
+                                                            BorderSide.none),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                      InkWell(
                                         onTap: () {
-                                          Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      MasterPanel(0, '')));
+                                          if (entryBoxController
+                                              .text.length.isEven) {
+                                            for (int i = 0;
+                                                i <
+                                                    entryBoxController
+                                                        .text.length;
+                                                i++) {
+                                              entryBox = int.parse(
+                                                  entryBoxController.text[i] +
+                                                      entryBoxController
+                                                          .text[i + 1]);
+                                              entryAmt = int.parse(
+                                                  entryAmtController.text);
+                                              global.numberPair[entryBox!] =
+                                                  (global.numberPair[
+                                                          entryBox])! +
+                                                      entryAmt!;
+                                              i = i + 1;
+                                            }
+                                          } else {
+                                            for (int i = 0;
+                                                i <
+                                                    entryBoxController
+                                                        .text.length;
+                                                i++) {
+                                              entryBox = int.parse(
+                                                  entryBoxController.text[i] +
+                                                      entryBoxController
+                                                          .text[i + 1] +
+                                                      entryBoxController
+                                                          .text[i + 2]);
+                                              entryAmt = int.parse(
+                                                  entryAmtController.text);
+                                              global.numberPair[entryBox!] =
+                                                  (global.numberPair[
+                                                          entryBox])! +
+                                                      entryAmt!;
+                                              i = i + 2;
+                                            }
+                                          }
+                                          ref.refresh(numberPairProvider);
                                         },
                                         child: DesignConfig.flatButtonWithIcon(
                                           ColorsRes.mainBlue,
                                           1.6.w,
-                                          FontAwesomeIcons.book,
+                                          Icons.done,
                                           ColorsRes.white,
                                           2.6.w,
-                                          'Master',
+                                          'Enter',
                                           2.w,
                                           ColorsRes.white,
                                         ),
                                       ),
                                     ],
                                   ),
-                                ),
+                                ],
                               ),
-                            ],
-                          )
-                        ],
-                      ),
-                    )
-                  ],
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
                 ),
+                Container(
+                  width: 40.w,
+                  padding: EdgeInsets.only(left: 2.w),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text(
+                        '  Clients',
+                        textAlign: TextAlign.start,
+                      ),
+                      Consumer(
+                        builder: (BuildContext context, WidgetRef ref,
+                            Widget? child) {
+                          return _data.when(data: (dynamic data) {
+                            print(
+                                'agentsDataProvider 0 : ${_data.value!.data}');
+                            return Column(
+                              children: _data.value!.data!.map((e) {
+                                return clientsList(
+                                    e, extraDataParameter, context);
+                              }).toList(),
+                            );
+                          }, error: (Object error, StackTrace stackTrace) {
+                            return Text('Error');
+                          }, loading: () {
+                            return CircularProgressIndicator();
+                          });
+                        },
+                      ),
+                      Expanded(
+                          child: SizedBox(
+                        height: 2.w,
+                      )),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: Container(
+                              padding: EdgeInsets.symmetric(vertical: 1.w),
+                              decoration:
+                                  DesignConfig.boxDecorationContainerCardShadow(
+                                ColorsRes.white,
+                                Color.fromRGBO(44, 39, 46, 0.059),
+                                16.0,
+                                3,
+                                3,
+                                20,
+                                0,
+                              ),
+                              child: Row(
+                                children: [
+                                  DesignConfig.flatButtonWithIcon(
+                                    ColorsRes.lightBlue,
+                                    1.6.w,
+                                    FontAwesomeIcons.print,
+                                    ColorsRes.mainBlue,
+                                    2.6.w,
+                                    'Print',
+                                    2.w,
+                                    ColorsRes.mainBlue,
+                                  ),
+                                  GestureDetector(
+                                    onTap: () {
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  MasterPanel(0, '')));
+                                    },
+                                    child: DesignConfig.flatButtonWithIcon(
+                                      ColorsRes.mainBlue,
+                                      1.6.w,
+                                      FontAwesomeIcons.book,
+                                      ColorsRes.white,
+                                      2.6.w,
+                                      'Master',
+                                      2.w,
+                                      ColorsRes.white,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ],
+                      )
+                    ],
+                  ),
+                )
               ],
             ),
           ),
