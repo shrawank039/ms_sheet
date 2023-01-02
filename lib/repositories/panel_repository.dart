@@ -24,6 +24,22 @@ class PanelRepository {
     return PanelResponseEntity.fromJson(json.decode(response.body));
   }
 
+  Future<PanelResponseEntity> updatePanel(
+      int sheet_id, int agent_id, String date, var pair) async {
+    var postBody = jsonEncode({
+      "sheet_id": sheet_id,
+      "agent_id": agent_id,
+      "date": date,
+      "pair": pair,
+    });
+
+    Uri url = Uri.parse("${AppConfig.BASE_URL}/e-panels/$sheet_id");
+    final response = await http.patch(url,
+        headers: await global.getApiHeaders(true), body: postBody);
+    print('updatePanel : ${response.body}');
+    return PanelResponseEntity.fromJson(json.decode(response.body));
+  }
+
   Future<PanelResponseEntity> getPanel(int sheet_id, String date) async {
     var postBody = jsonEncode({
       "sheet_id": sheet_id,
