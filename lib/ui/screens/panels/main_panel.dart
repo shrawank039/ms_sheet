@@ -596,6 +596,7 @@ class _MainPanelState extends ConsumerState<MainPanel> {
                                             120: 0,
                                           };
                                           updatePanel = false;
+                                          selectedAgents = null;
                                           ref.refresh(numberPairProvider);
                                         },
                                         child: Container(
