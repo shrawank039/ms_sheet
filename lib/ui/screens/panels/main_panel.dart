@@ -221,10 +221,9 @@ class _MainPanelState extends ConsumerState<MainPanel> {
                                       ),
                                     ],
                                   ),
-
-                                  // SizedBox(
-                                  //   height: 2.w,
-                                  // ),
+                                  SizedBox(
+                                    height: 2.w,
+                                  ),
                                   Row(
                                     children: [
                                       Expanded(
@@ -363,11 +362,11 @@ class _MainPanelState extends ConsumerState<MainPanel> {
                             )
                           ],
                         ),
-                        Expanded(
-                          child: SizedBox(
-                            height: 2.w,
-                          ),
-                        ),
+                        // Expanded(
+                        //   child: SizedBox(
+                        //     height: 2.w,
+                        //   ),
+                        // ),
                         // All buttons to update the sheet
                         Row(
                           children: [
