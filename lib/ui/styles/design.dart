@@ -214,7 +214,8 @@ class DesignConfig {
             decoration: InputDecoration(
               isDense: true,
               hintText: hint,
-              hintStyle: TextStyle(color: Color.fromARGB(255, 174, 174, 174)),
+              hintStyle:
+                  const TextStyle(color: Color.fromARGB(255, 174, 174, 174)),
               border: const OutlineInputBorder(borderSide: BorderSide.none),
             ),
           ),

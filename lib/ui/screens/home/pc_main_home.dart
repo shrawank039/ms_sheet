@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:iconly/iconly.dart';
 import 'package:ms_sheet/ui/screens/home/pages/Counters.dart';
@@ -298,9 +299,6 @@ class _PCHomeState extends State<PCHome> {
                 ),
               ],
             ),
-            SizedBox(
-              width: 4.w,
-            ),
             //sheets section
             Expanded(
               child: Column(
@@ -311,17 +309,17 @@ class _PCHomeState extends State<PCHome> {
                       GestureDetector(
                         onTap: () {
                           setState(() {
-                            currentPage = 'Local Players';
+                            currentPage = 'Chats';
                           });
                         },
-                        child: (currentPage == 'Local Players')
+                        child: (currentPage == 'Chats')
                             ? DesignConfig.flatButtonWithIcon(
                                 ColorsRes.mainBlue,
                                 1.4.w,
                                 FontAwesomeIcons.peopleGroup,
                                 ColorsRes.white,
                                 2.0.w,
-                                'Local Players',
+                                'Chats',
                                 1.6.w,
                                 ColorsRes.white,
                               )
@@ -331,12 +329,12 @@ class _PCHomeState extends State<PCHome> {
                                 FontAwesomeIcons.peopleGroup,
                                 ColorsRes.mainBlue,
                                 2.0.w,
-                                'Local Players',
+                                'Chats',
                                 1.6.w,
                                 ColorsRes.mainBlue,
                               ),
                       ),
-                      GestureDetector(
+                      /*GestureDetector(
                         onTap: () {
                           setState(() {
                             currentPage = 'Counters';
@@ -419,7 +417,7 @@ class _PCHomeState extends State<PCHome> {
                                 1.6.w,
                                 ColorsRes.mainBlue,
                               ),
-                      ),
+                      ),*/
                       GestureDetector(
                         onTap: () {
                           setState(() {
@@ -470,7 +468,7 @@ class _PCHomeState extends State<PCHome> {
                   ] else if (currentPage == 'Wallet') ...[
                     hiding(),
                     Wallet(),
-                  ] else if (currentPage == 'Local Players') ...[
+                  ] else if (currentPage == 'Chats') ...[
                     hiding(),
                     LocalPlayers(),
                   ] else if (currentPage == 'Counters') ...[

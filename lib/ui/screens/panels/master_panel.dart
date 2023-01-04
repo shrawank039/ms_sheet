@@ -68,6 +68,7 @@ class _MasterPanelState extends ConsumerState<MasterPanel> {
                               onPressed: () {
                                 Navigator.pop(context);
                               },
+                              hoverColor: Colors.transparent,
                               icon: Icon(Icons.arrow_back)),
                           SizedBox(
                             width: 1.w,
@@ -561,6 +562,7 @@ Widget controls() {
   final TextEditingController dabbaUpController = TextEditingController();
   final TextEditingController dabbaDownController = TextEditingController();
   final TextEditingController percentController = TextEditingController();
+  percentController.text = '100';
   final Function(String) callback;
 
   return Consumer(
@@ -614,8 +616,9 @@ Widget controls() {
                   }
                   global.numberPair = convertPair(_selectedList);
                   for (int i = 0; i < global.numberPair.length; i++) {
-                    if (global.numberPair[i]! <= int.parse(value)) {
-                      global.numberPair[i] = 0;
+                    if (global.numberPair[i]! >= int.parse(value)) {
+                      global.numberPair[i] =
+                          (global.numberPair[i]! - int.parse(value));
                     }
                   }
                   ref.refresh(numberPairProvider);

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:ms_sheet/global.dart' as global;
+import 'package:ms_sheet/providers/data_providers.dart';
 import 'package:sizer/sizer.dart';
 
 import '../ui/styles/color.dart';
@@ -16,6 +17,9 @@ class _LaddiPopupState extends ConsumerState<LaddiPopup> {
   final amtController = TextEditingController();
   final fromController = TextEditingController();
   final toController = TextEditingController();
+  final amtCrossController = TextEditingController();
+  final fromCrossController = TextEditingController();
+  final toCrossController = TextEditingController();
 
   @override
   void initState() {
@@ -28,6 +32,9 @@ class _LaddiPopupState extends ConsumerState<LaddiPopup> {
     amtController.dispose();
     fromController.dispose();
     toController.dispose();
+    amtCrossController.dispose();
+    fromCrossController.dispose();
+    toCrossController.dispose();
     super.dispose();
   }
 
@@ -73,7 +80,7 @@ class _LaddiPopupState extends ConsumerState<LaddiPopup> {
                   alignment: Alignment.center,
                   // height: 9.w,
                   child: Card(
-                    margin: EdgeInsets.only(left: 1.w, right: 1.w, top: 2.w),
+                    //margin: EdgeInsets.only(left: 1.w, right: 1.w, top: 2.w),
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(1.5.w)),
                     elevation: 0,
@@ -86,7 +93,7 @@ class _LaddiPopupState extends ConsumerState<LaddiPopup> {
                         keyboardType: TextInputType.number,
                         textAlign: TextAlign.center,
                         style: TextStyle(
-                            fontSize: 3.w,
+                            fontSize: 15.0,
                             fontFamily: 'Arial',
                             fontWeight: FontWeight.w500),
                         decoration: const InputDecoration(
@@ -107,7 +114,7 @@ class _LaddiPopupState extends ConsumerState<LaddiPopup> {
                   alignment: Alignment.center,
                   // height: 9.w,
                   child: Card(
-                    margin: EdgeInsets.only(left: 1.w, right: 1.w, top: 2.w),
+                    //margin: EdgeInsets.only(left: 1.w, right: 1.w, top: 2.w),
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(1.5.w)),
                     elevation: 0,
@@ -120,7 +127,7 @@ class _LaddiPopupState extends ConsumerState<LaddiPopup> {
                         keyboardType: TextInputType.number,
                         textAlign: TextAlign.center,
                         style: TextStyle(
-                            fontSize: 3.w,
+                            fontSize: 15.0,
                             fontFamily: 'Arial',
                             fontWeight: FontWeight.w500),
                         decoration: const InputDecoration(
@@ -136,16 +143,12 @@ class _LaddiPopupState extends ConsumerState<LaddiPopup> {
                     ),
                   ),
                 )),
-              ],
-            ),
-            Row(
-              children: [
                 Expanded(
                     child: Container(
                   alignment: Alignment.center,
                   // height: 9.w,
                   child: Card(
-                    margin: EdgeInsets.only(left: 1.w, right: 1.w, top: 2.w),
+                    //margin: EdgeInsets.only(left: 1.w, right: 1.w, top: 2.w),
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(1.5.w)),
                     elevation: 0,
@@ -161,7 +164,126 @@ class _LaddiPopupState extends ConsumerState<LaddiPopup> {
                         keyboardType: TextInputType.number,
                         textAlign: TextAlign.center,
                         style: TextStyle(
-                            fontSize: 3.w,
+                            fontSize: 15.0,
+                            fontFamily: 'Arial',
+                            fontWeight: FontWeight.w500),
+                        decoration: const InputDecoration(
+                          labelText: 'Amount',
+                          isDense: true,
+                          hintText: '0',
+                          hintStyle:
+                              TextStyle(color: Color.fromARGB(50, 0, 0, 0)),
+                          border:
+                              OutlineInputBorder(borderSide: BorderSide.none),
+                        ),
+                      ),
+                    ),
+                  ),
+                )),
+              ],
+            ),
+            Container(
+              alignment: Alignment.topLeft,
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: 2.w),
+                child: Text(
+                  'Add Crossing',
+                  style: TextStyle(color: ColorsRes.darkGrey, fontSize: 2.5.w),
+                ),
+              ),
+            ),
+            Row(
+              children: [
+                Expanded(
+                    child: Container(
+                  alignment: Alignment.center,
+                  // height: 9.w,
+                  child: Card(
+                    //margin: EdgeInsets.only(left: 1.w, right: 1.w, top: 2.w),
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(1.5.w)),
+                    elevation: 0,
+                    color: ColorsRes.lightWeightColor,
+                    child: Padding(
+                      padding: EdgeInsets.only(left: 1.w),
+                      child: TextField(
+                        controller: fromCrossController,
+                        //maxLength: 1,
+                        keyboardType: TextInputType.number,
+                        textAlign: TextAlign.center,
+                        style: const TextStyle(
+                            fontSize: 15.0,
+                            fontFamily: 'Arial',
+                            fontWeight: FontWeight.w500),
+                        decoration: const InputDecoration(
+                          labelText: 'From',
+                          isDense: true,
+                          hintText: '00',
+                          hintStyle:
+                              TextStyle(color: Color.fromARGB(50, 0, 0, 0)),
+                          border:
+                              OutlineInputBorder(borderSide: BorderSide.none),
+                        ),
+                      ),
+                    ),
+                  ),
+                )),
+                Expanded(
+                    child: Container(
+                  alignment: Alignment.center,
+                  // height: 9.w,
+                  child: Card(
+                    //margin: EdgeInsets.only(left: 1.w, right: 1.w, top: 2.w),
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(1.5.w)),
+                    elevation: 0,
+                    color: ColorsRes.lightWeightColor,
+                    child: Padding(
+                      padding: EdgeInsets.only(left: 1.w),
+                      child: TextField(
+                        // maxLength: 1,
+                        controller: toCrossController,
+                        keyboardType: TextInputType.number,
+                        textAlign: TextAlign.center,
+                        style: const TextStyle(
+                            fontSize: 15.0,
+                            fontFamily: 'Arial',
+                            fontWeight: FontWeight.w500),
+                        decoration: const InputDecoration(
+                          labelText: 'To',
+                          isDense: true,
+                          hintText: '00',
+                          hintStyle:
+                              TextStyle(color: Color.fromARGB(50, 0, 0, 0)),
+                          border:
+                              OutlineInputBorder(borderSide: BorderSide.none),
+                        ),
+                      ),
+                    ),
+                  ),
+                )),
+                Expanded(
+                    child: Container(
+                  alignment: Alignment.center,
+                  // height: 9.w,
+                  child: Card(
+                    //margin: EdgeInsets.only(left: 1.w, right: 1.w, top: 2.w),
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(1.5.w)),
+                    elevation: 0,
+                    color: ColorsRes.lightWeightColor,
+                    child: Padding(
+                      padding: EdgeInsets.only(left: 1.w),
+                      child: TextField(
+                        // maxLength: 2,
+                        controller: amtCrossController,
+                        onChanged: (val) {
+                          setState(() {});
+                        },
+                        keyboardType: TextInputType.number,
+                        textAlign: TextAlign.center,
+                        style: const TextStyle(
+                            fontSize: 15.0,
                             fontFamily: 'Arial',
                             fontWeight: FontWeight.w500),
                         decoration: const InputDecoration(
@@ -199,6 +321,9 @@ class _LaddiPopupState extends ConsumerState<LaddiPopup> {
                             fromController.text = '';
                             toController.text = '';
                             amtController.text = '';
+                            fromCrossController.text = '';
+                            toCrossController.text = '';
+                            amtCrossController.text = '';
                           });
                         },
                         child: Container(
@@ -224,21 +349,50 @@ class _LaddiPopupState extends ConsumerState<LaddiPopup> {
                           borderRadius: BorderRadius.circular(1.6.w)),
                       child: InkWell(
                         onTap: () {
-                          int from = int.parse(fromController.text);
-                          int to = int.parse(toController.text);
-                          int amt = int.parse(amtController.text);
-                          setState(() {
-                            if (amt > 0) {
-                              for (int i = from; i <= to; i++) {
-                                global.numberPair[i] =
-                                    global.numberPair[i]! + amt;
-                                print(i.toString().padLeft(2, '0'));
+                          var crossingPair = [];
+
+                          if (amtController.text.isNotEmpty &&
+                              fromController.text.isNotEmpty &&
+                              toController.text.isNotEmpty) {
+                            int from = int.parse(fromController.text);
+                            int to = int.parse(toController.text);
+                            int amt = int.parse(amtController.text);
+
+                            for (int i = from; i <= to; i++) {
+                              global.numberPair[i] =
+                                  global.numberPair[i]! + amt;
+                              print(i.toString().padLeft(2, '0'));
+                            }
+                          }
+                          if (amtCrossController.text.isNotEmpty &&
+                              fromCrossController.text.isNotEmpty &&
+                              toCrossController.text.isNotEmpty) {
+                            String fromCross = fromCrossController.text;
+                            String toCross = toCrossController.text;
+                            int amtCross = int.parse(amtCrossController.text);
+
+                            for (int t = 0; t < toCross.length; t++) {
+                              for (int i = 0; i < fromCross.length; i++) {
+                                String pair = fromCross[i] + toCross[t];
+                                crossingPair.add(pair);
                               }
                             }
-                            fromController.text = '';
-                            toController.text = '';
-                            amtController.text = '';
-                          });
+
+                            for (int i = 0; i < crossingPair.length; i++) {
+                              int a = int.parse(crossingPair[i]);
+                              global.numberPair[a] =
+                                  global.numberPair[a]! + amtCross;
+                              print(i.toString().padLeft(2, '0'));
+                            }
+                          }
+                          fromController.text = '';
+                          toController.text = '';
+                          amtController.text = '';
+                          fromCrossController.text = '';
+                          toCrossController.text = '';
+                          amtCrossController.text = '';
+                          crossingPair.clear();
+                          ref.refresh(numberPairProvider);
                         },
                         child: Container(
                           height: 6.w,

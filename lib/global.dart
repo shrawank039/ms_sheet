@@ -270,3 +270,5 @@ Map<int, int> numberPair = {
   119: 0,
   120: 0,
 };
+List<int> pairKey = [];
+List<int> pairValue = [];

@@ -1,16 +1,16 @@
-import 'package:date_time_picker/date_time_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:iconly/iconly.dart';
 import 'package:ms_sheet/global.dart' as global;
+import 'package:ms_sheet/models/sheets_response_entity.dart';
 import 'package:ms_sheet/providers/data_providers.dart';
 import 'package:ms_sheet/ui/styles/color.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../../../../repositories/sheets_repository.dart';
+import '../../../../../widgets/delete_confirmation_popup.dart';
 import '../../../../styles/design.dart';
-import '../../../panels/main_panel.dart';
 
 class AddSheets extends StatefulWidget {
   const AddSheets({super.key});
@@ -77,6 +77,7 @@ class _CreateSheetsState extends ConsumerState<CreateSheets> {
                 children: [
                   IconButton(
                       onPressed: () {},
+                      hoverColor: Colors.transparent,
                       icon: Icon(
                         Icons.arrow_back,
                         color: ColorsRes.darkGrey,
@@ -129,9 +130,47 @@ class _CreateSheetsState extends ConsumerState<CreateSheets> {
                     ),
                   ),
                 )),
+                SizedBox(
+                  width: 2.w,
+                ),
+                Card(
+                  margin: EdgeInsets.only(right: 1.w, top: 1.5.w),
+                  color: ColorsRes.mainBlue,
+                  elevation: 0,
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(1.6.w)),
+                  child: InkWell(
+                    onTap: () async {
+                      if (_controllerName.text.isNotEmpty) {
+                        var addSheet = await SheetsRepository()
+                            .addSheets(_controllerName.text, '12:00');
+                        if (addSheet.success == true) {
+                          _controllerName.text = '';
+                          _controllerTime.text = '';
+                          SmartDialog.showToast(
+                              "${_controllerName.text} Added");
+                        }
+                      } else {
+                        print('Bearer ${global.prefs.get('token')}');
+                        SmartDialog.showToast("Please fill all data");
+                      }
+                      ref.refresh(sheetDataProvider);
+                    },
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      height: 6.w,
+                      alignment: Alignment.center,
+                      child: Text(
+                        'Add',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(color: ColorsRes.white, fontSize: 2.w),
+                      ),
+                    ),
+                  ),
+                ),
               ],
             ),
-            Row(
+            /*Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -204,7 +243,7 @@ class _CreateSheetsState extends ConsumerState<CreateSheets> {
                   ),
                 ),
               ],
-            ),
+            ),*/
             SizedBox(
               height: 3.w,
             ),
@@ -218,8 +257,7 @@ class _CreateSheetsState extends ConsumerState<CreateSheets> {
                     children: _data.value!.data!.map((e) {
                       return sheetsList(
                           'https://cdn-icons-png.flaticon.com/256/281/281761.png',
-                          e.name,
-                          e.endTime,
+                          e,
                           context);
                     }).toList(),
                   );
@@ -237,8 +275,7 @@ class _CreateSheetsState extends ConsumerState<CreateSheets> {
   }
 }
 
-Widget sheetsList(
-    String? pic, String? name, String? date, BuildContext context) {
+Widget sheetsList(String? pic, SheetsResponseData data, BuildContext context) {
   return Container(
     // width: 50.w,
     margin: EdgeInsets.only(top: 1.w),
@@ -270,7 +307,7 @@ Widget sheetsList(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  name!,
+                  data.name!,
                   textAlign: TextAlign.left,
                   style: TextStyle(
                       fontSize: 1.7.w,
@@ -278,7 +315,7 @@ Widget sheetsList(
                       color: const Color.fromARGB(255, 0, 0, 0)),
                 ),
                 Text(
-                  date!,
+                  data.endTime!,
                   textAlign: TextAlign.left,
                   style: TextStyle(
                     fontSize: 1.3.w,
@@ -302,11 +339,10 @@ Widget sheetsList(
           ),
           IconButton(
             onPressed: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => MainPanel(1, ''),
-                  ));
+              showDialog(
+                  context: context,
+                  builder: (context) => DeleteConfirmationPopup(data.id!,
+                      'sheet', const ExtraDataParameter(dataList: [])));
             },
             icon: Icon(
               IconlyBroken.arrow_right,

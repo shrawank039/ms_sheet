@@ -108,7 +108,7 @@ class _SheetsHistoryState extends State<SheetsHistory> {
                       });
                     },
                     //itemHeight: 40,
-                    dropdownMaxHeight: 300,
+                    dropdownMaxHeight: 25.h,
                     searchController: textEditingController,
                     searchInnerWidget: Padding(
                       padding: const EdgeInsets.only(

@@ -4,6 +4,7 @@ import 'package:ms_sheet/repositories/agents_repository.dart';
 import 'package:ms_sheet/repositories/counters_repository.dart';
 import 'package:ms_sheet/repositories/local_player_repository.dart';
 import 'package:ms_sheet/repositories/panel_repository.dart';
+import 'package:ms_sheet/repositories/sheets_repository.dart';
 import 'package:sizer/sizer.dart';
 
 import '../providers/data_providers.dart';
@@ -84,6 +85,13 @@ class DeleteConfirmationPopup extends ConsumerWidget {
                               if (delete.success == true) {
                                 Navigator.of(context).pop();
                                 ref.refresh(counterDataProvider);
+                              }
+                            } else if (type == 'sheet') {
+                              delete =
+                                  await SheetsRepository().deleteSheets(id);
+                              if (delete.success == true) {
+                                Navigator.of(context).pop();
+                                ref.refresh(sheetDataProvider);
                               }
                             } else if (type == 'local_player') {
                               delete = await LocalPlayersRepository()

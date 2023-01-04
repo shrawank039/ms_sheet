@@ -138,6 +138,7 @@ class _OtpState extends State<Otp> {
                                     onTap: () {
                                       Navigator.pop(context);
                                     },
+                                    hoverColor: Colors.transparent,
                                     child: const Icon(Icons.arrow_back)),
                               ],
                             )),

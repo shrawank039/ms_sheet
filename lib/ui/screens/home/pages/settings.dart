@@ -49,6 +49,7 @@ class _SettingsState extends State<Settings> {
                               children: [
                                 IconButton(
                                     onPressed: () {},
+                                    hoverColor: Colors.transparent,
                                     icon: Icon(
                                       Icons.arrow_back,
                                       color: ColorsRes.darkGrey,
