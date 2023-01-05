@@ -521,38 +521,45 @@ class _MasterPanelState extends ConsumerState<MasterPanel> {
 
 Widget numberBox(int index) {
   final TextEditingController pointController = TextEditingController();
+
   if (global.numberPair[index + 1]! > 0) {
     pointController.text = global.numberPair[index + 1].toString();
   }
-  return Container(
-    padding: EdgeInsets.only(left: 1.w),
-    decoration: BoxDecoration(
-        border: Border.all(width: 0.5, color: ColorsRes.greyLightColor)),
-    child: Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          (index + 1).toString(),
-          style: TextStyle(fontSize: 0.8.h, color: Colors.grey),
-        ),
-        TextField(
-          textAlign: TextAlign.end,
-          scribbleEnabled: true,
-          controller: pointController,
-          style: const TextStyle(
-              color: ColorsRes.mainBlue, fontWeight: FontWeight.w500),
-          decoration: InputDecoration(
-            isCollapsed: true,
-            contentPadding:
-                EdgeInsets.only(left: 1.2.w, top: 0.5.w, bottom: 0.5.w),
-            hoverColor: ColorsRes.lightBlue,
-            border: const OutlineInputBorder(borderSide: BorderSide.none),
+  return Consumer(
+      builder: (BuildContext context, WidgetRef ref, Widget? child) {
+    return Container(
+      padding: EdgeInsets.only(left: 1.w),
+      decoration: BoxDecoration(
+          border: Border.all(width: 0.5, color: ColorsRes.greyLightColor)),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            (index + 1).toString(),
+            style: TextStyle(fontSize: 0.8.h, color: Colors.grey),
           ),
-          onChanged: (text) {},
-        ),
-      ],
-    ),
-  );
+          TextField(
+            textAlign: TextAlign.end,
+            scribbleEnabled: true,
+            controller: pointController,
+            style: const TextStyle(
+                color: ColorsRes.mainBlue, fontWeight: FontWeight.w500),
+            decoration: InputDecoration(
+              isCollapsed: true,
+              contentPadding:
+                  EdgeInsets.only(left: 1.2.w, top: 0.5.w, bottom: 0.5.w),
+              hoverColor: ColorsRes.lightBlue,
+              border: const OutlineInputBorder(borderSide: BorderSide.none),
+            ),
+            onChanged: (value) {
+              global.numberPair[index] = int.parse(value);
+              print('onChanged ${global.numberPair[index]}');
+            },
+          ),
+        ],
+      ),
+    );
+  });
 }
 
 Widget controls() {

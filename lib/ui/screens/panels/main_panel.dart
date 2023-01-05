@@ -442,61 +442,57 @@ class _MainPanelState extends ConsumerState<MainPanel> {
                                 ],
                               ),
                             ),
-                            Container(
-                              width: 25.w,
-                              child: Padding(
-                                padding: EdgeInsets.only(left: 2.w),
-                                child: Column(
-                                  children: [
-                                    Padding(
-                                      padding:
-                                          EdgeInsets.symmetric(horizontal: 1.w),
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          const Expanded(
-                                              child: Text(
-                                            "Pair",
-                                            textAlign: TextAlign.center,
-                                            style: TextStyle(
-                                                color: ColorsRes.grayColor),
-                                          )),
-                                          const Expanded(
-                                              child: Text(
-                                            "Amount",
-                                            textAlign: TextAlign.center,
-                                            style: TextStyle(
-                                                color: ColorsRes.grayColor),
-                                          )),
-                                          SizedBox(
-                                            width: 4.w,
-                                          )
-                                        ],
+                            SingleChildScrollView(
+                              child: Container(
+                                width: 25.w,
+                                child: Padding(
+                                  padding: EdgeInsets.only(left: 2.w),
+                                  child: Column(
+                                    children: <Widget>[
+                                      Padding(
+                                        padding: EdgeInsets.symmetric(
+                                            horizontal: 1.w),
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            const Expanded(
+                                                child: Text(
+                                              "Pair",
+                                              textAlign: TextAlign.center,
+                                              style: TextStyle(
+                                                  color: ColorsRes.grayColor),
+                                            )),
+                                            const Expanded(
+                                                child: Text(
+                                              "Amount",
+                                              textAlign: TextAlign.center,
+                                              style: TextStyle(
+                                                  color: ColorsRes.grayColor),
+                                            )),
+                                            SizedBox(
+                                              width: 4.w,
+                                            )
+                                          ],
+                                        ),
                                       ),
-                                    ),
-                                    SizedBox(
-                                      height: 2.w,
-                                    ),
-                                    ListView.builder(
-                                      shrinkWrap: true,
-                                      itemCount: global.pairKey.length,
-                                      itemBuilder: (context, index) {
-                                        return pairList(index);
-                                      },
-                                    ),
-                                  ],
+                                      SizedBox(
+                                        height: 2.w,
+                                      ),
+                                      ListView.builder(
+                                        shrinkWrap: true,
+                                        itemCount: global.pairKey.length,
+                                        itemBuilder: (context, index) {
+                                          return pairList(index);
+                                        },
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               ),
                             )
                           ],
                         ),
-                        // Expanded(
-                        //   child: SizedBox(
-                        //     height: 2.w,
-                        //   ),
-                        // ),
-                        // All buttons to update the sheet
                         Row(
                           children: [
                             Expanded(
