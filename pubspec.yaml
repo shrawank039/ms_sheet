@@ -43,7 +43,6 @@ dependencies:
   iconly: ^1.0.1
   date_time_picker: ^2.1.0
   dropdown_button2: ^1.9.1
-  flutter_smart_dialog: ^4.5.4+1
   http: ^0.13.4
   json_annotation: ^4.1.0
   connectivity: ^3.0.6
@@ -56,6 +55,7 @@ dependencies:
   responsive_framework: ^0.2.0
   flutter_riverpod: ^2.1.1
   equatable: ^2.0.5
+  fluttertoast: ^8.1.2
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.

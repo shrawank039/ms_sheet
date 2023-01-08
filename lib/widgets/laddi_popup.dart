@@ -20,6 +20,7 @@ class _LaddiPopupState extends ConsumerState<LaddiPopup> {
   final amtCrossController = TextEditingController();
   final fromCrossController = TextEditingController();
   final toCrossController = TextEditingController();
+  bool checkBox = false;
 
   @override
   void initState() {
@@ -301,6 +302,28 @@ class _LaddiPopupState extends ConsumerState<LaddiPopup> {
                 )),
               ],
             ),
+            Row(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                  child: Text(
+                    'Exclude Pair',
+                    style:
+                        TextStyle(color: ColorsRes.darkGrey, fontSize: 1.5.w),
+                  ),
+                ),
+                Checkbox(
+                  value: checkBox,
+                  onChanged: (value) {
+                    setState(() {
+                      checkBox = value!;
+                    });
+                    print('agentsDataProvider 0 : ${global.numberPair}');
+                    ref.refresh(numberPairProvider);
+                  },
+                ),
+              ],
+            ),
             SizedBox(
               height: 1.w,
             ),
@@ -374,7 +397,10 @@ class _LaddiPopupState extends ConsumerState<LaddiPopup> {
                             for (int t = 0; t < toCross.length; t++) {
                               for (int i = 0; i < fromCross.length; i++) {
                                 String pair = fromCross[i] + toCross[t];
-                                crossingPair.add(pair);
+                                if (checkBox && fromCross[i] == toCross[t]) {
+                                } else {
+                                  crossingPair.add(pair);
+                                }
                               }
                             }
 

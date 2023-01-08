@@ -1,7 +1,6 @@
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:ms_sheet/providers/data_providers.dart';
 import 'package:ms_sheet/repositories/agents_repository.dart';
 import 'package:ms_sheet/ui/styles/color.dart';
@@ -10,6 +9,7 @@ import 'package:ms_sheet/widgets/delete_confirmation_popup.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../../../models/agents_response_entity.dart';
+import '../../../utils/toast.dart';
 
 class Agents extends ConsumerStatefulWidget {
   @override
@@ -655,11 +655,10 @@ class _CreateAgentSectionState extends ConsumerState<CreateAgentSection> {
                             selectedAgents = null;
                           });
                           ref.refresh(agentsDataProvider);
-                          SmartDialog.showToast(
-                              "${_controllerName.text} Added");
+                          ShowToast("Added", context);
                         }
                       } else {
-                        SmartDialog.showToast("Please fill all data");
+                        ShowToast("Please fill all data", context);
                       }
                     },
                     child: Container(
@@ -979,12 +978,11 @@ class _CreateAgentSectionMobileState
                           _controllerReferenceComm.clear();
                           _controllerIncentive.clear();
                           textEditingController.clear();
-                          SmartDialog.showToast(
-                              "${_controllerName.text} Added");
+                          ShowToast("Added", context);
                         }
                       } else {
                         ref.refresh(agentsDataProvider);
-                        SmartDialog.showToast("Please fill all data");
+                        ShowToast("Please fill all data", context);
                       }
                     },
                     child: Container(

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:iconly/iconly.dart';
 import 'package:ms_sheet/global.dart' as global;
 import 'package:ms_sheet/models/sheets_response_entity.dart';
@@ -11,6 +10,7 @@ import 'package:sizer/sizer.dart';
 import '../../../../../repositories/sheets_repository.dart';
 import '../../../../../widgets/delete_confirmation_popup.dart';
 import '../../../../styles/design.dart';
+import '../../../../utils/toast.dart';
 
 class AddSheets extends StatefulWidget {
   const AddSheets({super.key});
@@ -147,12 +147,11 @@ class _CreateSheetsState extends ConsumerState<CreateSheets> {
                         if (addSheet.success == true) {
                           _controllerName.text = '';
                           _controllerTime.text = '';
-                          SmartDialog.showToast(
-                              "${_controllerName.text} Added");
+                          ShowToast("Added", context);
                         }
                       } else {
                         print('Bearer ${global.prefs.get('token')}');
-                        SmartDialog.showToast("Please fill all data");
+                        ShowToast("Please fill all data", context);
                       }
                       ref.refresh(sheetDataProvider);
                     },

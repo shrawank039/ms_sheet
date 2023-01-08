@@ -258,7 +258,7 @@ class _MasterPanelState extends ConsumerState<MasterPanel> {
                 ),
               ),
               Container(
-                width: 70.w,
+                width: 40.w,
                 padding: EdgeInsets.only(left: 2.w),
                 child: Column(
                   children: [
@@ -357,7 +357,7 @@ class _MasterPanelState extends ConsumerState<MasterPanel> {
                       children: [
                         Expanded(
                           child: Container(
-                            padding: EdgeInsets.symmetric(vertical: 1.2.w),
+                            padding: EdgeInsets.symmetric(vertical: 1.0.w),
                             decoration:
                                 DesignConfig.boxDecorationContainerCardShadow(
                               ColorsRes.white,
@@ -369,139 +369,126 @@ class _MasterPanelState extends ConsumerState<MasterPanel> {
                               0,
                             ),
                             child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                Expanded(
-                                  child: Card(
-                                    margin: EdgeInsets.only(left: 2.w),
-                                    color: ColorsRes.lightBlue,
-                                    elevation: 0,
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(1.8.w)),
-                                    child: Padding(
-                                      padding: EdgeInsets.only(
-                                          top: 0.7.h,
-                                          bottom: 0.7.h,
-                                          left: 1.8.w),
-                                      child: Row(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.center,
-                                        children: [
-                                          SizedBox(
-                                            width: 0.1.w,
-                                          ),
-                                          Icon(
-                                            FontAwesomeIcons.share,
+                                Card(
+                                  //margin: EdgeInsets.only(left: 1.w),
+                                  color: ColorsRes.lightBlue,
+                                  elevation: 0,
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius:
+                                          BorderRadius.circular(1.8.w)),
+                                  child: Padding(
+                                    padding: EdgeInsets.only(
+                                        top: 0.7.h, bottom: 0.7.h, left: 0.8.w),
+                                    child: Row(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      children: [
+                                        SizedBox(
+                                          width: 0.1.w,
+                                        ),
+                                        Icon(
+                                          FontAwesomeIcons.share,
+                                          color: ColorsRes.mainBlue,
+                                          size: 2.w,
+                                        ),
+                                        SizedBox(
+                                          width: 1.0.w,
+                                        ),
+                                        Text(
+                                          'Share',
+                                          style: TextStyle(
                                             color: ColorsRes.mainBlue,
-                                            size: 3.w,
+                                            fontSize: 1.5.w,
                                           ),
-                                          SizedBox(
-                                            width: 1.h,
-                                          ),
-                                          Text(
-                                            'Share',
-                                            style: TextStyle(
-                                              color: ColorsRes.mainBlue,
-                                              fontSize: 2.w,
-                                            ),
-                                          ),
-                                          SizedBox(
-                                            width: 2.w,
-                                          )
-                                        ],
-                                      ),
+                                        ),
+                                        SizedBox(
+                                          width: 1.0.w,
+                                        )
+                                      ],
                                     ),
                                   ),
                                 ),
-                                Expanded(
-                                  child: Card(
-                                    margin: EdgeInsets.only(left: 2.w),
-                                    color: ColorsRes.lightBlue,
-                                    elevation: 0,
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(1.8.w)),
-                                    child: Padding(
-                                      padding: EdgeInsets.only(
-                                          top: 0.7.h,
-                                          bottom: 0.7.h,
-                                          left: 1.8.w),
-                                      child: Row(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.center,
-                                        children: [
-                                          SizedBox(
-                                            width: 0.1.w,
-                                          ),
-                                          Icon(
-                                            FontAwesomeIcons.whatsapp,
+                                Card(
+                                  // margin: EdgeInsets.only(left: 2.w),
+                                  color: ColorsRes.lightBlue,
+                                  elevation: 0,
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius:
+                                          BorderRadius.circular(1.8.w)),
+                                  child: Padding(
+                                    padding: EdgeInsets.only(
+                                        top: 0.7.h, bottom: 0.7.h, left: 1.8.w),
+                                    child: Row(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      children: [
+                                        SizedBox(
+                                          width: 0.1.w,
+                                        ),
+                                        Icon(
+                                          FontAwesomeIcons.whatsapp,
+                                          color: ColorsRes.mainBlue,
+                                          size: 2.w,
+                                        ),
+                                        SizedBox(
+                                          width: 1.0.w,
+                                        ),
+                                        Text(
+                                          'Share',
+                                          style: TextStyle(
                                             color: ColorsRes.mainBlue,
-                                            size: 3.w,
+                                            fontSize: 1.5.w,
                                           ),
-                                          SizedBox(
-                                            width: 1.h,
-                                          ),
-                                          Text(
-                                            'Share',
-                                            style: TextStyle(
-                                              color: ColorsRes.mainBlue,
-                                              fontSize: 2.w,
-                                            ),
-                                          ),
-                                          SizedBox(
-                                            width: 2.w,
-                                          )
-                                        ],
-                                      ),
+                                        ),
+                                        SizedBox(
+                                          width: 1.0.w,
+                                        )
+                                      ],
                                     ),
                                   ),
                                 ),
-                                Expanded(
-                                  child: Card(
-                                    margin: EdgeInsets.only(left: 2.w),
-                                    color: ColorsRes.lightBlue,
-                                    elevation: 0,
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(1.8.w)),
-                                    child: Padding(
-                                      padding: EdgeInsets.only(
-                                          top: 0.7.h,
-                                          bottom: 0.7.h,
-                                          left: 1.8.w),
-                                      child: Row(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.center,
-                                        children: [
-                                          SizedBox(
-                                            width: 0.1.w,
-                                          ),
-                                          Icon(
-                                            Icons.generating_tokens,
+                                Card(
+                                  //margin: EdgeInsets.only(left: 2.w),
+                                  color: ColorsRes.lightBlue,
+                                  elevation: 0,
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius:
+                                          BorderRadius.circular(1.8.w)),
+                                  child: Padding(
+                                    padding: EdgeInsets.only(
+                                        top: 0.7.h, bottom: 0.7.h, left: 1.8.w),
+                                    child: Row(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      children: [
+                                        SizedBox(
+                                          width: 0.1.w,
+                                        ),
+                                        Icon(
+                                          Icons.generating_tokens,
+                                          color: ColorsRes.mainBlue,
+                                          size: 2.w,
+                                        ),
+                                        SizedBox(
+                                          width: 1.0.w,
+                                        ),
+                                        Text(
+                                          'Generate',
+                                          style: TextStyle(
                                             color: ColorsRes.mainBlue,
-                                            size: 3.w,
+                                            fontSize: 1.5.w,
                                           ),
-                                          SizedBox(
-                                            width: 1.h,
-                                          ),
-                                          Text(
-                                            'Generate',
-                                            style: TextStyle(
-                                              color: ColorsRes.mainBlue,
-                                              fontSize: 2.w,
-                                            ),
-                                          ),
-                                          SizedBox(
-                                            width: 2.w,
-                                          )
-                                        ],
-                                      ),
+                                        ),
+                                        SizedBox(
+                                          width: 1.0.w,
+                                        )
+                                      ],
                                     ),
                                   ),
                                 ),
-                                SizedBox(
-                                  width: 2.w,
-                                )
                               ],
                             ),
                           ),

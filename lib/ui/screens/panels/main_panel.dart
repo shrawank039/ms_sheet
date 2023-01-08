@@ -1,10 +1,9 @@
 import 'package:dropdown_button2/dropdown_button2.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:ms_sheet/global.dart' as global;
 import 'package:ms_sheet/models/panel_response_entity.dart';
@@ -21,10 +20,13 @@ import '../../styles/design.dart';
 
 bool updatePanel = false;
 int selectedAgentId = 0;
+int selectedIndex = 0;
+int a = 0;
 
 class MainPanel extends ConsumerStatefulWidget {
   final int sheet_id;
   final String date;
+
   const MainPanel(this.sheet_id, this.date, {super.key});
 
   @override
@@ -32,16 +34,20 @@ class MainPanel extends ConsumerStatefulWidget {
 }
 
 class _MainPanelState extends ConsumerState<MainPanel> {
-  final FocusNode _focusNode = FocusNode();
+  FocusNode _focusNode = FocusNode();
+  FocusNode focusAmount = FocusNode();
   int? entryBox, entryAmt;
   AgentsResponseData? selectedAgents;
   final TextEditingController textEditingController = TextEditingController();
   final TextEditingController entryBoxController = TextEditingController();
   final TextEditingController entryAmtController = TextEditingController();
+  late FToast fToast;
 
   @override
   void initState() {
     super.initState();
+    fToast = FToast();
+    fToast.init(context);
   }
 
   @override
@@ -178,40 +184,70 @@ class _MainPanelState extends ConsumerState<MainPanel> {
     super.dispose();
   }
 
+  _showToast(String text) {
+    Widget toast = Container(
+      padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 12.0),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(25.0),
+        color: Colors.greenAccent,
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(text),
+        ],
+      ),
+    );
+
+    fToast.showToast(
+      child: toast,
+      gravity: ToastGravity.BOTTOM,
+      toastDuration: Duration(seconds: 2),
+    );
+  }
+
   void _handleKeyEvent(RawKeyEvent event) {
-    if (event.logicalKey == LogicalKeyboardKey.arrowUp) {
-      setState(() {
-        if (kReleaseMode) {
-          print('kReleaseMode : arrowUp');
-        } else {
+    if (a.isEven) {
+      /*if (event.logicalKey == LogicalKeyboardKey.arrowUp) {
+        setState(() {
+          _focusNode.previousFocus();
           print('kReleaseMode (false) : arrowUp');
-        }
-      });
-    } else if (event.logicalKey == LogicalKeyboardKey.arrowDown) {
-      setState(() {
-        if (kReleaseMode) {
-          print('kReleaseMode : arrowDown');
-        } else {
+        });
+      } else if (event.logicalKey == LogicalKeyboardKey.arrowDown) {
+        setState(() {
           print('kReleaseMode (false) : arrowDown');
-        }
-      });
-    } else if (event.logicalKey == LogicalKeyboardKey.arrowLeft) {
-      setState(() {
-        if (kReleaseMode) {
-          print('kReleaseMode : arrowLeft');
-        } else {
+        });
+      } else if (event.logicalKey == LogicalKeyboardKey.arrowLeft) {
+        setState(() {
+          selectedIndex--;
+          _focusNode.previousFocus();
           print('kReleaseMode (false) : arrowLeft');
-        }
-      });
-    } else if (event.logicalKey == LogicalKeyboardKey.arrowRight) {
-      setState(() {
-        if (kReleaseMode) {
-          print('kReleaseMode : arrowRight');
-        } else {
+        });
+      } else if (event.logicalKey == LogicalKeyboardKey.arrowRight) {
+        setState(() {
+          selectedIndex++;
+          _focusNode.nextFocus();
           print('kReleaseMode (false) : arrowRight');
-        }
-      });
+        });
+      } else */
+      if (event.logicalKey == LogicalKeyboardKey.tab) {
+        setState(() {
+          //_focusNode.nextFocus();
+          selectedIndex++;
+          print('kReleaseMode (false) : tab');
+        });
+      }
     }
+    a++;
+  }
+
+  changeFocus(
+      FocusNode focusNode, TextEditingController textEditingController) {
+    FocusScope.of(context).requestFocus(focusNode);
+    textEditingController.selection = TextSelection(
+      baseOffset: 0,
+      extentOffset: textEditingController.text.length,
+    );
   }
 
   @override
@@ -233,7 +269,6 @@ class _MainPanelState extends ConsumerState<MainPanel> {
     return Scaffold(
       body: SafeArea(
         child: RawKeyboardListener(
-          autofocus: true,
           focusNode: _focusNode,
           onKey: _handleKeyEvent,
           child: Padding(
@@ -301,8 +336,6 @@ class _MainPanelState extends ConsumerState<MainPanel> {
                                           mainAxisSpacing: 0,
                                           crossAxisSpacing: 0,
                                           itemBuilder: (context, index) {
-                                            // print(
-                                            //     '_dataNumberPair 0 : ${_dataNumberPair}');
                                             return numberBox(index);
                                           },
                                         ),
@@ -546,8 +579,7 @@ class _MainPanelState extends ConsumerState<MainPanel> {
                                                         global.numberPair
                                                             .toString());
                                             if (addPanel.success == true) {
-                                              SmartDialog.showToast(
-                                                  "${selectedAgents!.name} Added");
+                                              _showToast('Added Successfully');
                                               setState(() {
                                                 selectedAgents = null;
                                               });
@@ -565,8 +597,7 @@ class _MainPanelState extends ConsumerState<MainPanel> {
                                                         global.numberPair
                                                             .toString());
                                             if (updatePanel.success == true) {
-                                              SmartDialog.showToast(
-                                                  "${selectedAgents!.name} Updated");
+                                              _showToast("Updated");
                                               setState(() {
                                                 selectedAgents = null;
                                               });
@@ -574,8 +605,7 @@ class _MainPanelState extends ConsumerState<MainPanel> {
                                                   extraDataParameter));
                                             }
                                           } else {
-                                            SmartDialog.showToast(
-                                                "Fill all the data first!!!");
+                                            _showToast('Select Any Clint');
                                           }
                                         },
                                         child: Container(
@@ -936,6 +966,7 @@ class _MainPanelState extends ConsumerState<MainPanel> {
                                               horizontal: 2.w,
                                             ),
                                             child: TextField(
+                                              focusNode: focusAmount,
                                               controller: entryAmtController,
                                               textAlign: TextAlign.start,
                                               scribbleEnabled: true,
@@ -961,51 +992,55 @@ class _MainPanelState extends ConsumerState<MainPanel> {
                                       ),
                                       InkWell(
                                         onTap: () {
-                                          if (entryBoxController
-                                              .text.length.isEven) {
-                                            for (int i = 0;
-                                                i <
-                                                    entryBoxController
-                                                        .text.length;
-                                                i++) {
-                                              entryBox = int.parse(
-                                                  entryBoxController.text[i] +
+                                          if (selectedAgents != null) {
+                                            if (entryBoxController
+                                                .text.length.isEven) {
+                                              for (int i = 0;
+                                                  i <
                                                       entryBoxController
-                                                          .text[i + 1]);
-                                              entryAmt = int.parse(
-                                                  entryAmtController.text);
-                                              global.numberPair[entryBox!] =
-                                                  (global.numberPair[
-                                                          entryBox])! +
-                                                      entryAmt!;
-                                              global.pairKey.add(entryBox!);
-                                              global.pairValue.add(entryAmt!);
-                                              i = i + 1;
+                                                          .text.length;
+                                                  i++) {
+                                                entryBox = int.parse(
+                                                    entryBoxController.text[i] +
+                                                        entryBoxController
+                                                            .text[i + 1]);
+                                                entryAmt = int.parse(
+                                                    entryAmtController.text);
+                                                global.numberPair[entryBox!] =
+                                                    (global.numberPair[
+                                                            entryBox])! +
+                                                        entryAmt!;
+                                                global.pairKey.add(entryBox!);
+                                                global.pairValue.add(entryAmt!);
+                                                i = i + 1;
+                                              }
+                                            } else {
+                                              for (int i = 0;
+                                                  i <
+                                                      entryBoxController
+                                                          .text.length;
+                                                  i++) {
+                                                entryBox = int.parse(
+                                                    entryBoxController.text[i] +
+                                                        entryBoxController
+                                                            .text[i + 1] +
+                                                        entryBoxController
+                                                            .text[i + 2]);
+                                                entryAmt = int.parse(
+                                                    entryAmtController.text);
+                                                global.numberPair[entryBox!] =
+                                                    (global.numberPair[
+                                                            entryBox])! +
+                                                        entryAmt!;
+                                                global.pairKey.add(entryBox!);
+                                                global.pairValue.add(entryAmt!);
+                                                i = i + 2;
+                                              }
                                             }
+                                            ref.refresh(numberPairProvider);
                                           } else {
-                                            for (int i = 0;
-                                                i <
-                                                    entryBoxController
-                                                        .text.length;
-                                                i++) {
-                                              entryBox = int.parse(
-                                                  entryBoxController.text[i] +
-                                                      entryBoxController
-                                                          .text[i + 1] +
-                                                      entryBoxController
-                                                          .text[i + 2]);
-                                              entryAmt = int.parse(
-                                                  entryAmtController.text);
-                                              global.numberPair[entryBox!] =
-                                                  (global.numberPair[
-                                                          entryBox])! +
-                                                      entryAmt!;
-                                              global.pairKey.add(entryBox!);
-                                              global.pairValue.add(entryAmt!);
-                                              i = i + 2;
-                                            }
+                                            _showToast('Select Any Client');
                                           }
-                                          ref.refresh(numberPairProvider);
                                         },
                                         child: DesignConfig.flatButtonWithIcon(
                                           ColorsRes.mainBlue,
@@ -1128,36 +1163,89 @@ class _MainPanelState extends ConsumerState<MainPanel> {
 
 Widget numberBox(int index) {
   final TextEditingController pointController = TextEditingController();
+  FocusNode focusNode = FocusNode();
+
   if (global.numberPair[index + 1]! > 0) {
     pointController.text = global.numberPair[index + 1].toString();
   }
-  return Container(
-    padding: EdgeInsets.only(left: 1.w),
-    decoration: BoxDecoration(
-        border: Border.all(width: 0.5, color: ColorsRes.greyLightColor)),
-    child: Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          (index + 1).toString(),
-          style: TextStyle(fontSize: 0.8.h, color: Colors.grey),
+
+  if (selectedIndex == index) {
+    print("focus: : $index");
+    pointController.selection = TextSelection(
+      baseOffset: 0,
+      extentOffset: pointController.text.length,
+    );
+  }
+
+  return Consumer(
+    builder: (BuildContext context, WidgetRef ref, Widget? child) {
+      // focusNode.addListener(() {
+      //   if (focusNode.hasFocus && selectedIndex == index) {
+      //     // pointController.selection = TextSelection(
+      //     //   baseOffset: 0,
+      //     //   extentOffset: pointController.text.length,
+      //     // );
+      //     print("focus: : $index");
+      //     focusNode.unfocus();
+      //     //ref.refresh(numberPairProvider);
+      //   }
+      // });
+
+      return Container(
+        padding: EdgeInsets.only(left: 1.w),
+        decoration: BoxDecoration(
+            border: Border.all(width: 0.5, color: ColorsRes.greyLightColor)),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              (index + 1).toString(),
+              style: TextStyle(fontSize: 0.8.h, color: Colors.grey),
+            ),
+            /*FocusScope(
+              child: Focus(
+                descendantsAreFocusable: true,
+                canRequestFocus: true,
+                onFocusChange: (focus) {
+                  if (focus) {
+                    print("focus: $focus : $index");
+                    selectedIndex = index;
+                    pointController.selection = TextSelection(
+                      baseOffset: 0,
+                      extentOffset: pointController.text.length,
+                    );
+                  }
+                },
+                child: */
+            TextField(
+              controller: pointController,
+              //focusNode: focusNode,
+              onChanged: (value) {
+                if (value.isNotEmpty) {
+                  global.numberPair[index + 1] = int.parse(value);
+                }
+              },
+              onTap: () {
+                selectedIndex = index;
+              },
+              textAlign: TextAlign.end,
+              scribbleEnabled: true,
+              style: const TextStyle(
+                  color: ColorsRes.mainBlue, fontWeight: FontWeight.w500),
+              decoration: InputDecoration(
+                isCollapsed: true,
+                contentPadding:
+                    EdgeInsets.only(left: 1.2.w, top: 0.5.w, bottom: 0.5.w),
+                hoverColor: ColorsRes.lightBlue,
+                border: OutlineInputBorder(borderSide: BorderSide.none),
+              ),
+            ),
+            //   ),
+            // ),
+          ],
         ),
-        TextField(
-          controller: pointController,
-          textAlign: TextAlign.end,
-          scribbleEnabled: true,
-          style:
-              TextStyle(color: ColorsRes.mainBlue, fontWeight: FontWeight.w500),
-          decoration: InputDecoration(
-            isCollapsed: true,
-            contentPadding:
-                EdgeInsets.only(left: 1.2.w, top: 0.5.w, bottom: 0.5.w),
-            hoverColor: ColorsRes.lightBlue,
-            border: OutlineInputBorder(borderSide: BorderSide.none),
-          ),
-        ),
-      ],
-    ),
+      );
+    },
   );
 }
 

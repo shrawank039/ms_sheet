@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:iconly/iconly.dart';
 import 'package:ms_sheet/models/local_players_entity.dart';
 import 'package:ms_sheet/providers/data_providers.dart';
@@ -11,6 +10,7 @@ import 'package:ms_sheet/widgets/player_limit_popup.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../../../widgets/delete_confirmation_popup.dart';
+import '../../../utils/toast.dart';
 
 class LocalPlayers extends ConsumerStatefulWidget {
   @override
@@ -128,11 +128,10 @@ class _SheetsState extends ConsumerState<LocalPlayers> {
                                   ref.refresh(localPlayerDataProvider);
                                   _controllerName.clear();
                                   _controllerMobile.clear();
-                                  SmartDialog.showToast(
-                                      "${_controllerName.text} Added");
+                                  ShowToast('Added', context);
                                 }
                               } else {
-                                SmartDialog.showToast("Please fill all data");
+                                ShowToast("Please fill all data", context);
                               }
                             },
                             child: Container(
