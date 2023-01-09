@@ -45,6 +45,14 @@ PanelResponseData $PanelResponseDataFromJson(Map<String, dynamic> json) {
   if (pair != null) {
     panelResponseData.pair = pair;
   }
+  final String? pair_key = jsonConvert.convert<String>(json['pair_key']);
+  if (pair_key != null) {
+    panelResponseData.pair_key = pair_key;
+  }
+  final String? pair_value = jsonConvert.convert<String>(json['pair_value']);
+  if (pair_value != null) {
+    panelResponseData.pair_value = pair_value;
+  }
   final String? date = jsonConvert.convert<String>(json['date']);
   if (date != null) {
     panelResponseData.date = date;

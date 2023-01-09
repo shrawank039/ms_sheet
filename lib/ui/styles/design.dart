@@ -64,13 +64,14 @@ class DesignConfig {
   }
 
   static Card flatButtonWithCheckBox(
-    Color BgColor,
-    double radius,
-    Color boxColor,
-    String text,
-    double textSize,
-    Color textColor,
-  ) {
+      Color BgColor,
+      double radius,
+      Color boxColor,
+      String text,
+      double textSize,
+      Color textColor,
+      bool check,
+      ValueChanged<bool> checkCallback) {
     return Card(
       margin: EdgeInsets.only(left: 2.w),
       color: BgColor,
@@ -98,9 +99,11 @@ class DesignConfig {
               ),
             ),
             Checkbox(
-              value: false,
-              onChanged: (value) {},
-              checkColor: boxColor,
+              value: check,
+              onChanged: (value) {
+                checkCallback(value!);
+              },
+              checkColor: Colors.white,
             )
           ],
         ),

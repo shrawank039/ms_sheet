@@ -8,13 +8,15 @@ import 'package:ms_sheet/models/panel_response_entity.dart';
 import '../app_config.dart';
 
 class PanelRepository {
-  Future<PanelResponseEntity> addPanel(
-      int sheet_id, int agent_id, String date, var pair) async {
+  Future<PanelResponseEntity> addPanel(int sheet_id, int agent_id, String date,
+      var pair, List<int> pair_key, List<int> pair_value) async {
     var postBody = jsonEncode({
       "sheet_id": sheet_id,
       "agent_id": agent_id,
       "date": date,
       "pair": pair,
+      "pair_key": pair_key.toString(),
+      "pair_value": pair_value.toString()
     });
 
     Uri url = Uri.parse("${AppConfig.BASE_URL}/e-panels");
@@ -24,13 +26,15 @@ class PanelRepository {
     return PanelResponseEntity.fromJson(json.decode(response.body));
   }
 
-  Future<PanelResponseEntity> updatePanel(
-      int sheet_id, int agent_id, String date, var pair) async {
+  Future<PanelResponseEntity> updatePanel(int sheet_id, int agent_id,
+      String date, var pair, List<int> pair_key, List<int> pair_value) async {
     var postBody = jsonEncode({
       "sheet_id": sheet_id,
       "agent_id": agent_id,
       "date": date,
       "pair": pair,
+      "pair_key": pair_key.toString(),
+      "pair_value": pair_value.toString()
     });
 
     Uri url = Uri.parse("${AppConfig.BASE_URL}/e-panels/$sheet_id");

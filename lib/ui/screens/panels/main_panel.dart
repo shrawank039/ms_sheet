@@ -208,9 +208,8 @@ class _MainPanelState extends ConsumerState<MainPanel> {
 
   void _handleKeyEvent(RawKeyEvent event) {
     if (a.isEven) {
-      /*if (event.logicalKey == LogicalKeyboardKey.arrowUp) {
+      if (event.logicalKey == LogicalKeyboardKey.arrowUp) {
         setState(() {
-          _focusNode.previousFocus();
           print('kReleaseMode (false) : arrowUp');
         });
       } else if (event.logicalKey == LogicalKeyboardKey.arrowDown) {
@@ -229,8 +228,7 @@ class _MainPanelState extends ConsumerState<MainPanel> {
           _focusNode.nextFocus();
           print('kReleaseMode (false) : arrowRight');
         });
-      } else */
-      if (event.logicalKey == LogicalKeyboardKey.tab) {
+      } else if (event.logicalKey == LogicalKeyboardKey.tab) {
         setState(() {
           //_focusNode.nextFocus();
           selectedIndex++;
@@ -577,7 +575,9 @@ class _MainPanelState extends ConsumerState<MainPanel> {
                                                         selectedAgents!.id!,
                                                         widget.date,
                                                         global.numberPair
-                                                            .toString());
+                                                            .toString(),
+                                                        global.pairKey,
+                                                        global.pairValue);
                                             if (addPanel.success == true) {
                                               _showToast('Added Successfully');
                                               setState(() {
@@ -595,7 +595,9 @@ class _MainPanelState extends ConsumerState<MainPanel> {
                                                         selectedAgents!.id!,
                                                         widget.date,
                                                         global.numberPair
-                                                            .toString());
+                                                            .toString(),
+                                                        global.pairKey,
+                                                        global.pairValue);
                                             if (updatePanel.success == true) {
                                               _showToast("Updated");
                                               setState(() {
@@ -1411,6 +1413,27 @@ Widget clientsList(PanelResponseData data,
                   global.numberPair = result;
                   selectedAgentId = data.agentId!;
                   updatePanel = true;
+
+                  final pairKey = data.pair_key!
+                      .replaceAll("[", "")
+                      .replaceAll("]", "")
+                      .replaceAll("\"", "")
+                      .split(',');
+
+                  for (int i = 0; i < pairKey.length; i++) {
+                    global.pairKey.add(int.parse(pairKey[i].trim()));
+                  }
+
+                  final pairValue = data.pair_value!
+                      .replaceAll("[", "")
+                      .replaceAll("]", "")
+                      .replaceAll("\"", "")
+                      .split(',');
+
+                  for (int i = 0; i < pairValue.length; i++) {
+                    global.pairValue.add(int.parse(pairValue[i].trim()));
+                  }
+
                   ref.refresh(numberPairProvider);
                 },
                 icon: Icon(

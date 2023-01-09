@@ -6,12 +6,19 @@ import 'package:ms_sheet/global.dart' as global;
 import 'package:ms_sheet/ui/styles/color.dart';
 import 'package:sizer/sizer.dart';
 
+import '../../../models/agents_response_entity.dart';
 import '../../../models/panel_response_entity.dart';
 import '../../../providers/data_providers.dart';
 import '../../styles/design.dart';
 
 var _selectedList;
+var selectPairList;
 var checkBox;
+bool commCheck = false,
+    pattiCheck = false,
+    inOutCheck = false,
+    roundCheck = false;
+AgentsResponseData? selectedAgents;
 
 class MasterPanel extends ConsumerStatefulWidget {
   final int sheet_id;
@@ -30,7 +37,6 @@ class _MasterPanelState extends ConsumerState<MasterPanel> {
         ExtraDataParameter(dataList: [widget.sheet_id, widget.date]);
 
     final _data = ref.watch(panelDataProvider(extraDataParameter));
-
     final _dataNumberPair = ref.watch(numberPairProvider);
 
     var total = 0;
@@ -539,7 +545,7 @@ Widget numberBox(int index) {
               border: const OutlineInputBorder(borderSide: BorderSide.none),
             ),
             onChanged: (value) {
-              global.numberPair[index] = int.parse(value);
+              global.numberPair[index + 1] = int.parse(value);
               print('onChanged ${global.numberPair[index]}');
             },
           ),
@@ -712,43 +718,141 @@ Widget controls() {
                 children: [
                   Expanded(
                     child: DesignConfig.flatButtonWithCheckBox(
-                      ColorsRes.lightBlue,
-                      1.5.w,
-                      ColorsRes.mainBlue,
-                      "Round",
-                      2.w,
-                      ColorsRes.mainBlue,
-                    ),
+                        ColorsRes.lightBlue,
+                        1.5.w,
+                        ColorsRes.mainBlue,
+                        "Round",
+                        2.w,
+                        ColorsRes.mainBlue,
+                        roundCheck, (value) {
+                      roundCheck = value;
+                      double round = double.parse(selectedAgents!.pairRate!);
+                      if (value) {
+                        for (int i = 0; i < global.numberPair.length; i++) {
+                          if (global.numberPair[i]! > 0) {
+                            global.numberPair[i] = (global.numberPair[i]! -
+                                    (selectPairList[i]! * round))
+                                .toInt();
+                          }
+                        }
+                      } else {
+                        for (int i = 0; i < global.numberPair.length; i++) {
+                          global.numberPair[i] = (global.numberPair[i]! +
+                                  (selectPairList[i]! * round))
+                              .toInt();
+                        }
+                      }
+                      ref.refresh(numberPairProvider);
+                    }),
                   ),
                   Expanded(
                     child: DesignConfig.flatButtonWithCheckBox(
-                      ColorsRes.lightBlue,
-                      1.5.w,
-                      ColorsRes.mainBlue,
-                      "In/Out",
-                      2.w,
-                      ColorsRes.mainBlue,
-                    ),
+                        ColorsRes.lightBlue,
+                        1.5.w,
+                        ColorsRes.mainBlue,
+                        "In/Out",
+                        2.w,
+                        ColorsRes.mainBlue,
+                        inOutCheck, (value) {
+                      inOutCheck = value;
+                      double inout = global.numberPair[101]! / 10;
+                      double inout2 = global.numberPair[110]! / 10;
+                      if (global.numberPair[101]! > 0) {
+                        if (value) {
+                          for (int i = 0; i < 10; i++) {
+                            int a = i * 10 + 1;
+                            global.numberPair[a] =
+                                (global.numberPair[a]! + inout).toInt();
+                          }
+                        } else {
+                          for (int i = 0; i < 10; i++) {
+                            int a = i * 10 + 1;
+                            if (global.numberPair[a]! > 0) {
+                              global.numberPair[a] =
+                                  (global.numberPair[a]! - inout).toInt();
+                            }
+                          }
+                        }
+                      }
+                      if (global.numberPair[110]! > 0) {
+                        if (value) {
+                          for (int i = 0; i < 10; i++) {
+                            int a = i * 10 + 10;
+                            global.numberPair[a] =
+                                (global.numberPair[a]! + inout2).toInt();
+                          }
+                        } else {
+                          for (int i = 0; i < 10; i++) {
+                            int a = i * 10 + 10;
+                            if (global.numberPair[a]! > 0) {
+                              global.numberPair[a] =
+                                  (global.numberPair[a]! - inout2).toInt();
+                            }
+                          }
+                        }
+                      }
+                      ref.refresh(numberPairProvider);
+                    }),
                   ),
                   Expanded(
                     child: DesignConfig.flatButtonWithCheckBox(
-                      ColorsRes.lightBlue,
-                      1.5.w,
-                      ColorsRes.mainBlue,
-                      "Comm",
-                      2.w,
-                      ColorsRes.mainBlue,
-                    ),
+                        ColorsRes.lightBlue,
+                        1.5.w,
+                        ColorsRes.mainBlue,
+                        "Comm",
+                        2.w,
+                        ColorsRes.mainBlue,
+                        commCheck, (value) {
+                      commCheck = value;
+                      double commission =
+                          double.parse(selectedAgents!.commission!) / 100;
+                      if (value) {
+                        for (int i = 0; i < global.numberPair.length; i++) {
+                          if (global.numberPair[i]! > 0) {
+                            global.numberPair[i] = (global.numberPair[i]! -
+                                    (selectPairList[i]! * commission))
+                                .toInt();
+                          }
+                        }
+                      } else {
+                        for (int i = 0; i < global.numberPair.length; i++) {
+                          global.numberPair[i] = (global.numberPair[i]! +
+                                  (selectPairList[i]! * commission))
+                              .toInt();
+                        }
+                      }
+                      ref.refresh(numberPairProvider);
+                      print('checkCallback : $value');
+                    }),
                   ),
                   Expanded(
                     child: DesignConfig.flatButtonWithCheckBox(
-                      ColorsRes.lightBlue,
-                      1.5.w,
-                      ColorsRes.mainBlue,
-                      "Patti",
-                      2.w,
-                      ColorsRes.mainBlue,
-                    ),
+                        ColorsRes.lightBlue,
+                        1.5.w,
+                        ColorsRes.mainBlue,
+                        "Patti",
+                        2.w,
+                        ColorsRes.mainBlue,
+                        pattiCheck, (value) {
+                      pattiCheck = value;
+                      double patti = double.parse(selectedAgents!.patti!) / 100;
+                      if (value) {
+                        for (int i = 0; i < global.numberPair.length; i++) {
+                          if (global.numberPair[i]! > 0) {
+                            global.numberPair[i] = (global.numberPair[i]! -
+                                    (selectPairList[i]! * patti))
+                                .toInt();
+                          }
+                        }
+                      } else {
+                        for (int i = 0; i < global.numberPair.length; i++) {
+                          global.numberPair[i] = (global.numberPair[i]! +
+                                  (selectPairList[i]! * patti))
+                              .toInt();
+                        }
+                      }
+                      ref.refresh(numberPairProvider);
+                    }),
                   ),
                   SizedBox(
                     width: 5.w,
@@ -835,13 +939,19 @@ Widget clientsList(
             child: Container(),
           ),
           Consumer(builder: (_, WidgetRef ref, __) {
+            final _dataAgents = ref.watch(agentsDataProvider);
+
             return Checkbox(
               value: checkBox == data.id ? true : false,
               onChanged: (value) {
                 checkBox = data.id!;
                 global.numberPair = pair;
                 _selectedList = data;
-                print('agentsDataProvider 0 : ${global.numberPair}');
+                selectPairList = convertPair(data);
+                selectedAgents = _dataAgents.value!.data!
+                    .where((item) => item.id == data.agentId)
+                    .toList()[0];
+                print('selectedAgents 0 : ${selectedAgents!.name}');
                 ref.refresh(numberPairProvider);
               },
             );
