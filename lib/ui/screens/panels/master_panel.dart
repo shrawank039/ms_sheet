@@ -726,7 +726,8 @@ Widget controls() {
                         ColorsRes.mainBlue,
                         roundCheck, (value) {
                       roundCheck = value;
-                      double round = double.parse(selectedAgents!.pairRate!);
+                      double round =
+                          double.parse(selectedAgents!.pairRate!) / 100;
                       if (value) {
                         for (int i = 0; i < global.numberPair.length; i++) {
                           if (global.numberPair[i]! > 0) {
