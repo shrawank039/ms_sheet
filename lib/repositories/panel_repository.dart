@@ -9,14 +9,15 @@ import '../app_config.dart';
 
 class PanelRepository {
   Future<PanelResponseEntity> addPanel(int sheet_id, int agent_id, String date,
-      var pair, List<int> pair_key, List<int> pair_value) async {
+      var pair, List<int> pair_key, List<int> pair_value, int total) async {
     var postBody = jsonEncode({
       "sheet_id": sheet_id,
       "agent_id": agent_id,
       "date": date,
       "pair": pair,
       "pair_key": pair_key.toString(),
-      "pair_value": pair_value.toString()
+      "pair_value": pair_value.toString(),
+      "total" : total
     });
 
     Uri url = Uri.parse("${AppConfig.BASE_URL}/e-panels");
@@ -27,14 +28,15 @@ class PanelRepository {
   }
 
   Future<PanelResponseEntity> updatePanel(int sheet_id, int agent_id,
-      String date, var pair, List<int> pair_key, List<int> pair_value) async {
+      String date, var pair, List<int> pair_key, List<int> pair_value, int total) async {
     var postBody = jsonEncode({
       "sheet_id": sheet_id,
       "agent_id": agent_id,
       "date": date,
       "pair": pair,
       "pair_key": pair_key.toString(),
-      "pair_value": pair_value.toString()
+      "pair_value": pair_value.toString(),
+      "total" : total
     });
 
     Uri url = Uri.parse("${AppConfig.BASE_URL}/e-panels/$sheet_id");

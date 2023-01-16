@@ -37,6 +37,36 @@ class AgentsRepository {
     return AgentsResponseEntity.fromJson(json.decode(response.body));
   }
 
+  Future<AgentsResponseEntity> updateAgent(
+      int id,
+      String name,
+      String mobile_number,
+      String pair_rate,
+      String in_out_rate,
+      String commission,
+      String patti,
+      String reference_id,
+      String reference_commission,
+      String daily_incentive) async {
+    var postBody = jsonEncode({
+      "name": name,
+      "mobile_number": mobile_number,
+      "pair_rate": pair_rate,
+      "in_out_rate": in_out_rate,
+      "commission": commission,
+      "patti": patti,
+      "reference_commission": reference_commission,
+      "daily_incentive": daily_incentive,
+      "reference_id": reference_id,
+    });
+
+    Uri url = Uri.parse("${AppConfig.BASE_URL}/agents/$id");
+    final response = await http.patch(url,
+        headers: await global.getApiHeaders(true), body: postBody);
+    print('updateAgent : ${response.body}');
+    return AgentsResponseEntity.fromJson(json.decode(response.body));
+  }
+
   Future<AgentsResponseEntity> getAgents() async {
     Uri url = Uri.parse("${AppConfig.BASE_URL}/agents");
     final response =

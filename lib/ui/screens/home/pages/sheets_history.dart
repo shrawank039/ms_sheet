@@ -1,7 +1,11 @@
+import 'package:date_time_picker/date_time_picker.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:iconly/iconly.dart';
+import 'package:intl/intl.dart';
+import 'package:ms_sheet/models/sheets_response_entity.dart';
 import 'package:ms_sheet/ui/screens/panels/main_panel.dart';
+import 'package:ms_sheet/ui/screens/panels/master_panel.dart';
 import 'package:ms_sheet/ui/styles/color.dart';
 import 'package:ms_sheet/ui/styles/design.dart';
 import 'package:sizer/sizer.dart';
@@ -16,28 +20,31 @@ class SheetsHistory extends StatefulWidget {
 
 class _SheetsHistoryState extends State<SheetsHistory> {
   String? selectedValue;
-  final TextEditingController textEditingController = TextEditingController();
+  TextEditingController textEditingController = TextEditingController();
+  TextEditingController _controllerDate = TextEditingController();
   List<dynamic> _sheetsList = [];
 
   @override
   void initState() {
     super.initState();
-    getSheets();
+    fetchSheetHistory(DateTime.now().toString().trim());
+  }
+
+  void fetchSheetHistory(String date) async {
+    _sheetsList.clear();
+    var getSheets = await SheetsRepository().getSheetsHistory(date);
+    if (getSheets.success == true) {
+      setState(() {
+       // _controllerDate.text = DateTime.now().toString();
+        _sheetsList.addAll(getSheets.data!);
+      });
+    }
   }
 
   @override
   void dispose() {
     textEditingController.dispose();
     super.dispose();
-  }
-
-  void getSheets() async {
-    var getSheets = await SheetsRepository().getSheets();
-    if (getSheets.success == true) {
-      setState(() {
-        _sheetsList.addAll(getSheets.data!);
-      });
-    }
   }
 
   @override
@@ -68,81 +75,32 @@ class _SheetsHistoryState extends State<SheetsHistory> {
               ],
             ),
             Expanded(child: Container()),
-            Card(
-              margin: EdgeInsets.only(left: 1.w, right: 1.w, top: 2.w),
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(1.5.w)),
-              elevation: 0,
-              color: const Color(0xFFf9f9f9),
-              child: Padding(
-                padding: EdgeInsets.only(left: 1.w),
-                child: DropdownButtonHideUnderline(
-                  child: DropdownButton2(
-                    dropdownDecoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(8),
-                      color: const Color(0xFFf9f9f9),
-                    ),
-                    isExpanded: false,
-                    hint: Text(
-                      'Select Sheets',
-                      style: TextStyle(
-                        fontSize: 6.0.sp,
-                        color: const Color.fromARGB(255, 174, 174, 174),
+            Flexible(
+              child: Card(
+                margin: EdgeInsets.only(left: 1.w, right: 1.w, top: 2.w),
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(1.5.w)),
+                elevation: 0,
+                color: const Color(0xFFf9f9f9),
+                child: Padding(
+                      padding: EdgeInsets.only(left: 1.w),
+                      child:
+                      DateTimePicker(
+                        type: DateTimePickerType.date,
+                        dateMask: 'yyyy-MM-dd',
+                        controller: _controllerDate,
+                        firstDate: DateTime(2000),
+                        lastDate: DateTime(2100),
+                        icon: Icon(Icons.event),
+                        dateLabelText: 'Select Date',
+                        timeLabelText: 'Declare Time',
+                        onChanged: (val) {
+                          setState(() {
+                            _controllerDate.text = val;
+                          });
+                          fetchSheetHistory(val);
+                        },
                       ),
-                    ),
-                    items: sheets
-                        .map((item) => DropdownMenuItem<String>(
-                              value: item.name,
-                              child: Text(
-                                item.name.toString(),
-                                style: const TextStyle(
-                                  fontSize: 14,
-                                ),
-                              ),
-                            ))
-                        .toList(),
-                    value: selectedValue,
-                    onChanged: (value) {
-                      setState(() {
-                        selectedValue = value as String;
-                      });
-                    },
-                    //itemHeight: 40,
-                    dropdownMaxHeight: 25.h,
-                    searchController: textEditingController,
-                    searchInnerWidget: Padding(
-                      padding: const EdgeInsets.only(
-                        top: 8,
-                        bottom: 4,
-                        right: 8,
-                        left: 8,
-                      ),
-                      child: TextFormField(
-                        controller: textEditingController,
-                        decoration: InputDecoration(
-                          isDense: true,
-                          // contentPadding: const EdgeInsets.symmetric(
-                          //   horizontal: 10,
-                          //   vertical: 8,
-                          // ),
-                          hintText: 'Search for sheets...',
-                          hintStyle: const TextStyle(fontSize: 12),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                        ),
-                      ),
-                    ),
-                    searchMatchFn: (item, searchValue) {
-                      return (item.value.toString().contains(searchValue));
-                    },
-                    //This to clear the search value when you close the menu
-                    onMenuStateChange: (isOpen) {
-                      if (!isOpen) {
-                        textEditingController.clear();
-                      }
-                    },
-                  ),
                 ),
               ),
             ),
@@ -172,9 +130,8 @@ class _SheetsHistoryState extends State<SheetsHistory> {
               child: Column(
                 children: _sheetsList.map((e) {
                   return sheetsList(
-                      'https://cdn-icons-png.flaticon.com/256/281/281761.png',
-                      e.name,
-                      e.endTime,
+                      e,
+                      _controllerDate.text.trim(),
                       context);
                 }).toList(),
               ),
@@ -186,8 +143,7 @@ class _SheetsHistoryState extends State<SheetsHistory> {
   }
 }
 
-Widget sheetsList(
-    String? pic, String? name, String? date, BuildContext context) {
+Widget sheetsList(SheetsResponseData data, String date, BuildContext context) {
   return Container(
     // width: 50.w,
     margin: EdgeInsets.only(top: 1.w),
@@ -203,7 +159,7 @@ Widget sheetsList(
           ClipRRect(
             borderRadius: BorderRadius.circular(8),
             child: Image.network(
-              pic!,
+              'https://cdn-icons-png.flaticon.com/256/281/281761.png',
               height: 5.5.w,
               width: 5.5.w,
               fit: BoxFit.cover,
@@ -219,7 +175,7 @@ Widget sheetsList(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  name!,
+                  data.name!,
                   textAlign: TextAlign.left,
                   style: TextStyle(
                       fontSize: 1.7.w,
@@ -227,7 +183,7 @@ Widget sheetsList(
                       color: const Color.fromARGB(255, 0, 0, 0)),
                 ),
                 Text(
-                  date!,
+                  data.endTime!,
                   textAlign: TextAlign.left,
                   style: TextStyle(
                     fontSize: 1.3.w,
@@ -254,7 +210,7 @@ Widget sheetsList(
               Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => MainPanel(1, ''),
+                    builder: (context) => MasterPanel(data.id!, date),
                   ));
             },
             icon: Icon(

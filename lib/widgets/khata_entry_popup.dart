@@ -140,7 +140,7 @@ class KhataEntryPopup extends StatelessWidget {
                         lastDate: DateTime(2100),
                         icon: Icon(Icons.event),
                         dateLabelText: 'Declare Time',
-                        timeLabelText: "Declare Time",
+                        timeLabelText: 'Declare Time',
                         selectableDayPredicate: (date) {
                           // Disable weekend days to select from the calendar
                           if (date.weekday == 6 || date.weekday == 7) {

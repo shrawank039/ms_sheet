@@ -1,3 +1,4 @@
+import 'package:date_time_picker/date_time_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:iconly/iconly.dart';
@@ -22,14 +23,8 @@ class AddSheets extends StatefulWidget {
 class _AddSheetsState extends State<AddSheets> {
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Row(
-          children: const [
-            CreateSheets(),
-          ],
-        ),
-      ],
+    return const Expanded(
+      child: CreateSheets(),
     );
   }
 }
@@ -57,8 +52,7 @@ class _CreateSheetsState extends ConsumerState<CreateSheets> {
   @override
   Widget build(BuildContext context) {
     final _data = ref.watch(sheetDataProvider);
-    return Expanded(
-      child: Container(
+    return Container(
         margin: EdgeInsets.only(top: 1.w),
         padding: EdgeInsets.all(1.5.w),
         decoration: DesignConfig.boxDecorationContainerCardShadow(
@@ -169,7 +163,7 @@ class _CreateSheetsState extends ConsumerState<CreateSheets> {
                 ),
               ],
             ),
-            /*Row(
+           /* Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -220,12 +214,9 @@ class _CreateSheetsState extends ConsumerState<CreateSheets> {
                         if (addSheet.success == true) {
                           _controllerName.text = '';
                           _controllerTime.text = '';
-                          SmartDialog.showToast(
-                              "${_controllerName.text} Added");
                         }
                       } else {
                         print('Bearer ${global.prefs.get('token')}');
-                        SmartDialog.showToast("Please fill all data");
                       }
                       ref.refresh(sheetDataProvider);
                     },
@@ -252,7 +243,6 @@ class _CreateSheetsState extends ConsumerState<CreateSheets> {
                   print('agentsDataProvider 0 : ${_data.value!.data}');
                   return ListView(
                     shrinkWrap: true,
-                    scrollDirection: Axis.vertical,
                     children: _data.value!.data!.map((e) {
                       return sheetsList(
                           'https://cdn-icons-png.flaticon.com/256/281/281761.png',
@@ -269,8 +259,7 @@ class _CreateSheetsState extends ConsumerState<CreateSheets> {
             ),
           ],
         ),
-      ),
-    );
+      );
   }
 }
 

@@ -12,6 +12,8 @@ class SheetsRepository {
     var postBody = jsonEncode({
       "name": name,
       "end_time": time,
+      "pair_key":[].toString(),
+      "pair_value":[].toString(),
     });
 
     Uri url = Uri.parse("${AppConfig.BASE_URL}/sheets");
@@ -26,6 +28,17 @@ class SheetsRepository {
     final response =
         await http.get(url, headers: await global.getApiHeaders(true));
     print('getSheets : ${response.body}');
+    return SheetsResponseEntity.fromJson(json.decode(response.body));
+  }
+
+  Future<SheetsResponseEntity> getSheetsHistory(String date) async {
+    var postBody = jsonEncode({
+      "date": date,
+    });
+    Uri url = Uri.parse("${AppConfig.BASE_URL}/sheets/history");
+    final response =
+    await http.post(url, headers: await global.getApiHeaders(true), body: postBody);
+    print('getSheetsHistory : ${response.body}');
     return SheetsResponseEntity.fromJson(json.decode(response.body));
   }
 

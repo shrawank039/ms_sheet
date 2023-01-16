@@ -361,8 +361,8 @@ class _PCHomeState extends State<PCHome> {
                                 1.6.w,
                                 ColorsRes.mainBlue,
                               ),
-                      ),
-                      GestureDetector(
+                      ),*/
+                      /*GestureDetector(
                         onTap: () {
                           setState(() {
                             currentPage = 'Share History';
@@ -389,7 +389,7 @@ class _PCHomeState extends State<PCHome> {
                                 1.6.w,
                                 ColorsRes.mainBlue,
                               ),
-                      ),
+                      ),*/
                       GestureDetector(
                         onTap: () {
                           setState(() {
@@ -417,7 +417,7 @@ class _PCHomeState extends State<PCHome> {
                                 1.6.w,
                                 ColorsRes.mainBlue,
                               ),
-                      ),*/
+                      ),
                       GestureDetector(
                         onTap: () {
                           setState(() {

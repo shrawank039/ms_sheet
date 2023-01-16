@@ -19,6 +19,7 @@ import '../../../widgets/delete_confirmation_popup.dart';
 import '../../styles/design.dart';
 
 bool updatePanel = false;
+bool updatePanelStatus = false;
 int selectedAgentId = 0;
 int selectedIndex = 0;
 int a = 0;
@@ -52,6 +53,18 @@ class _MainPanelState extends ConsumerState<MainPanel> {
 
   @override
   void dispose() {
+    clearData();
+    textEditingController.dispose();
+    entryBoxController.dispose();
+    entryAmtController.dispose();
+    _focusNode.dispose();
+    super.dispose();
+  }
+
+  void clearData() {
+    selectedAgents = null;
+    entryBoxController.clear();
+    entryAmtController.clear();
     global.numberPair = {
       00: 0,
       01: 0,
@@ -177,11 +190,6 @@ class _MainPanelState extends ConsumerState<MainPanel> {
     };
     global.pairKey.clear();
     global.pairValue.clear();
-    textEditingController.dispose();
-    entryBoxController.dispose();
-    entryAmtController.dispose();
-    _focusNode.dispose();
-    super.dispose();
   }
 
   _showToast(String text) {
@@ -265,7 +273,8 @@ class _MainPanelState extends ConsumerState<MainPanel> {
     }
 
     return Scaffold(
-      body: SafeArea(
+      body: 
+      SafeArea(
         child: RawKeyboardListener(
           focusNode: _focusNode,
           onKey: _handleKeyEvent,
@@ -276,7 +285,8 @@ class _MainPanelState extends ConsumerState<MainPanel> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Expanded(
-                  child: Container(
+                  child: 
+                  Container(
                     padding: EdgeInsets.only(
                         top: 1.w, left: 3.w, right: 3.w, bottom: 1.w),
                     decoration: DesignConfig.boxDecorationContainerCardShadow(
@@ -348,7 +358,7 @@ class _MainPanelState extends ConsumerState<MainPanel> {
                                               width: 8.w,
                                               child: AlignedGridView.count(
                                                 physics:
-                                                    NeverScrollableScrollPhysics(),
+                                                   const NeverScrollableScrollPhysics(),
                                                 scrollDirection: Axis.vertical,
                                                 shrinkWrap: true,
                                                 crossAxisCount: 1,
@@ -381,9 +391,7 @@ class _MainPanelState extends ConsumerState<MainPanel> {
                                       ),
                                     ],
                                   ),
-                                  /*SizedBox(
-                                    height: 2.w,
-                                  ),*/
+                              
                                   Row(
                                     children: [
                                       Expanded(
@@ -408,7 +416,7 @@ class _MainPanelState extends ConsumerState<MainPanel> {
                                               width: 8.w,
                                               child: AlignedGridView.count(
                                                 physics:
-                                                    NeverScrollableScrollPhysics(),
+                                                const NeverScrollableScrollPhysics(),
                                                 scrollDirection: Axis.vertical,
                                                 shrinkWrap: true,
                                                 crossAxisCount: 1,
@@ -473,8 +481,7 @@ class _MainPanelState extends ConsumerState<MainPanel> {
                                 ],
                               ),
                             ),
-                            SingleChildScrollView(
-                              child: Container(
+                            Container(
                                 width: 25.w,
                                 child: Padding(
                                   padding: EdgeInsets.only(left: 2.w),
@@ -520,8 +527,7 @@ class _MainPanelState extends ConsumerState<MainPanel> {
                                     ],
                                   ),
                                 ),
-                              ),
-                            )
+                              ),                            
                           ],
                         ),
                         Row(
@@ -577,18 +583,18 @@ class _MainPanelState extends ConsumerState<MainPanel> {
                                                         global.numberPair
                                                             .toString(),
                                                         global.pairKey,
-                                                        global.pairValue);
+                                                        global.pairValue, total);
                                             if (addPanel.success == true) {
                                               _showToast('Added Successfully');
-                                              setState(() {
-                                                selectedAgents = null;
-                                              });
-                                              ref.refresh(panelDataProvider(
-                                                  extraDataParameter));
+                                              updatePanel = false;
+                                          clearData();
+                                          updatePanelStatus = false;
+                                              ref.refresh(panelDataProvider(extraDataParameter));
+                                              ref.refresh(numberPairProvider);
                                             }
                                           } else if (selectedAgents != null &&
                                               updatePanel == true) {
-                                            var updatePanel =
+                                            var updatePanelApi =
                                                 await PanelRepository()
                                                     .updatePanel(
                                                         widget.sheet_id,
@@ -597,14 +603,14 @@ class _MainPanelState extends ConsumerState<MainPanel> {
                                                         global.numberPair
                                                             .toString(),
                                                         global.pairKey,
-                                                        global.pairValue);
-                                            if (updatePanel.success == true) {
+                                                        global.pairValue, total);
+                                            if (updatePanelApi.success == true) {
                                               _showToast("Updated");
-                                              setState(() {
-                                                selectedAgents = null;
-                                              });
-                                              ref.refresh(panelDataProvider(
-                                                  extraDataParameter));
+                                             updatePanel = false;
+                                          clearData();
+                                          updatePanelStatus = false;
+                                              ref.refresh(panelDataProvider(extraDataParameter));
+                                              ref.refresh(numberPairProvider);
                                             }
                                           } else {
                                             _showToast('Select Any Clint');
@@ -626,131 +632,9 @@ class _MainPanelState extends ConsumerState<MainPanel> {
                                       ),
                                       InkWell(
                                         onTap: () {
-                                          global.numberPair = {
-                                            00: 0,
-                                            01: 0,
-                                            02: 0,
-                                            03: 0,
-                                            04: 0,
-                                            05: 0,
-                                            06: 0,
-                                            07: 0,
-                                            08: 0,
-                                            09: 0,
-                                            10: 0,
-                                            11: 0,
-                                            12: 0,
-                                            13: 0,
-                                            14: 0,
-                                            15: 0,
-                                            16: 0,
-                                            17: 0,
-                                            18: 0,
-                                            19: 0,
-                                            20: 0,
-                                            21: 0,
-                                            22: 0,
-                                            23: 0,
-                                            24: 0,
-                                            25: 0,
-                                            26: 0,
-                                            27: 0,
-                                            28: 0,
-                                            29: 0,
-                                            30: 0,
-                                            31: 0,
-                                            32: 0,
-                                            33: 0,
-                                            34: 0,
-                                            35: 0,
-                                            36: 0,
-                                            37: 0,
-                                            38: 0,
-                                            39: 0,
-                                            40: 0,
-                                            41: 0,
-                                            42: 0,
-                                            43: 0,
-                                            44: 0,
-                                            45: 0,
-                                            46: 0,
-                                            47: 0,
-                                            48: 0,
-                                            49: 0,
-                                            50: 0,
-                                            51: 0,
-                                            52: 0,
-                                            53: 0,
-                                            54: 0,
-                                            55: 0,
-                                            56: 0,
-                                            57: 0,
-                                            58: 0,
-                                            59: 0,
-                                            60: 0,
-                                            61: 0,
-                                            62: 0,
-                                            63: 0,
-                                            64: 0,
-                                            65: 0,
-                                            66: 0,
-                                            67: 0,
-                                            68: 0,
-                                            69: 0,
-                                            70: 0,
-                                            71: 0,
-                                            72: 0,
-                                            73: 0,
-                                            74: 0,
-                                            75: 0,
-                                            76: 0,
-                                            77: 0,
-                                            78: 0,
-                                            79: 0,
-                                            80: 0,
-                                            81: 0,
-                                            82: 0,
-                                            83: 0,
-                                            84: 0,
-                                            85: 0,
-                                            86: 0,
-                                            87: 0,
-                                            88: 0,
-                                            89: 0,
-                                            90: 0,
-                                            91: 0,
-                                            92: 0,
-                                            93: 0,
-                                            94: 0,
-                                            95: 0,
-                                            96: 0,
-                                            97: 0,
-                                            98: 0,
-                                            99: 0,
-                                            100: 0,
-                                            101: 0,
-                                            102: 0,
-                                            103: 0,
-                                            104: 0,
-                                            105: 0,
-                                            106: 0,
-                                            107: 0,
-                                            108: 0,
-                                            109: 0,
-                                            110: 0,
-                                            111: 0,
-                                            112: 0,
-                                            113: 0,
-                                            114: 0,
-                                            115: 0,
-                                            116: 0,
-                                            117: 0,
-                                            118: 0,
-                                            119: 0,
-                                            120: 0,
-                                          };
                                           updatePanel = false;
-                                          selectedAgents = null;
+                                          clearData();
+                                          updatePanelStatus = false;
                                           ref.refresh(numberPairProvider);
                                         },
                                         child: Container(
@@ -829,12 +713,14 @@ class _MainPanelState extends ConsumerState<MainPanel> {
                                                         .toList(),
                                                     dropdownMaxHeight: 25.h,
                                                     value: selectedAgents,
-                                                    onChanged: updatePanel
+                                                    onChanged: updatePanelStatus
                                                         ? null
                                                         : (value) {
                                                             setState(() {
                                                               selectedAgents = value
                                                                   as AgentsResponseData?;
+                                                              updatePanelStatus =
+                                                                  true;
                                                             });
                                                           },
                                                     searchController:
@@ -1076,29 +962,30 @@ class _MainPanelState extends ConsumerState<MainPanel> {
                         '  Clients',
                         textAlign: TextAlign.start,
                       ),
-                      Consumer(
-                        builder: (BuildContext context, WidgetRef ref,
-                            Widget? child) {
-                          return _data.when(data: (dynamic data) {
-                            print(
-                                'agentsDataProvider 0 : ${_data.value!.data}');
-                            return Column(
-                              children: _data.value!.data!.map((e) {
-                                return clientsList(
-                                    e, extraDataParameter, context);
-                              }).toList(),
-                            );
-                          }, error: (Object error, StackTrace stackTrace) {
-                            return Text('Error');
-                          }, loading: () {
-                            return CircularProgressIndicator();
-                          });
-                        },
-                      ),
                       Expanded(
-                          child: SizedBox(
+                        child: Consumer(
+                          builder: (BuildContext context, WidgetRef ref,
+                              Widget? child) {
+                            return _data.when(data: (dynamic data) {
+                              print(
+                                  'agentsDataProvider 0 : ${_data.value!.data}');
+                              return Column(
+                                children: _data.value!.data!.map((e) {
+                                  return clientsList(
+                                      e, extraDataParameter, context);
+                                }).toList(),
+                              );
+                            }, error: (Object error, StackTrace stackTrace) {
+                              return Text('Error');
+                            }, loading: () {
+                              return CircularProgressIndicator();
+                            });
+                          },
+                        ),
+                      ),
+                      SizedBox(
                         height: 2.w,
-                      )),
+                     ),
                       Row(
                         children: [
                           Expanded(
@@ -1131,8 +1018,9 @@ class _MainPanelState extends ConsumerState<MainPanel> {
                                       Navigator.push(
                                           context,
                                           MaterialPageRoute(
-                                              builder: (context) =>
-                                                  MasterPanel(0, '')));
+                                              builder: (context) => MasterPanel(
+                                                  widget.sheet_id,
+                                                  widget.date)));
                                     },
                                     child: DesignConfig.flatButtonWithIcon(
                                       ColorsRes.mainBlue,
@@ -1158,7 +1046,7 @@ class _MainPanelState extends ConsumerState<MainPanel> {
             ),
           ),
         ),
-      ),
+      )
     );
   }
 }

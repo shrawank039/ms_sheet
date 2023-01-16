@@ -11,6 +11,10 @@ import 'package:sizer/sizer.dart';
 import '../../../../models/agents_response_entity.dart';
 import '../../../utils/toast.dart';
 
+AgentsResponseData? selectedAgents;
+bool updateAgent = false;
+int selectedAgentsReference = 0;
+
 class Agents extends ConsumerStatefulWidget {
   @override
   ConsumerState<Agents> createState() => _SheetsState();
@@ -184,86 +188,94 @@ Widget topBar() {
 }
 
 Widget agentsList(AgentsResponseData data, BuildContext context) {
-  return Container(
-    margin: EdgeInsets.only(top: 1.w),
-    decoration: DesignConfig.boxDecorationContainerCardShadow(
-        ColorsRes.white, Color.fromRGBO(44, 39, 46, 0.059), 12.0, 3, 3, 20, 0),
-    child: Padding(
-      padding: EdgeInsets.symmetric(horizontal: 1.2.w, vertical: 1.w),
-      child: Row(
-        children: [
-          SizedBox(
-            width: 0.5.w,
-          ),
-          ClipRRect(
-            borderRadius: BorderRadius.circular(8),
-            child: Image.network(
-              'https://cdn-icons-png.flaticon.com/256/3135/3135715.png',
-              height: 5.5.w,
-              width: 5.5.w,
-              fit: BoxFit.cover,
+  return Consumer(
+      builder: (BuildContext context, WidgetRef ref, Widget? child) {
+    return Container(
+      margin: EdgeInsets.only(top: 1.w),
+      decoration: DesignConfig.boxDecorationContainerCardShadow(ColorsRes.white,
+          Color.fromRGBO(44, 39, 46, 0.059), 12.0, 3, 3, 20, 0),
+      child: Padding(
+        padding: EdgeInsets.symmetric(horizontal: 1.2.w, vertical: 1.w),
+        child: Row(
+          children: [
+            SizedBox(
+              width: 0.5.w,
             ),
-          ),
-          SizedBox(
-            width: 1.w,
-          ),
-          Padding(
-            padding: EdgeInsets.all(1.w),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  data.name!,
-                  textAlign: TextAlign.left,
-                  style: TextStyle(
-                      fontSize: 1.7.w,
-                      fontWeight: FontWeight.w600,
-                      color: const Color.fromARGB(255, 0, 0, 0)),
-                ),
-                Text(
-                  data.createdAt!,
-                  textAlign: TextAlign.left,
-                  style: TextStyle(
-                    fontSize: 1.3.w,
-                    fontWeight: FontWeight.w300,
-                    color: Colors.grey,
+            ClipRRect(
+              borderRadius: BorderRadius.circular(8),
+              child: Image.network(
+                'https://cdn-icons-png.flaticon.com/256/3135/3135715.png',
+                height: 5.5.w,
+                width: 5.5.w,
+                fit: BoxFit.cover,
+              ),
+            ),
+            SizedBox(
+              width: 1.w,
+            ),
+            Padding(
+              padding: EdgeInsets.all(1.w),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    data.name!,
+                    textAlign: TextAlign.left,
+                    style: TextStyle(
+                        fontSize: 1.7.w,
+                        fontWeight: FontWeight.w600,
+                        color: const Color.fromARGB(255, 0, 0, 0)),
                   ),
-                ),
-              ],
+                  Text(
+                    data.createdAt!,
+                    textAlign: TextAlign.left,
+                    style: TextStyle(
+                      fontSize: 1.3.w,
+                      fontWeight: FontWeight.w300,
+                      color: Colors.grey,
+                    ),
+                  ),
+                ],
+              ),
             ),
-          ),
-          Expanded(
-            child: Container(),
-          ),
-          IconButton(
-            onPressed: () {
-              showDialog(
-                  context: context,
-                  builder: (context) => DeleteConfirmationPopup(data.id!,
-                      'agent', const ExtraDataParameter(dataList: [])));
-            },
-            icon: Icon(
-              Icons.delete,
-              color: ColorsRes.red,
-              size: 3.w,
+            Expanded(
+              child: Container(),
             ),
-          ),
-          SizedBox(
-            width: 1.w,
-          ),
-          IconButton(
-            onPressed: () {},
-            icon: Icon(
-              Icons.edit_note,
-              color: ColorsRes.mainBlue,
-              size: 3.w,
+            IconButton(
+              onPressed: () {
+                showDialog(
+                    context: context,
+                    builder: (context) => DeleteConfirmationPopup(data.id!,
+                        'agent', const ExtraDataParameter(dataList: [])));
+              },
+              icon: Icon(
+                Icons.delete,
+                color: ColorsRes.red,
+                size: 3.w,
+              ),
             ),
-          ),
-        ],
+            SizedBox(
+              width: 1.w,
+            ),
+            IconButton(
+              onPressed: () {
+                selectedAgents = data;
+                selectedAgentsReference = int.parse(data.referenceId!);
+                updateAgent = true;
+                ref.refresh(agentsDataProvider);
+              },
+              icon: Icon(
+                Icons.edit_note,
+                color: ColorsRes.mainBlue,
+                size: 3.w,
+              ),
+            ),
+          ],
+        ),
       ),
-    ),
-  );
+    );
+  });
 }
 
 Widget agentsListMobile(
@@ -361,7 +373,6 @@ class CreateAgentSection extends ConsumerStatefulWidget {
 }
 
 class _CreateAgentSectionState extends ConsumerState<CreateAgentSection> {
-  AgentsResponseData? selectedAgents;
   final TextEditingController textEditingController = TextEditingController();
   late TextEditingController _controllerName;
   late TextEditingController _controllerMobile;
@@ -395,6 +406,16 @@ class _CreateAgentSectionState extends ConsumerState<CreateAgentSection> {
   @override
   Widget build(BuildContext context) {
     final _data = ref.watch(agentsDataProvider);
+    if (selectedAgents != null) {
+      _controllerName.text = selectedAgents!.name!;
+      _controllerMobile.text = selectedAgents!.mobileNumber!;
+      _controllerPair.text = selectedAgents!.pairRate!;
+      _controllerInOut.text = selectedAgents!.inOutRate!;
+      _controllerCommission.text = selectedAgents!.commission!;
+      _controllerPatti.text = selectedAgents!.patti!;
+      _controllerReferenceComm.text = selectedAgents!.referenceCommission!;
+      _controllerIncentive.text = selectedAgents!.dailyIncentive!;
+    }
     return Expanded(
       child: Container(
         margin: EdgeInsets.only(top: 1.w),
@@ -510,6 +531,13 @@ class _CreateAgentSectionState extends ConsumerState<CreateAgentSection> {
                         builder: (BuildContext context, WidgetRef ref,
                             Widget? child) {
                           return _data.when(data: (dynamic data) {
+                            if (selectedAgents != null) {
+                              selectedAgents = null;
+                              selectedAgents = _data.value!.data!
+                                  .where((item) =>
+                                      item.id == selectedAgentsReference)
+                                  .toList()[0];
+                            }
                             print('DropdownButton2 0 : ${_data.value!.data}');
                             return DropdownButtonHideUnderline(
                               child: DropdownButton2(
@@ -631,16 +659,28 @@ class _CreateAgentSectionState extends ConsumerState<CreateAgentSection> {
                           _controllerReferenceComm.text.isNotEmpty &&
                           _controllerIncentive.text.isNotEmpty &&
                           selectedAgents!.name!.isNotEmpty) {
-                        var addAgent = await AgentsRepository().addAgent(
-                            _controllerName.text,
-                            _controllerMobile.text,
-                            _controllerPair.text,
-                            _controllerInOut.text,
-                            _controllerCommission.text,
-                            _controllerPatti.text,
-                            selectedAgents!.id!,
-                            _controllerReferenceComm.text,
-                            _controllerIncentive.text);
+                        var addAgent = updateAgent
+                            ? await AgentsRepository().updateAgent(
+                                selectedAgents!.id!,
+                                _controllerName.text,
+                                _controllerMobile.text,
+                                _controllerPair.text,
+                                _controllerInOut.text,
+                                _controllerCommission.text,
+                                _controllerPatti.text,
+                                selectedAgents!.referenceId!,
+                                _controllerReferenceComm.text,
+                                _controllerIncentive.text)
+                            : await AgentsRepository().addAgent(
+                                _controllerName.text,
+                                _controllerMobile.text,
+                                _controllerPair.text,
+                                _controllerInOut.text,
+                                _controllerCommission.text,
+                                _controllerPatti.text,
+                                selectedAgents!.id!,
+                                _controllerReferenceComm.text,
+                                _controllerIncentive.text);
                         if (addAgent.success == true) {
                           _controllerName.clear();
                           _controllerMobile.clear();
@@ -653,6 +693,8 @@ class _CreateAgentSectionState extends ConsumerState<CreateAgentSection> {
                           textEditingController.clear();
                           setState(() {
                             selectedAgents = null;
+                            updateAgent = false;
+                            selectedAgentsReference = 0;
                           });
                           ref.refresh(agentsDataProvider);
                           ShowToast("Added", context);
@@ -666,7 +708,7 @@ class _CreateAgentSectionState extends ConsumerState<CreateAgentSection> {
                       width: 30.w,
                       alignment: Alignment.center,
                       child: Text(
-                        'Add',
+                        updateAgent ? 'Update' : 'Add',
                         textAlign: TextAlign.center,
                         style: TextStyle(color: ColorsRes.white, fontSize: 2.w),
                       ),
@@ -692,7 +734,6 @@ class CreateAgentSectionMobile extends ConsumerStatefulWidget {
 
 class _CreateAgentSectionMobileState
     extends ConsumerState<CreateAgentSectionMobile> {
-  AgentsResponseData? selectedAgentsM;
   final TextEditingController textEditingController = TextEditingController();
   late TextEditingController _controllerName;
   late TextEditingController _controllerMobile;
@@ -726,6 +767,16 @@ class _CreateAgentSectionMobileState
   @override
   Widget build(BuildContext context) {
     final _data = ref.watch(agentsDataProvider);
+    if (selectedAgents != null) {
+      _controllerName.text = selectedAgents!.name!;
+      _controllerMobile.text = selectedAgents!.mobileNumber!;
+      _controllerPair.text = selectedAgents!.pairRate!;
+      _controllerInOut.text = selectedAgents!.inOutRate!;
+      _controllerCommission.text = selectedAgents!.commission!;
+      _controllerPatti.text = selectedAgents!.patti!;
+      _controllerReferenceComm.text = selectedAgents!.referenceCommission!;
+      _controllerIncentive.text = selectedAgents!.dailyIncentive!;
+    }
     return Container(
       padding: EdgeInsets.all(2.w),
       decoration: DesignConfig.boxDecorationContainerCardShadow(ColorsRes.white,
@@ -850,6 +901,13 @@ class _CreateAgentSectionMobileState
                       builder:
                           (BuildContext context, WidgetRef ref, Widget? child) {
                         return _data.when(data: (dynamic data) {
+                          if (selectedAgents != null) {
+                            selectedAgents = null;
+                            selectedAgents = _data.value!.data!
+                                .where((item) =>
+                                    item.id == selectedAgentsReference)
+                                .toList()[0];
+                          }
                           print('DropdownButton2 1 : ${_data.value!.data}');
                           return DropdownButtonHideUnderline(
                             child: DropdownButton2(
@@ -878,10 +936,10 @@ class _CreateAgentSectionMobileState
                                         ),
                                       ))
                                   .toList(),
-                              value: selectedAgentsM,
+                              value: selectedAgents,
                               onChanged: (value) {
                                 setState(() {
-                                  selectedAgentsM = value;
+                                  selectedAgents = value;
                                 });
                               },
                               //itemHeight: 40,
@@ -953,20 +1011,34 @@ class _CreateAgentSectionMobileState
                           _controllerPatti.text.isNotEmpty &&
                           _controllerReferenceComm.text.isNotEmpty &&
                           _controllerIncentive.text.isNotEmpty &&
-                          selectedAgentsM!.name!.isNotEmpty) {
-                        var addAgent = await AgentsRepository().addAgent(
-                            _controllerName.text,
-                            _controllerMobile.text,
-                            _controllerPair.text,
-                            _controllerInOut.text,
-                            _controllerCommission.text,
-                            _controllerPatti.text,
-                            selectedAgentsM!.id!,
-                            _controllerReferenceComm.text,
-                            _controllerIncentive.text);
+                          selectedAgents!.name!.isNotEmpty) {
+                        var addAgent = updateAgent
+                            ? await AgentsRepository().updateAgent(
+                                selectedAgents!.id!,
+                                _controllerName.text,
+                                _controllerMobile.text,
+                                _controllerPair.text,
+                                _controllerInOut.text,
+                                _controllerCommission.text,
+                                _controllerPatti.text,
+                                selectedAgents!.referenceId!,
+                                _controllerReferenceComm.text,
+                                _controllerIncentive.text)
+                            : await AgentsRepository().addAgent(
+                                _controllerName.text,
+                                _controllerMobile.text,
+                                _controllerPair.text,
+                                _controllerInOut.text,
+                                _controllerCommission.text,
+                                _controllerPatti.text,
+                                selectedAgents!.id!,
+                                _controllerReferenceComm.text,
+                                _controllerIncentive.text);
                         if (addAgent.success == true) {
                           setState(() {
-                            selectedAgentsM = null;
+                            selectedAgents = null;
+                            updateAgent = false;
+                            selectedAgentsReference = 0;
                           });
                           ref.refresh(agentsDataProvider);
                           _controllerName.clear();
@@ -990,7 +1062,7 @@ class _CreateAgentSectionMobileState
                       width: 30.w,
                       alignment: Alignment.center,
                       child: Text(
-                        'Add',
+                        updateAgent ? 'Update' : 'Add',
                         textAlign: TextAlign.center,
                         style: TextStyle(color: ColorsRes.white, fontSize: 4.w),
                       ),

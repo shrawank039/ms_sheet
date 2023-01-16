@@ -13,7 +13,7 @@ import 'package:sizer/sizer.dart';
 import '../../../../repositories/sheets_repository.dart';
 
 List<dynamic> _sheetsList = [];
-final now = DateTime.now();
+DateTime now = DateTime.now();
 String dateToday = DateFormat.yMMMd('en_US').format(now);
 String dateOnly = DateFormat('yyyy-MM-dd').format(now);
 
@@ -44,17 +44,19 @@ class _SheetsState extends State<Sheets> {
 
   @override
   Widget build(BuildContext context) {
-    return LayoutBuilder(
-      builder: (BuildContext context, BoxConstraints constraints) {
-        // Mobile = Small (smaller than 640px)
-        // Tablet = Medium (641px to 1007px)
-        // Laptop = Large (1008px and larger)
-        if (constraints.maxWidth < 640) {
-          return SheetsMobile();
-        } else {
-          return SheetsPC();
-        }
-      },
+    return Expanded(
+      child: LayoutBuilder(
+        builder: (BuildContext context, BoxConstraints constraints) {
+          // Mobile = Small (smaller than 640px)
+          // Tablet = Medium (641px to 1007px)
+          // Laptop = Large (1008px and larger)
+          if (constraints.maxWidth < 640) {
+            return SheetsMobile();
+          } else {
+            return SheetsPC();
+          }
+        },
+      ),
     );
   }
 }
@@ -75,8 +77,7 @@ class _SheetsPCState extends State<SheetsPC> {
         SizedBox(
           height: 4.w,
         ),
-        SingleChildScrollView(
-          physics: BouncingScrollPhysics(),
+        Expanded(
           child: ResponsiveGridList(
               squareCells: false,
               scroll: true,
