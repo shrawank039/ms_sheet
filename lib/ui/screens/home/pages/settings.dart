@@ -16,150 +16,152 @@ class Settings extends StatefulWidget {
 class _SettingsState extends State<Settings> {
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        topBar(),
-        SizedBox(
-          height: 3.w,
-        ),
-        Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Expanded(
-              flex: 2,
-              child: Column(
-                children: [
-                  Container(
-                      margin: EdgeInsets.only(top: 1.w),
-                      padding:
-                          EdgeInsets.only(top: 2.w, bottom: 1.8.w, right: 1.w),
-                      decoration: DesignConfig.boxDecorationContainerCardShadow(
-                          ColorsRes.white,
-                          const Color.fromRGBO(44, 39, 46, 0.059),
-                          16.0,
-                          3,
-                          3,
-                          20,
-                          0),
-                      child: Column(
-                        children: [
-                          Padding(
-                            padding: EdgeInsets.only(left: 1.0.w, right: 1.w),
-                            child: Row(
-                              children: [
-                                IconButton(
-                                    onPressed: () {},
-                                    hoverColor: Colors.transparent,
-                                    icon: Icon(
-                                      Icons.arrow_back,
-                                      color: ColorsRes.darkGrey,
-                                      size: 2.8.w,
-                                    )),
-                                Text(
-                                  'Settings',
-                                  style: TextStyle(
-                                      color: ColorsRes.darkGrey,
-                                      fontSize: 2.0.w),
-                                ),
-                                Expanded(
-                                    child: SizedBox(
-                                  width: 2.w,
-                                )),
-                                Card(
-                                  margin: EdgeInsets.only(left: 2.w),
-                                  color: ColorsRes.lightBlue,
-                                  elevation: 0,
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius:
-                                          BorderRadius.circular(1.5.w)),
-                                  child: Padding(
-                                    padding: EdgeInsets.only(
-                                        top: 0.7.h, bottom: 0.7.h, left: 1.8.w),
-                                    child: Row(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      children: [
-                                        SizedBox(
-                                          width: 0.1.w,
-                                        ),
-                                        Icon(
-                                          FontAwesomeIcons.wallet,
-                                          color: ColorsRes.mainBlue,
-                                          size: 2.5.w,
-                                        ),
-                                        SizedBox(
-                                          width: 1.0.h,
-                                        ),
-                                        Text(
-                                          "2300",
-                                          style: TextStyle(
-                                            color: ColorsRes.mainBlue,
-                                            fontSize: 2.w,
+    return Expanded(
+      child: Column(
+        children: [
+          topBar(),
+          SizedBox(
+            height: 3.w,
+          ),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Expanded(
+                flex: 2,
+                child: Column(
+                  children: [
+                    Container(
+                        margin: EdgeInsets.only(top: 1.w),
+                        padding:
+                            EdgeInsets.only(top: 2.w, bottom: 1.8.w, right: 1.w),
+                        decoration: DesignConfig.boxDecorationContainerCardShadow(
+                            ColorsRes.white,
+                            const Color.fromRGBO(44, 39, 46, 0.059),
+                            16.0,
+                            3,
+                            3,
+                            20,
+                            0),
+                        child: Column(
+                          children: [
+                            Padding(
+                              padding: EdgeInsets.only(left: 1.0.w, right: 1.w),
+                              child: Row(
+                                children: [
+                                  IconButton(
+                                      onPressed: () {},
+                                      hoverColor: Colors.transparent,
+                                      icon: Icon(
+                                        Icons.arrow_back,
+                                        color: ColorsRes.darkGrey,
+                                        size: 2.8.w,
+                                      )),
+                                  Text(
+                                    'Settings',
+                                    style: TextStyle(
+                                        color: ColorsRes.darkGrey,
+                                        fontSize: 2.0.w),
+                                  ),
+                                  Expanded(
+                                      child: SizedBox(
+                                    width: 2.w,
+                                  )),
+                                  Card(
+                                    margin: EdgeInsets.only(left: 2.w),
+                                    color: ColorsRes.lightBlue,
+                                    elevation: 0,
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(1.5.w)),
+                                    child: Padding(
+                                      padding: EdgeInsets.only(
+                                          top: 0.7.h, bottom: 0.7.h, left: 1.8.w),
+                                      child: Row(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        children: [
+                                          SizedBox(
+                                            width: 0.1.w,
                                           ),
-                                        ),
-                                        SizedBox(
-                                          width: 2.5.w,
-                                        )
-                                      ],
+                                          Icon(
+                                            FontAwesomeIcons.wallet,
+                                            color: ColorsRes.mainBlue,
+                                            size: 2.5.w,
+                                          ),
+                                          SizedBox(
+                                            width: 1.0.h,
+                                          ),
+                                          Text(
+                                            "2300",
+                                            style: TextStyle(
+                                              color: ColorsRes.mainBlue,
+                                              fontSize: 2.w,
+                                            ),
+                                          ),
+                                          SizedBox(
+                                            width: 2.5.w,
+                                          )
+                                        ],
+                                      ),
                                     ),
                                   ),
-                                ),
-                              ],
+                                ],
+                              ),
                             ),
-                          ),
-                          SizedBox(
-                            height: 1.w,
-                          ),
-                          Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 2.w),
-                            child: userDetails(),
-                          ),
-                        ],
-                      )),
-                  SizedBox(
-                    height: 3.w,
-                  ),
-                  settingButtons(Icons.create_new_folder, 'Add Sheet',
-                      'Create and edit sheets'),
-                  SizedBox(
-                    height: 1.5.w,
-                  ),
-                  settingButtons(Icons.login, 'Login Details',
-                      'Change you login details or logout'),
-                  SizedBox(
-                    height: 1.5.w,
-                  ),
-                  InkWell(
-                    onTap: () {
-                      Navigator.push(context,
-                          MaterialPageRoute(builder: (context) => const Otp()));
-                    },
-                    child: settingButtons(Icons.password, 'Change Password',
-                        'Change you password'),
-                  ),
-                  SizedBox(
-                    height: 1.5.w,
-                  ),
-                  settingButtons(Icons.mobile_friendly, 'Recharge',
-                      'Create and Recharge your wallet'),
-                  SizedBox(
-                    height: 1.5.w,
-                  ),
-                  settingButtons(
-                      Icons.mobile_friendly, 'About Us', 'Check About Us'),
-                ],
+                            SizedBox(
+                              height: 1.w,
+                            ),
+                            Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 2.w),
+                              child: userDetails(),
+                            ),
+                          ],
+                        )),
+                    SizedBox(
+                      height: 3.w,
+                    ),
+                    settingButtons(Icons.create_new_folder, 'Add Sheet',
+                        'Create and edit sheets'),
+                    SizedBox(
+                      height: 1.5.w,
+                    ),
+                    settingButtons(Icons.login, 'Login Details',
+                        'Change you login details or logout'),
+                    SizedBox(
+                      height: 1.5.w,
+                    ),
+                    InkWell(
+                      onTap: () {
+                        Navigator.push(context,
+                            MaterialPageRoute(builder: (context) => const Otp()));
+                      },
+                      child: settingButtons(Icons.password, 'Change Password',
+                          'Change you password'),
+                    ),
+                    SizedBox(
+                      height: 1.5.w,
+                    ),
+                    settingButtons(Icons.mobile_friendly, 'Recharge',
+                        'Create and Recharge your wallet'),
+                    SizedBox(
+                      height: 1.5.w,
+                    ),
+                    settingButtons(
+                        Icons.mobile_friendly, 'About Us', 'Check About Us'),
+                  ],
+                ),
               ),
-            ),
-            SizedBox(
-              width: 3.w,
-            ),
-            const Expanded(
-              flex: 3,
-              child: AddSheets(),
-            ),
-          ],
-        )
-      ],
+              SizedBox(
+                width: 3.w,
+              ),
+              const Expanded(
+                flex: 3,
+                child: AddSheets(),
+              ),
+            ],
+          )
+        ],
+      ),
     );
   }
 }
