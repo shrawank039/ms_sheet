@@ -22,7 +22,7 @@ class _HomeState extends State<Home> {
           // Mobile = Small (smaller than 640px)
           // Tablet = Medium (641px to 1007px)
           // Laptop = Large (1008px and larger)
-          //login(context);
+          login(context);
           if (constraints.maxWidth < 640) {
             return BottomNavigationWidget();
           } else {
