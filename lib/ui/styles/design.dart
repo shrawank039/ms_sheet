@@ -143,6 +143,48 @@ class DesignConfig {
       ),
     );
   }
+  static Container inputBoxPassword(
+      Color BgColor,
+      double radius,
+      double fontSize,
+      String hint,
+      IconData icon,
+      double iconSize,
+      TextInputType inputType,
+      TextEditingController controller) {
+    return Container(
+      alignment: Alignment.center,
+      // height: 9.w,
+      child: Card(
+        margin: EdgeInsets.only(left: 1.w, right: 1.w, top: 2.w),
+        shape:
+        RoundedRectangleBorder(borderRadius: BorderRadius.circular(radius)),
+        elevation: 0,
+        color: BgColor,
+        child: Padding(
+          padding: EdgeInsets.only(left: 1.w),
+          child: TextField(
+            obscureText: true,
+            enableSuggestions: false,
+            autocorrect: false,
+            onChanged: (input) {},
+            controller: controller,
+            keyboardType: inputType,
+            style: TextStyle(
+                fontSize: fontSize,
+                fontFamily: 'Arial',
+                fontWeight: FontWeight.w500),
+            decoration: InputDecoration(
+              isDense: true,
+              hintText: hint,
+              hintStyle: TextStyle(color: Color.fromARGB(255, 174, 174, 174)),
+              border: const OutlineInputBorder(borderSide: BorderSide.none),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
 
   static Container inputBoxDecorated(
       Color BgColor,

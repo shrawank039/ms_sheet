@@ -51,7 +51,7 @@ class _ButtonState extends State<Button> {
         child: Text(
           widget.text,
           style: GoogleFonts.lato(
-              fontSize: 11.sp,
+              fontSize: 7.sp,
               color: (widget.textcolor != null) ? widget.textcolor : buttonText,
               fontWeight: FontWeight.bold,
               letterSpacing: 1),

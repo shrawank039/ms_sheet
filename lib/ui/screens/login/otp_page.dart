@@ -109,13 +109,12 @@ class _OtpState extends State<Otp> {
   @override
   Widget build(BuildContext context) {
     var media = MediaQuery.of(context).size;
-
     return Material(
-      child: Container(
+      child: Center(
         child: ValueListenableBuilder(
             valueListenable: valueNotifierHome.value,
             builder: (context, value, child) {
-              return Stack(
+              return Column(
                 children: [
                   Container(
                     padding: EdgeInsets.only(
@@ -125,27 +124,19 @@ class _OtpState extends State<Otp> {
                             MediaQuery.of(context).padding.top),
                     color: Colors.white,
                     height: media.height * 1,
-                    width: media.width * 1,
+                    width: media.width * 0.5,
                     child: Column(
                       children: [
-                        Container(
-                            width: media.width * 1,
-                            color: Colors.white,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                InkWell(
-                                    onTap: () {
-                                      Navigator.pop(context);
-                                    },
-                                    hoverColor: Colors.transparent,
-                                    child: const Icon(Icons.arrow_back)),
-                              ],
-                            )),
                         Expanded(
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
+                              InkWell(
+                                  onTap: () {
+                                    Navigator.pop(context);
+                                  },
+                                  hoverColor: Colors.transparent,
+                                  child: const Icon(Icons.arrow_back)),
                               SizedBox(
                                 height: media.height * 0.04,
                               ),
@@ -154,7 +145,7 @@ class _OtpState extends State<Otp> {
                                 child: Text(
                                   'Verify OTP',
                                   style: TextStyle(
-                                      fontSize: 18.0.sp,
+                                      fontSize: 12.0.sp,
                                       fontWeight: FontWeight.bold,
                                       color: Colors.black),
                                 ),
@@ -165,14 +156,14 @@ class _OtpState extends State<Otp> {
                               Text(
                                 'You will receive an OTP in the given mobile number',
                                 style: TextStyle(
-                                    fontSize: 10.0.sp,
+                                    fontSize: 6.0.sp,
                                     color: Colors.black.withOpacity(0.3)),
                               ),
                               const SizedBox(height: 10),
                               Text(
                                 '+91' + phnumber,
                                 style: TextStyle(
-                                    fontSize: 10.sp,
+                                    fontSize: 6.sp,
                                     color: Colors.black,
                                     fontWeight: FontWeight.bold,
                                     letterSpacing: 1),
@@ -183,11 +174,11 @@ class _OtpState extends State<Otp> {
                                 child: OTPTextField(
                                   length: 6,
                                   width: 80.w,
-                                  style: TextStyle(fontSize: 15.sp),
+                                  style: TextStyle(fontSize: 8.sp),
                                   textFieldAlignment:
                                       MainAxisAlignment.spaceAround,
                                   fieldStyle: FieldStyle.box,
-                                  fieldWidth: 10.w,
+                                  fieldWidth: 6.w,
                                   onCompleted: (pin) {
                                     setState(() {
                                       otpNumber = pin;
@@ -199,61 +190,12 @@ class _OtpState extends State<Otp> {
                                   },
                                 ),
                               ),
-                              /*SizedBox(height: media.height * 0.1),
-                              Container(
-                                height: media.width * 0.15,
-                                width: media.width * 0.9,
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(12),
-                                    color: Colors.white,
-                                    border: Border.all(
-                                        color: Colors.grey, width: 1.2)),
-                                child: TextField(
-                                  controller: otpController,
-                                  autofocus:
-                                      (phoneAuthCheck == false) ? false : true,
-                                  onChanged: (val) {
-                                    setState(() {
-                                      otpNumber = val;
-                                    });
-                                    if (val.length == 6) {
-                                      FocusManager.instance.primaryFocus
-                                          ?.unfocus();
-                                    }
-                                  },
-                                  decoration: const InputDecoration(
-                                      border: InputBorder.none,
-                                      counterText: '',
-                                      hintText: 'Enter OTP'),
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                    fontSize: 20.sp,
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.w600,
-                                  ),
-                                  maxLength: 6,
-                                  keyboardType: TextInputType.number,
-                                ),
-                              ),
-                              // show error on otp
-                              (_error != '')
-                                  ? Container(
-                                      alignment: Alignment.center,
-                                      margin: EdgeInsets.only(
-                                          top: media.height * 0.02),
-                                      child: Text(
-                                        _error,
-                                        style: TextStyle(
-                                            fontSize: 2.2.w, color: Colors.red),
-                                      ),
-                                    )
-                                  : Container(),*/
                               SizedBox(
                                 height: media.height * 0.15,
                               ),
                               Container(
                                 width: media.width,
-                                height: 10.w,
+                                height: 60,
                                 alignment: Alignment.center,
                                 child: Button(
                                   onTap: () async {

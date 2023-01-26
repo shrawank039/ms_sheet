@@ -11,6 +11,7 @@ import 'package:responsive_grid/responsive_grid.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../../../repositories/sheets_repository.dart';
+import '../../login/login_screen.dart';
 
 List<dynamic> _sheetsList = [];
 DateTime now = DateTime.now();
@@ -39,6 +40,9 @@ class _SheetsState extends State<Sheets> {
       setState(() {
         _sheetsList.addAll(getSheets.data!);
       });
+    } else{
+      Navigator.push(context,
+          MaterialPageRoute(builder: (context) => LoginScreen()));
     }
   }
 
@@ -223,7 +227,7 @@ Widget SheetsCardPC(SheetsResponseData data, BuildContext context) {
                       onTap: () {
                         showDialog(
                             context: context,
-                            builder: (context) => DeclarePopup());
+                            builder: (context) => DeclarePopup(data.id!,data.declared_result.toString()));
                       },
                       child: DesignConfig.flatButton(
                         ColorsRes.lightBlue,

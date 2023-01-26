@@ -400,6 +400,9 @@ class _CreateAgentSectionState extends ConsumerState<CreateAgentSection> {
   @override
   void dispose() {
     textEditingController.dispose();
+    selectedAgents = null;
+    updateAgent = false;
+    selectedAgentsReference = 0;
     super.dispose();
   }
 
@@ -531,14 +534,14 @@ class _CreateAgentSectionState extends ConsumerState<CreateAgentSection> {
                         builder: (BuildContext context, WidgetRef ref,
                             Widget? child) {
                           return _data.when(data: (dynamic data) {
-                            if (selectedAgents != null) {
+                            if (selectedAgents != null || selectedAgentsReference !=0) {
+                              // PC Layout
                               selectedAgents = null;
                               selectedAgents = _data.value!.data!
                                   .where((item) =>
                                       item.id == selectedAgentsReference)
                                   .toList()[0];
                             }
-                            print('DropdownButton2 0 : ${_data.value!.data}');
                             return DropdownButtonHideUnderline(
                               child: DropdownButton2(
                                 dropdownDecoration: BoxDecoration(
@@ -569,7 +572,8 @@ class _CreateAgentSectionState extends ConsumerState<CreateAgentSection> {
                                 value: selectedAgents,
                                 onChanged: (value) {
                                   setState(() {
-                                    selectedAgents = value;
+                                    selectedAgentsReference = value!.id!;
+                                    //selectedAgents = value;
                                   });
                                 },
                                 //itemHeight: 40,
@@ -657,8 +661,9 @@ class _CreateAgentSectionState extends ConsumerState<CreateAgentSection> {
                           _controllerCommission.text.isNotEmpty &&
                           _controllerPatti.text.isNotEmpty &&
                           _controllerReferenceComm.text.isNotEmpty &&
-                          _controllerIncentive.text.isNotEmpty &&
-                          selectedAgents!.name!.isNotEmpty) {
+                          _controllerIncentive.text.isNotEmpty
+                          //&& selectedAgents!.name!.isNotEmpty
+                      ) {
                         var addAgent = updateAgent
                             ? await AgentsRepository().updateAgent(
                                 selectedAgents!.id!,
@@ -668,7 +673,7 @@ class _CreateAgentSectionState extends ConsumerState<CreateAgentSection> {
                                 _controllerInOut.text,
                                 _controllerCommission.text,
                                 _controllerPatti.text,
-                                selectedAgents!.referenceId!,
+                                  selectedAgentsReference.toString(),
                                 _controllerReferenceComm.text,
                                 _controllerIncentive.text)
                             : await AgentsRepository().addAgent(
@@ -678,7 +683,7 @@ class _CreateAgentSectionState extends ConsumerState<CreateAgentSection> {
                                 _controllerInOut.text,
                                 _controllerCommission.text,
                                 _controllerPatti.text,
-                                selectedAgents!.id!,
+                                  selectedAgentsReference,
                                 _controllerReferenceComm.text,
                                 _controllerIncentive.text);
                         if (addAgent.success == true) {
@@ -761,6 +766,9 @@ class _CreateAgentSectionMobileState
   @override
   void dispose() {
     textEditingController.dispose();
+    selectedAgents = null;
+    updateAgent = false;
+    selectedAgentsReference = 0;
     super.dispose();
   }
 
@@ -908,7 +916,6 @@ class _CreateAgentSectionMobileState
                                     item.id == selectedAgentsReference)
                                 .toList()[0];
                           }
-                          print('DropdownButton2 1 : ${_data.value!.data}');
                           return DropdownButtonHideUnderline(
                             child: DropdownButton2(
                               dropdownDecoration: BoxDecoration(
@@ -939,7 +946,8 @@ class _CreateAgentSectionMobileState
                               value: selectedAgents,
                               onChanged: (value) {
                                 setState(() {
-                                  selectedAgents = value;
+                                  //selectedAgents = value;
+                                  selectedAgentsReference = value!.id!;
                                 });
                               },
                               //itemHeight: 40,
@@ -1010,8 +1018,9 @@ class _CreateAgentSectionMobileState
                           _controllerCommission.text.isNotEmpty &&
                           _controllerPatti.text.isNotEmpty &&
                           _controllerReferenceComm.text.isNotEmpty &&
-                          _controllerIncentive.text.isNotEmpty &&
-                          selectedAgents!.name!.isNotEmpty) {
+                          _controllerIncentive.text.isNotEmpty
+                         // && selectedAgents!.name!.isNotEmpty
+                      ) {
                         var addAgent = updateAgent
                             ? await AgentsRepository().updateAgent(
                                 selectedAgents!.id!,
@@ -1021,7 +1030,7 @@ class _CreateAgentSectionMobileState
                                 _controllerInOut.text,
                                 _controllerCommission.text,
                                 _controllerPatti.text,
-                                selectedAgents!.referenceId!,
+                            selectedAgentsReference.toString(),
                                 _controllerReferenceComm.text,
                                 _controllerIncentive.text)
                             : await AgentsRepository().addAgent(
@@ -1031,7 +1040,7 @@ class _CreateAgentSectionMobileState
                                 _controllerInOut.text,
                                 _controllerCommission.text,
                                 _controllerPatti.text,
-                                selectedAgents!.id!,
+                                selectedAgentsReference,
                                 _controllerReferenceComm.text,
                                 _controllerIncentive.text);
                         if (addAgent.success == true) {

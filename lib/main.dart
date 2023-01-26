@@ -4,7 +4,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:responsive_framework/responsive_wrapper.dart';
 import 'package:sizer/sizer.dart';
-
 import 'firebase_options.dart';
 import 'ui/screens/home/home.dart';
 

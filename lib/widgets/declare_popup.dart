@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 
+import '../repositories/panel_repository.dart';
 import '../ui/styles/color.dart';
 
 class DeclarePopup extends StatefulWidget {
-  const DeclarePopup({super.key});
+  final int sheet_id;
+  final String result;
+  const DeclarePopup(this.sheet_id, this.result, {super.key});
 
   @override
   State<DeclarePopup> createState() => _DeclarePopupState();
@@ -19,6 +22,11 @@ class _DeclarePopupState extends State<DeclarePopup> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    if(widget.result != 'null'){
+      resultController.text = widget.result;
+      firstDigitController.text = widget.result[0];
+      secondDigitController.text = widget.result[1];
+    }
   }
 
   @override
@@ -57,8 +65,8 @@ class _DeclarePopupState extends State<DeclarePopup> {
                 ),
                 IconButton(
                     onPressed: () {
-                      Navigator.of(context).pop();
-                    },
+                        Navigator.of(context).pop();
+                      },
                     icon: Icon(
                       Icons.close,
                       size: 2.5.w,
@@ -209,12 +217,18 @@ class _DeclarePopupState extends State<DeclarePopup> {
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(1.6.w)),
                       child: InkWell(
-                        onTap: () {
-                          setState(() {
-                            firstDigitController.text = '';
-                            secondDigitController.text = '';
-                            resultController.text = '';
-                          });
+                        onTap: () async{
+                          var declareResult =
+                              await PanelRepository()
+                              .undeclareResult(
+                              widget.sheet_id,);
+                          if (declareResult.success == true) {
+                            setState(() {
+                              firstDigitController.text = '';
+                              secondDigitController.text = '';
+                              resultController.text = '';
+                            });
+                          }
                         },
                         child: Container(
                           height: 6.w,
@@ -238,12 +252,18 @@ class _DeclarePopupState extends State<DeclarePopup> {
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(1.6.w)),
                       child: InkWell(
-                        onTap: () {
-                          setState(() {
-                            firstDigitController.text = '';
-                            secondDigitController.text = '';
-                            resultController.text = '';
-                          });
+                        onTap: () async {
+                          if(resultController.text.length>1){
+                            var declareResult =
+                                await PanelRepository()
+                                .declareResult(
+                                widget.sheet_id,
+                                int.parse(resultController.text.trim()));
+                            if (declareResult.success == true) {
+                              Navigator.of(context).pop();
+                            }
+                          }else{
+                          }
                         },
                         child: Container(
                           height: 6.w,

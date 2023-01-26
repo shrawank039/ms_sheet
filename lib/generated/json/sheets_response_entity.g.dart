@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:ms_sheet/generated/json/base/json_convert_content.dart';
 import 'package:ms_sheet/models/sheets_response_entity.dart';
 
@@ -41,6 +43,15 @@ SheetsResponseData $SheetsResponseDataFromJson(Map<String, dynamic> json) {
   if (endTime != null) {
     sheetsResponseData.endTime = endTime;
   }
+  final String? declared_result = jsonConvert.convert<String>(json['declared_result']);
+  if (declared_result != null) {
+    sheetsResponseData.declared_result = declared_result;
+  }
+  final int? declared_status = jsonConvert.convert<int>(json['declared_status']);
+  if (id != null) {
+    sheetsResponseData.declared_status = declared_status;
+  }
+
   return sheetsResponseData;
 }
 
@@ -49,5 +60,7 @@ Map<String, dynamic> $SheetsResponseDataToJson(SheetsResponseData entity) {
   data['id'] = entity.id;
   data['name'] = entity.name;
   data['end_time'] = entity.endTime;
+  data['declared_result'] = entity.declared_result;
+  data['declared_status'] = entity.declared_status;
   return data;
 }
