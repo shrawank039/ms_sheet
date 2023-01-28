@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -33,6 +34,8 @@ class MasterPanel extends ConsumerStatefulWidget {
 class _MasterPanelState extends ConsumerState<MasterPanel> {
   @override
   Widget build(BuildContext context) {
+
+    final FocusNode _focusNode = FocusNode();
     final ExtraDataParameter extraDataParameter =
         ExtraDataParameter(dataList: [widget.sheet_id, widget.date]);
 
@@ -44,467 +47,514 @@ class _MasterPanelState extends ConsumerState<MasterPanel> {
       total += global.numberPair[i]!;
     }
 
+    @override
+  void dispose() {
+    _focusNode.dispose();
+    super.dispose();
+  }
+
+    KeyEventResult _handleKeyEvent(FocusNode node, RawKeyEvent event) {
+    if (event is RawKeyDownEvent) {
+      if (event.logicalKey == LogicalKeyboardKey.arrowUp) {
+        setState(() {
+          _focusNode.focusInDirection(TraversalDirection.up);
+          print('kReleaseMode (false) : arrowUp');
+        });
+      } else if (event.logicalKey == LogicalKeyboardKey.arrowDown) {
+        setState(() {
+          _focusNode.focusInDirection(TraversalDirection.down);
+          print('kReleaseMode (false) : arrowDown');
+        });
+      } else if (event.logicalKey == LogicalKeyboardKey.arrowLeft) {
+        setState(() {
+          _focusNode.previousFocus();
+          print('kReleaseMode (false) : arrowLeft');
+        });
+      } else if (event.logicalKey == LogicalKeyboardKey.arrowRight) {
+        setState(() {
+          _focusNode.nextFocus();
+          print('kReleaseMode (false) : arrowRight');
+        });
+      // } else if (event.logicalKey == LogicalKeyboardKey.tab) {
+      //   setState(() {
+      //     _focusNode.nextFocus();
+      //     print('kReleaseMode (false) : tab');
+      //   });
+      // } else if (event.logicalKey == LogicalKeyboardKey.enter) {
+      //   setState(() {
+      //     _focusNode.nextFocus();
+      //     print('kReleaseMode (false) : enter');
+      //   });
+      }
+    }
+    return KeyEventResult.ignored;
+  }
+
     return Scaffold(
       body: SafeArea(
-        child: Padding(
-          padding: EdgeInsets.all(1.5.w),
-          child: Row(
-            children: [
-              Expanded(
-                child: Container(
-                  padding: EdgeInsets.only(
-                      top: 1.w, left: 3.w, right: 3.w, bottom: 1.w),
-                  decoration: DesignConfig.boxDecorationContainerCardShadow(
-                    ColorsRes.white,
-                    Color.fromRGBO(44, 39, 46, 0.059),
-                    12.0,
-                    3,
-                    3,
-                    20,
-                    0,
-                  ),
-                  //Creating the Sheet
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        children: [
-                          IconButton(
-                              onPressed: () {
-                                Navigator.pop(context);
-                              },
-                              hoverColor: Colors.transparent,
-                              icon: Icon(Icons.arrow_back)),
-                          SizedBox(
-                            width: 1.w,
-                          ),
-                          Text(
-                            'Draw :',
-                            style: TextStyle(
-                                color: ColorsRes.darkGrey, fontSize: 2.5.w),
-                          ),
-                          Text(
-                            ' Delhi - Nov 27, 2022',
-                            style: TextStyle(
-                                color: ColorsRes.mainBlue, fontSize: 2.5.w),
-                          ),
-                        ],
-                      ),
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Expanded(
-                            child: Column(
-                              children: [
-                                Row(
-                                  children: [
-                                    Expanded(
-                                      child: AlignedGridView.count(
-                                        shrinkWrap: true,
-                                        physics: NeverScrollableScrollPhysics(),
-                                        crossAxisCount: 10,
-                                        itemCount: 100,
-                                        mainAxisSpacing: 0,
-                                        crossAxisSpacing: 0,
-                                        itemBuilder: (context, index) {
-                                          return numberBox(index);
-                                        },
-                                      ),
-                                    ),
-                                    Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        Padding(
-                                          padding: EdgeInsets.all(1.w),
-                                          child: SizedBox(
-                                            width: 8.w,
-                                            child: AlignedGridView.count(
-                                              shrinkWrap: true,
-                                              physics:
-                                                  NeverScrollableScrollPhysics(),
-                                              crossAxisCount: 1,
-                                              itemCount: 10,
-                                              mainAxisSpacing: 0,
-                                              crossAxisSpacing: 0,
-                                              itemBuilder: (context, index) {
-                                                int total = 0;
-                                                for (int i = index * 10;
-                                                    i < index * 10 + 10;
-                                                    i++) {
-                                                  total = total +
-                                                      global.numberPair[i]!;
-                                                }
-                                                return Container(
-                                                  alignment:
-                                                      Alignment.centerLeft,
-                                                  height: 5.5.w,
-                                                  child: Text(
-                                                    "$total",
-                                                    style: TextStyle(
-                                                        fontSize: 2.2.w),
-                                                  ),
-                                                );
-                                              },
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                                // SizedBox(
-                                //   height: 1.w,
-                                // ),
-                                Row(
-                                  children: [
-                                    Expanded(
-                                      child: AlignedGridView.count(
-                                        shrinkWrap: true,
-                                        physics: NeverScrollableScrollPhysics(),
-                                        crossAxisCount: 10,
-                                        itemCount: 20,
-                                        mainAxisSpacing: 0,
-                                        crossAxisSpacing: 0,
-                                        itemBuilder: (context, index) {
-                                          return numberBox(index + 100);
-                                        },
-                                      ),
-                                    ),
-                                    Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        Padding(
-                                          padding: EdgeInsets.all(1.w),
-                                          child: SizedBox(
-                                            width: 8.w,
-                                            child: AlignedGridView.count(
-                                              physics:
-                                                  NeverScrollableScrollPhysics(),
-                                              shrinkWrap: true,
-                                              crossAxisCount: 1,
-                                              itemCount: 2,
-                                              mainAxisSpacing: 0,
-                                              crossAxisSpacing: 0,
-                                              itemBuilder: (context, index) {
-                                                int total = 0;
-                                                for (int i = index * 10;
-                                                    i < index * 10 + 10;
-                                                    i++) {
-                                                  total = total +
-                                                      global
-                                                          .numberPair[i + 100]!;
-                                                }
-                                                return Container(
-                                                  alignment:
-                                                      Alignment.centerLeft,
-                                                  height: 5.5.w,
-                                                  child: Text(
-                                                    "$total",
-                                                    style: TextStyle(
-                                                        fontSize: 2.2.w),
-                                                  ),
-                                                );
-                                              },
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                              ],
+        child: Focus(
+            focusNode: _focusNode,
+            onKey: _handleKeyEvent,
+          child: Padding(
+            padding: EdgeInsets.all(1.5.w),
+            child: Row(
+              children: [
+                Expanded(
+                  child: Container(
+                    padding: EdgeInsets.only(
+                        top: 1.w, left: 3.w, right: 3.w, bottom: 1.w),
+                    decoration: DesignConfig.boxDecorationContainerCardShadow(
+                      ColorsRes.white,
+                      Color.fromRGBO(44, 39, 46, 0.059),
+                      12.0,
+                      3,
+                      3,
+                      20,
+                      0,
+                    ),
+                    //Creating the Sheet
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          children: [
+                            IconButton(
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                },
+                                hoverColor: Colors.transparent,
+                                icon: Icon(Icons.arrow_back)),
+                            SizedBox(
+                              width: 1.w,
                             ),
+                            Text(
+                              'Draw :',
+                              style: TextStyle(
+                                  color: ColorsRes.darkGrey, fontSize: 2.5.w),
+                            ),
+                            Text(
+                              ' Delhi - Nov 27, 2022',
+                              style: TextStyle(
+                                  color: ColorsRes.mainBlue, fontSize: 2.5.w),
+                            ),
+                          ],
+                        ),
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Expanded(
+                              child: Column(
+                                children: [
+                                  Row(
+                                    children: [
+                                      Expanded(
+                                        child: AlignedGridView.count(
+                                          shrinkWrap: true,
+                                          physics: NeverScrollableScrollPhysics(),
+                                          crossAxisCount: 10,
+                                          itemCount: 100,
+                                          mainAxisSpacing: 0,
+                                          crossAxisSpacing: 0,
+                                          itemBuilder: (context, index) {
+                                            return numberBox(index);
+                                          },
+                                        ),
+                                      ),
+                                      Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          Padding(
+                                            padding: EdgeInsets.all(1.w),
+                                            child: SizedBox(
+                                              width: 8.w,
+                                              child: AlignedGridView.count(
+                                                shrinkWrap: true,
+                                                physics:
+                                                    NeverScrollableScrollPhysics(),
+                                                crossAxisCount: 1,
+                                                itemCount: 10,
+                                                mainAxisSpacing: 0,
+                                                crossAxisSpacing: 0,
+                                                itemBuilder: (context, index) {
+                                                  int total = 0;
+                                                  for (int i = index * 10;
+                                                      i < index * 10 + 10;
+                                                      i++) {
+                                                    total = total +
+                                                        global.numberPair[i]!;
+                                                  }
+                                                  return Container(
+                                                    alignment:
+                                                        Alignment.centerLeft,
+                                                    height: 5.5.w,
+                                                    child: Text(
+                                                      "$total",
+                                                      style: TextStyle(
+                                                          fontSize: 2.2.w),
+                                                    ),
+                                                  );
+                                                },
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                  // SizedBox(
+                                  //   height: 1.w,
+                                  // ),
+                                  Row(
+                                    children: [
+                                      Expanded(
+                                        child: AlignedGridView.count(
+                                          shrinkWrap: true,
+                                          physics: NeverScrollableScrollPhysics(),
+                                          crossAxisCount: 10,
+                                          itemCount: 20,
+                                          mainAxisSpacing: 0,
+                                          crossAxisSpacing: 0,
+                                          itemBuilder: (context, index) {
+                                            return numberBox(index + 100);
+                                          },
+                                        ),
+                                      ),
+                                      Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          Padding(
+                                            padding: EdgeInsets.all(1.w),
+                                            child: SizedBox(
+                                              width: 8.w,
+                                              child: AlignedGridView.count(
+                                                physics:
+                                                    NeverScrollableScrollPhysics(),
+                                                shrinkWrap: true,
+                                                crossAxisCount: 1,
+                                                itemCount: 2,
+                                                mainAxisSpacing: 0,
+                                                crossAxisSpacing: 0,
+                                                itemBuilder: (context, index) {
+                                                  int total = 0;
+                                                  for (int i = index * 10;
+                                                      i < index * 10 + 10;
+                                                      i++) {
+                                                    total = total +
+                                                        global
+                                                            .numberPair[i + 100]!;
+                                                  }
+                                                  return Container(
+                                                    alignment:
+                                                        Alignment.centerLeft,
+                                                    height: 5.5.w,
+                                                    child: Text(
+                                                      "$total",
+                                                      style: TextStyle(
+                                                          fontSize: 2.2.w),
+                                                    ),
+                                                  );
+                                                },
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: Container(
+                                width: 2.w,
+                              ),
+                            ),
+                            Text(
+                              "Total: ",
+                              style: TextStyle(
+                                  fontSize: 2.2.w,
+                                  color: ColorsRes.darkGrey,
+                                  fontWeight: FontWeight.w400),
+                            ),
+                            Container(
+                              width: 9.w,
+                              alignment: Alignment.centerLeft,
+                              //height: 5.5.w,
+                              child: Text(
+                                "$total",
+                                style: TextStyle(
+                                    fontSize: 2.2.w,
+                                    color: ColorsRes.mainBlue,
+                                    fontWeight: FontWeight.w600),
+                              ),
+                            ),
+                          ],
+                        ),
+                        Expanded(
+                          child: SizedBox(
+                            height: 2.w,
                           ),
-                        ],
+                        ),
+                        controls(),
+                        Expanded(
+                          child: SizedBox(
+                            height: 0.5.w,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                Container(
+                  width: 40.w,
+                  padding: EdgeInsets.only(left: 2.w),
+                  child: Column(
+                    children: [
+                      Expanded(
+                        child: Row(
+                          children: [
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  const Text(
+                                    '  Clients',
+                                    textAlign: TextAlign.start,
+                                  ),
+                                  Consumer(
+                                    builder: (BuildContext context, WidgetRef ref,
+                                        Widget? child) {
+                                      return _data.when(data: (dynamic data) {
+                                        return Column(
+                                          children: _data.value!.data!.map((e) {
+                                            var data = convertPair(e);
+                                            return clientsList(
+                                                e,
+                                                extraDataParameter,
+                                                data,
+                                                context);
+                                          }).toList(),
+                                        );
+                                      }, error:
+                                          (Object error, StackTrace stackTrace) {
+                                        return Text('Error');
+                                      }, loading: () {
+                                        return CircularProgressIndicator();
+                                      });
+                                    },
+                                  ),
+                                  Expanded(
+                                      child: SizedBox(
+                                    height: 2.w,
+                                  )),
+                                ],
+                              ),
+                            ),
+                            SizedBox(
+                              width: 1.w,
+                            ),
+                            /*Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  const Text(
+                                    '  Local',
+                                    textAlign: TextAlign.start,
+                                  ),
+                                  Column(
+                                    children: global.clients.map((e) {
+                                      return clientsList(
+                                          e.picture, e.name, e.date);
+                                    }).toList(),
+                                  ),
+                                  Expanded(
+                                      child: SizedBox(
+                                    height: 2.w,
+                                  )),
+                                ],
+                              ),
+                            ),
+                            SizedBox(
+                              width: 1.w,
+                            ),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  const Text(
+                                    '  Counter',
+                                    textAlign: TextAlign.start,
+                                  ),
+                                  Column(
+                                    children: global.clients.map((e) {
+                                      return clientsList(
+                                          e.picture, e.name, e.date);
+                                    }).toList(),
+                                  ),
+                                  Expanded(
+                                      child: SizedBox(
+                                    height: 2.w,
+                                  )),
+                                ],
+                              ),
+                            ),*/
+                          ],
+                        ),
                       ),
                       Row(
                         children: [
                           Expanded(
                             child: Container(
-                              width: 2.w,
-                            ),
-                          ),
-                          Text(
-                            "Total: ",
-                            style: TextStyle(
-                                fontSize: 2.2.w,
-                                color: ColorsRes.darkGrey,
-                                fontWeight: FontWeight.w400),
-                          ),
-                          Container(
-                            width: 9.w,
-                            alignment: Alignment.centerLeft,
-                            //height: 5.5.w,
-                            child: Text(
-                              "$total",
-                              style: TextStyle(
-                                  fontSize: 2.2.w,
-                                  color: ColorsRes.mainBlue,
-                                  fontWeight: FontWeight.w600),
+                              padding: EdgeInsets.symmetric(vertical: 1.0.w),
+                              decoration:
+                                  DesignConfig.boxDecorationContainerCardShadow(
+                                ColorsRes.white,
+                                Color.fromRGBO(44, 39, 46, 0.059),
+                                16.0,
+                                3,
+                                3,
+                                20,
+                                0,
+                              ),
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Card(
+                                    //margin: EdgeInsets.only(left: 1.w),
+                                    color: ColorsRes.lightBlue,
+                                    elevation: 0,
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(1.8.w)),
+                                    child: Padding(
+                                      padding: EdgeInsets.only(
+                                          top: 0.7.h, bottom: 0.7.h, left: 0.8.w),
+                                      child: Row(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        children: [
+                                          SizedBox(
+                                            width: 0.1.w,
+                                          ),
+                                          Icon(
+                                            FontAwesomeIcons.share,
+                                            color: ColorsRes.mainBlue,
+                                            size: 2.w,
+                                          ),
+                                          SizedBox(
+                                            width: 1.0.w,
+                                          ),
+                                          Text(
+                                            'Share',
+                                            style: TextStyle(
+                                              color: ColorsRes.mainBlue,
+                                              fontSize: 1.5.w,
+                                            ),
+                                          ),
+                                          SizedBox(
+                                            width: 1.0.w,
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                  Card(
+                                    // margin: EdgeInsets.only(left: 2.w),
+                                    color: ColorsRes.lightBlue,
+                                    elevation: 0,
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(1.8.w)),
+                                    child: Padding(
+                                      padding: EdgeInsets.only(
+                                          top: 0.7.h, bottom: 0.7.h, left: 1.8.w),
+                                      child: Row(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        children: [
+                                          SizedBox(
+                                            width: 0.1.w,
+                                          ),
+                                          Icon(
+                                            FontAwesomeIcons.whatsapp,
+                                            color: ColorsRes.mainBlue,
+                                            size: 2.w,
+                                          ),
+                                          SizedBox(
+                                            width: 1.0.w,
+                                          ),
+                                          Text(
+                                            'Share',
+                                            style: TextStyle(
+                                              color: ColorsRes.mainBlue,
+                                              fontSize: 1.5.w,
+                                            ),
+                                          ),
+                                          SizedBox(
+                                            width: 1.0.w,
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                  Card(
+                                    //margin: EdgeInsets.only(left: 2.w),
+                                    color: ColorsRes.lightBlue,
+                                    elevation: 0,
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(1.8.w)),
+                                    child: Padding(
+                                      padding: EdgeInsets.only(
+                                          top: 0.7.h, bottom: 0.7.h, left: 1.8.w),
+                                      child: Row(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        children: [
+                                          SizedBox(
+                                            width: 0.1.w,
+                                          ),
+                                          Icon(
+                                            Icons.generating_tokens,
+                                            color: ColorsRes.mainBlue,
+                                            size: 2.w,
+                                          ),
+                                          SizedBox(
+                                            width: 1.0.w,
+                                          ),
+                                          Text(
+                                            'Generate',
+                                            style: TextStyle(
+                                              color: ColorsRes.mainBlue,
+                                              fontSize: 1.5.w,
+                                            ),
+                                          ),
+                                          SizedBox(
+                                            width: 1.0.w,
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
                         ],
-                      ),
-                      Expanded(
-                        child: SizedBox(
-                          height: 2.w,
-                        ),
-                      ),
-                      controls(),
-                      Expanded(
-                        child: SizedBox(
-                          height: 0.5.w,
-                        ),
-                      ),
+                      )
                     ],
                   ),
-                ),
-              ),
-              Container(
-                width: 40.w,
-                padding: EdgeInsets.only(left: 2.w),
-                child: Column(
-                  children: [
-                    Expanded(
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                const Text(
-                                  '  Clients',
-                                  textAlign: TextAlign.start,
-                                ),
-                                Consumer(
-                                  builder: (BuildContext context, WidgetRef ref,
-                                      Widget? child) {
-                                    return _data.when(data: (dynamic data) {
-                                      return Column(
-                                        children: _data.value!.data!.map((e) {
-                                          var data = convertPair(e);
-                                          return clientsList(
-                                              e,
-                                              extraDataParameter,
-                                              data,
-                                              context);
-                                        }).toList(),
-                                      );
-                                    }, error:
-                                        (Object error, StackTrace stackTrace) {
-                                      return Text('Error');
-                                    }, loading: () {
-                                      return CircularProgressIndicator();
-                                    });
-                                  },
-                                ),
-                                Expanded(
-                                    child: SizedBox(
-                                  height: 2.w,
-                                )),
-                              ],
-                            ),
-                          ),
-                          SizedBox(
-                            width: 1.w,
-                          ),
-                          /*Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                const Text(
-                                  '  Local',
-                                  textAlign: TextAlign.start,
-                                ),
-                                Column(
-                                  children: global.clients.map((e) {
-                                    return clientsList(
-                                        e.picture, e.name, e.date);
-                                  }).toList(),
-                                ),
-                                Expanded(
-                                    child: SizedBox(
-                                  height: 2.w,
-                                )),
-                              ],
-                            ),
-                          ),
-                          SizedBox(
-                            width: 1.w,
-                          ),
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                const Text(
-                                  '  Counter',
-                                  textAlign: TextAlign.start,
-                                ),
-                                Column(
-                                  children: global.clients.map((e) {
-                                    return clientsList(
-                                        e.picture, e.name, e.date);
-                                  }).toList(),
-                                ),
-                                Expanded(
-                                    child: SizedBox(
-                                  height: 2.w,
-                                )),
-                              ],
-                            ),
-                          ),*/
-                        ],
-                      ),
-                    ),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: Container(
-                            padding: EdgeInsets.symmetric(vertical: 1.0.w),
-                            decoration:
-                                DesignConfig.boxDecorationContainerCardShadow(
-                              ColorsRes.white,
-                              Color.fromRGBO(44, 39, 46, 0.059),
-                              16.0,
-                              3,
-                              3,
-                              20,
-                              0,
-                            ),
-                            child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Card(
-                                  //margin: EdgeInsets.only(left: 1.w),
-                                  color: ColorsRes.lightBlue,
-                                  elevation: 0,
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius:
-                                          BorderRadius.circular(1.8.w)),
-                                  child: Padding(
-                                    padding: EdgeInsets.only(
-                                        top: 0.7.h, bottom: 0.7.h, left: 0.8.w),
-                                    child: Row(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      children: [
-                                        SizedBox(
-                                          width: 0.1.w,
-                                        ),
-                                        Icon(
-                                          FontAwesomeIcons.share,
-                                          color: ColorsRes.mainBlue,
-                                          size: 2.w,
-                                        ),
-                                        SizedBox(
-                                          width: 1.0.w,
-                                        ),
-                                        Text(
-                                          'Share',
-                                          style: TextStyle(
-                                            color: ColorsRes.mainBlue,
-                                            fontSize: 1.5.w,
-                                          ),
-                                        ),
-                                        SizedBox(
-                                          width: 1.0.w,
-                                        )
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                                Card(
-                                  // margin: EdgeInsets.only(left: 2.w),
-                                  color: ColorsRes.lightBlue,
-                                  elevation: 0,
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius:
-                                          BorderRadius.circular(1.8.w)),
-                                  child: Padding(
-                                    padding: EdgeInsets.only(
-                                        top: 0.7.h, bottom: 0.7.h, left: 1.8.w),
-                                    child: Row(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      children: [
-                                        SizedBox(
-                                          width: 0.1.w,
-                                        ),
-                                        Icon(
-                                          FontAwesomeIcons.whatsapp,
-                                          color: ColorsRes.mainBlue,
-                                          size: 2.w,
-                                        ),
-                                        SizedBox(
-                                          width: 1.0.w,
-                                        ),
-                                        Text(
-                                          'Share',
-                                          style: TextStyle(
-                                            color: ColorsRes.mainBlue,
-                                            fontSize: 1.5.w,
-                                          ),
-                                        ),
-                                        SizedBox(
-                                          width: 1.0.w,
-                                        )
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                                Card(
-                                  //margin: EdgeInsets.only(left: 2.w),
-                                  color: ColorsRes.lightBlue,
-                                  elevation: 0,
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius:
-                                          BorderRadius.circular(1.8.w)),
-                                  child: Padding(
-                                    padding: EdgeInsets.only(
-                                        top: 0.7.h, bottom: 0.7.h, left: 1.8.w),
-                                    child: Row(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      children: [
-                                        SizedBox(
-                                          width: 0.1.w,
-                                        ),
-                                        Icon(
-                                          Icons.generating_tokens,
-                                          color: ColorsRes.mainBlue,
-                                          size: 2.w,
-                                        ),
-                                        SizedBox(
-                                          width: 1.0.w,
-                                        ),
-                                        Text(
-                                          'Generate',
-                                          style: TextStyle(
-                                            color: ColorsRes.mainBlue,
-                                            fontSize: 1.5.w,
-                                          ),
-                                        ),
-                                        SizedBox(
-                                          width: 1.0.w,
-                                        )
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ],
-                    )
-                  ],
-                ),
-              )
-            ],
+                )
+              ],
+            ),
           ),
         ),
       ),
@@ -518,6 +568,12 @@ Widget numberBox(int index) {
   if (global.numberPair[index + 1]! > 0) {
     pointController.text = global.numberPair[index + 1].toString();
   }
+
+  pointController.selection = TextSelection(
+                      baseOffset: 0,
+                      extentOffset: pointController.text.length,
+                    );
+  
   return Consumer(
       builder: (BuildContext context, WidgetRef ref, Widget? child) {
     return Container(
@@ -565,8 +621,30 @@ Widget controls() {
   percentController.text = '100';
   final Function(String) callback;
 
+  cuttingUpController.selection = TextSelection(
+                      baseOffset: 0,
+                      extentOffset: cuttingUpController.text.length,
+                    );
+                    cuttingDownController.selection = TextSelection(
+                      baseOffset: 0,
+                      extentOffset: cuttingDownController.text.length,
+                    );
+                    dabbaUpController.selection = TextSelection(
+                      baseOffset: 0,
+                      extentOffset: dabbaUpController.text.length,
+                    );
+                    dabbaDownController.selection = TextSelection(
+                      baseOffset: 0,
+                      extentOffset: dabbaDownController.text.length,
+                    );
+                    percentController.selection = TextSelection(
+                      baseOffset: 0,
+                      extentOffset: percentController.text.length,
+                    );
+
   return Consumer(
       builder: (BuildContext context, WidgetRef ref, Widget? child) {
+
     return Column(
       children: [
         Row(

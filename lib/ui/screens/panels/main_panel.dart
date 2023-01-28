@@ -22,7 +22,6 @@ bool updatePanel = false;
 bool updatePanelStatus = false;
 int selectedAgentId = 0;
 int selectedIndex = 0;
-int a = 0;
 
 class MainPanel extends ConsumerStatefulWidget {
   final int sheet_id;
@@ -35,6 +34,7 @@ class MainPanel extends ConsumerStatefulWidget {
 }
 
 class _MainPanelState extends ConsumerState<MainPanel> {
+
   final FocusNode _focusNode = FocusNode();
   final FocusNode focusAmount = FocusNode();
   int? entryBox, entryAmt;
@@ -214,8 +214,8 @@ class _MainPanelState extends ConsumerState<MainPanel> {
     );
   }
 
-  void _handleKeyEvent(RawKeyEvent event) {
-    if (a.isEven) {
+  KeyEventResult _handleKeyEvent(FocusNode node, RawKeyEvent event) {
+    if (event is RawKeyDownEvent) {
       if (event.logicalKey == LogicalKeyboardKey.arrowUp) {
         setState(() {
           _focusNode.focusInDirection(TraversalDirection.up);
@@ -228,27 +228,27 @@ class _MainPanelState extends ConsumerState<MainPanel> {
         });
       } else if (event.logicalKey == LogicalKeyboardKey.arrowLeft) {
         setState(() {
-          _focusNode.focusInDirection(TraversalDirection.left);
+          _focusNode.previousFocus();
           print('kReleaseMode (false) : arrowLeft');
         });
       } else if (event.logicalKey == LogicalKeyboardKey.arrowRight) {
         setState(() {
-          _focusNode.focusInDirection(TraversalDirection.right);
+          _focusNode.nextFocus();
           print('kReleaseMode (false) : arrowRight');
         });
-      } else if (event.logicalKey == LogicalKeyboardKey.tab) {
-        setState(() {
-          _focusNode.focusInDirection(TraversalDirection.right);
-          print('kReleaseMode (false) : tab');
-        });
-      } else if (event.logicalKey == LogicalKeyboardKey.enter) {
-        setState(() {
-          _focusNode.focusInDirection(TraversalDirection.right);
-          print('kReleaseMode (false) : enter');
-        });
+      // } else if (event.logicalKey == LogicalKeyboardKey.tab) {
+      //   setState(() {
+      //     _focusNode.nextFocus();
+      //     print('kReleaseMode (false) : tab');
+      //   });
+      // } else if (event.logicalKey == LogicalKeyboardKey.enter) {
+      //   setState(() {
+      //     _focusNode.nextFocus();
+      //     print('kReleaseMode (false) : enter');
+      //   });
       }
     }
-    a++;
+    return KeyEventResult.ignored;
   }
 
   @override
@@ -259,18 +259,23 @@ class _MainPanelState extends ConsumerState<MainPanel> {
     final _dataAgents = ref.watch(agentsDataProvider);
     final _dataNumberPair = ref.watch(numberPairProvider);
 
-    print('${widget.sheet_id} and ${widget.date}');
+    debugPrint('${widget.sheet_id} and ${widget.date}');
 
     var total = 0;
     for (int i = 0; i < global.numberPair.length; i++) {
       total += global.numberPair[i]!;
+      entryBoxController.selection = TextSelection(
+                      baseOffset: 0,
+                      extentOffset: entryBoxController.text.length,
+                    );
+                    entryAmtController.selection = TextSelection(
+                      baseOffset: 0,
+                      extentOffset: entryAmtController.text.length,
+                    );
     }
-    return Expanded(
-      child: LayoutBuilder(
-          builder: (BuildContext context, BoxConstraints constraints) {
         return Scaffold(
             body: SafeArea(
-          child: RawKeyboardListener(
+          child: Focus(
             focusNode: _focusNode,
             onKey: _handleKeyEvent,
             child: Padding(
@@ -1067,8 +1072,6 @@ class _MainPanelState extends ConsumerState<MainPanel> {
             ),
           ),
         ));
-      }),
-    );
   }
 }
 
@@ -1079,27 +1082,13 @@ Widget numberBox(int index) {
     pointController.text = global.numberPair[index + 1].toString();
   }
 
-  if (selectedIndex == index) {
-    print("focus: : $index");
-    pointController.selection = TextSelection(
-      baseOffset: 0,
-      extentOffset: pointController.text.length,
-    );
-  }
-
   return Consumer(
     builder: (BuildContext context, WidgetRef ref, Widget? child) {
-      // focusNode.addListener(() {
-      //   if (focusNode.hasFocus && selectedIndex == index) {
-      //     // pointController.selection = TextSelection(
-      //     //   baseOffset: 0,
-      //     //   extentOffset: pointController.text.length,
-      //     // );
-      //     print("focus: : $index");
-      //     focusNode.unfocus();
-      //     //ref.refresh(numberPairProvider);
-      //   }
-      // });
+
+  pointController.selection = TextSelection(
+                      baseOffset: 0,
+                      extentOffset: pointController.text.length,
+                    );
 
       return Container(
         padding: EdgeInsets.only(left: 1.w),
@@ -1112,20 +1101,7 @@ Widget numberBox(int index) {
               (index + 1).toString(),
               style: TextStyle(fontSize: 0.8.h, color: Colors.grey),
             ),
-            Focus(
-                descendantsAreFocusable: true,
-                canRequestFocus: true,
-                onFocusChange: (focus) {
-                  if (focus) {
-                    print("Focus: $focus : $index");
-                    selectedIndex = index;
-                    pointController.selection = TextSelection(
-                      baseOffset: 0,
-                      extentOffset: pointController.text.length,
-                    );
-                  }
-                },
-                child: TextField(
+                TextField(
                   controller: pointController,
                   onChanged: (value) {
                     if (value.isNotEmpty) {
@@ -1152,7 +1128,6 @@ Widget numberBox(int index) {
                     border: OutlineInputBorder(borderSide: BorderSide.none),
                   ),
                 ),
-              ),
           ],
         ),
       );
