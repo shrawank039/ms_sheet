@@ -35,8 +35,8 @@ class MainPanel extends ConsumerStatefulWidget {
 }
 
 class _MainPanelState extends ConsumerState<MainPanel> {
-  FocusNode _focusNode = FocusNode();
-  FocusNode focusAmount = FocusNode();
+  final FocusNode _focusNode = FocusNode();
+  final FocusNode focusAmount = FocusNode();
   int? entryBox, entryAmt;
   AgentsResponseData? selectedAgents;
   final TextEditingController textEditingController = TextEditingController();
@@ -218,48 +218,37 @@ class _MainPanelState extends ConsumerState<MainPanel> {
     if (a.isEven) {
       if (event.logicalKey == LogicalKeyboardKey.arrowUp) {
         setState(() {
+          _focusNode.focusInDirection(TraversalDirection.up);
           print('kReleaseMode (false) : arrowUp');
         });
       } else if (event.logicalKey == LogicalKeyboardKey.arrowDown) {
         setState(() {
+          _focusNode.focusInDirection(TraversalDirection.down);
           print('kReleaseMode (false) : arrowDown');
         });
       } else if (event.logicalKey == LogicalKeyboardKey.arrowLeft) {
         setState(() {
-          selectedIndex--;
-          _focusNode.previousFocus();
+          _focusNode.focusInDirection(TraversalDirection.left);
           print('kReleaseMode (false) : arrowLeft');
         });
       } else if (event.logicalKey == LogicalKeyboardKey.arrowRight) {
         setState(() {
-          selectedIndex++;
-          _focusNode.nextFocus();
+          _focusNode.focusInDirection(TraversalDirection.right);
           print('kReleaseMode (false) : arrowRight');
         });
       } else if (event.logicalKey == LogicalKeyboardKey.tab) {
         setState(() {
-          //_focusNode.nextFocus();
-          selectedIndex++;
+          _focusNode.focusInDirection(TraversalDirection.right);
           print('kReleaseMode (false) : tab');
         });
       } else if (event.logicalKey == LogicalKeyboardKey.enter) {
         setState(() {
-          //_focusNode.nextFocus();
-          selectedIndex++;
-          print('kReleaseMode (false) : tab');
+          _focusNode.focusInDirection(TraversalDirection.right);
+          print('kReleaseMode (false) : enter');
         });
       }
     }
     a++;
-  }
-
-  changeFocus(
-      FocusNode focusNode, TextEditingController textEditingController) {
-    FocusScope.of(context).requestFocus(focusNode);
-    textEditingController.selection = TextSelection(
-      baseOffset: 0,
-      extentOffset: textEditingController.text.length,
-    );
   }
 
   @override
@@ -1085,7 +1074,6 @@ class _MainPanelState extends ConsumerState<MainPanel> {
 
 Widget numberBox(int index) {
   final TextEditingController pointController = TextEditingController();
-  FocusNode focusNode = FocusNode();
 
   if (global.numberPair[index + 1]! > 0) {
     pointController.text = global.numberPair[index + 1].toString();
@@ -1124,13 +1112,12 @@ Widget numberBox(int index) {
               (index + 1).toString(),
               style: TextStyle(fontSize: 0.8.h, color: Colors.grey),
             ),
-            /*FocusScope(
-              child: Focus(
+            Focus(
                 descendantsAreFocusable: true,
                 canRequestFocus: true,
                 onFocusChange: (focus) {
                   if (focus) {
-                    print("focus: $focus : $index");
+                    print("Focus: $focus : $index");
                     selectedIndex = index;
                     pointController.selection = TextSelection(
                       baseOffset: 0,
@@ -1138,32 +1125,34 @@ Widget numberBox(int index) {
                     );
                   }
                 },
-                child: */
-            TextField(
-              controller: pointController,
-              //focusNode: focusNode,
-              onChanged: (value) {
-                if (value.isNotEmpty) {
-                  global.numberPair[index + 1] = int.parse(value);
-                }
-              },
-              onTap: () {
-                selectedIndex = index;
-              },
-              textAlign: TextAlign.end,
-              scribbleEnabled: true,
-              style: const TextStyle(
-                  color: ColorsRes.mainBlue, fontWeight: FontWeight.w500),
-              decoration: InputDecoration(
-                isCollapsed: true,
-                contentPadding:
-                    EdgeInsets.only(left: 1.2.w, top: 0.5.w, bottom: 0.5.w),
-                hoverColor: ColorsRes.lightBlue,
-                border: OutlineInputBorder(borderSide: BorderSide.none),
+                child: TextField(
+                  controller: pointController,
+                  onChanged: (value) {
+                    if (value.isNotEmpty) {
+                      global.numberPair[index + 1] = int.parse(value);
+                    }
+                  },
+                  onTap: () {
+                    print("onTap: $index");
+                    selectedIndex = index;
+                    pointController.selection = TextSelection(
+                      baseOffset: 0,
+                      extentOffset: pointController.text.length,
+                    );
+                  },
+                  textAlign: TextAlign.end,
+                  scribbleEnabled: true,
+                  style: const TextStyle(
+                      color: ColorsRes.mainBlue, fontWeight: FontWeight.w500),
+                  decoration: InputDecoration(
+                    isCollapsed: true,
+                    contentPadding:
+                        EdgeInsets.only(left: 1.2.w, top: 0.5.w, bottom: 0.5.w),
+                    hoverColor: ColorsRes.lightBlue,
+                    border: OutlineInputBorder(borderSide: BorderSide.none),
+                  ),
+                ),
               ),
-            ),
-            //   ),
-            // ),
           ],
         ),
       );

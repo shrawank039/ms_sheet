@@ -39,7 +39,7 @@ class _MsSheetState extends State<MsSheet> {
           MaterialApp(
         //navigatorObservers: [FlutterSmartDialog.observer],
         debugShowCheckedModeBanner: false,
-        theme: ThemeData(fontFamily: 'Poppins'),
+        theme: ThemeData(fontFamily: 'Poppins', useMaterial3: true),
         builder: (context, child) => ResponsiveWrapper.builder(
           child,
           defaultScale: true,
