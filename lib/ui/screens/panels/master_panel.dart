@@ -75,16 +75,16 @@ class _MasterPanelState extends ConsumerState<MasterPanel> {
           _focusNode.nextFocus();
           print('kReleaseMode (false) : arrowRight');
         });
-      // } else if (event.logicalKey == LogicalKeyboardKey.tab) {
-      //   setState(() {
-      //     _focusNode.nextFocus();
-      //     print('kReleaseMode (false) : tab');
-      //   });
-      // } else if (event.logicalKey == LogicalKeyboardKey.enter) {
-      //   setState(() {
-      //     _focusNode.nextFocus();
-      //     print('kReleaseMode (false) : enter');
-      //   });
+      } else if (event.logicalKey == LogicalKeyboardKey.tab) {
+        setState(() {
+          //_focusNode.nextFocus();
+          print('kReleaseMode (false) : tab');
+        });
+      } else if (event.logicalKey == LogicalKeyboardKey.enter) {
+        setState(() {
+          //_focusNode.nextFocus();
+          print('kReleaseMode (false) : enter');
+        });
       }
     }
     return KeyEventResult.ignored;
@@ -588,6 +588,7 @@ Widget numberBox(int index) {
             style: TextStyle(fontSize: 0.8.h, color: Colors.grey),
           ),
           TextField(
+            textInputAction: TextInputAction.next,
             textAlign: TextAlign.end,
             scribbleEnabled: true,
             controller: pointController,

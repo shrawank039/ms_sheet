@@ -249,6 +249,7 @@ class DesignConfig {
         child: Padding(
           padding: EdgeInsets.only(left: 1.w),
           child: TextField(
+            textInputAction: TextInputAction.next,
             onChanged: (value) {
               onClick(value);
             },
