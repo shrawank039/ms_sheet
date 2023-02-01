@@ -32,9 +32,144 @@ class MasterPanel extends ConsumerStatefulWidget {
 }
 
 class _MasterPanelState extends ConsumerState<MasterPanel> {
+
+   @override
+    void dispose() {
+      global.numberPair = {
+        00: 0,
+        01: 0,
+        02: 0,
+        03: 0,
+        04: 0,
+        05: 0,
+        06: 0,
+        07: 0,
+        08: 0,
+        09: 0,
+        10: 0,
+        11: 0,
+        12: 0,
+        13: 0,
+        14: 0,
+        15: 0,
+        16: 0,
+        17: 0,
+        18: 0,
+        19: 0,
+        20: 0,
+        21: 0,
+        22: 0,
+        23: 0,
+        24: 0,
+        25: 0,
+        26: 0,
+        27: 0,
+        28: 0,
+        29: 0,
+        30: 0,
+        31: 0,
+        32: 0,
+        33: 0,
+        34: 0,
+        35: 0,
+        36: 0,
+        37: 0,
+        38: 0,
+        39: 0,
+        40: 0,
+        41: 0,
+        42: 0,
+        43: 0,
+        44: 0,
+        45: 0,
+        46: 0,
+        47: 0,
+        48: 0,
+        49: 0,
+        50: 0,
+        51: 0,
+        52: 0,
+        53: 0,
+        54: 0,
+        55: 0,
+        56: 0,
+        57: 0,
+        58: 0,
+        59: 0,
+        60: 0,
+        61: 0,
+        62: 0,
+        63: 0,
+        64: 0,
+        65: 0,
+        66: 0,
+        67: 0,
+        68: 0,
+        69: 0,
+        70: 0,
+        71: 0,
+        72: 0,
+        73: 0,
+        74: 0,
+        75: 0,
+        76: 0,
+        77: 0,
+        78: 0,
+        79: 0,
+        80: 0,
+        81: 0,
+        82: 0,
+        83: 0,
+        84: 0,
+        85: 0,
+        86: 0,
+        87: 0,
+        88: 0,
+        89: 0,
+        90: 0,
+        91: 0,
+        92: 0,
+        93: 0,
+        94: 0,
+        95: 0,
+        96: 0,
+        97: 0,
+        98: 0,
+        99: 0,
+        100: 0,
+        101: 0,
+        102: 0,
+        103: 0,
+        104: 0,
+        105: 0,
+        106: 0,
+        107: 0,
+        108: 0,
+        109: 0,
+        110: 0,
+        111: 0,
+        112: 0,
+        113: 0,
+        114: 0,
+        115: 0,
+        116: 0,
+        117: 0,
+        118: 0,
+        119: 0,
+        120: 0,
+      };
+      commCheck = false;
+      pattiCheck = false;
+      inOutCheck = false;
+      roundCheck = false;
+     _selectedList =null;
+    selectPairList=global.numberPair;
+    checkBox = null;
+      super.dispose();
+    }
+    
   @override
   Widget build(BuildContext context) {
-
     final FocusNode _focusNode = FocusNode();
     final ExtraDataParameter extraDataParameter =
         ExtraDataParameter(dataList: [widget.sheet_id, widget.date]);
@@ -47,54 +182,48 @@ class _MasterPanelState extends ConsumerState<MasterPanel> {
       total += global.numberPair[i]!;
     }
 
-    @override
-  void dispose() {
-    _focusNode.dispose();
-    super.dispose();
-  }
-
     KeyEventResult _handleKeyEvent(FocusNode node, RawKeyEvent event) {
-    if (event is RawKeyDownEvent) {
-      if (event.logicalKey == LogicalKeyboardKey.arrowUp) {
-        setState(() {
-          _focusNode.focusInDirection(TraversalDirection.up);
-          print('kReleaseMode (false) : arrowUp');
-        });
-      } else if (event.logicalKey == LogicalKeyboardKey.arrowDown) {
-        setState(() {
-          _focusNode.focusInDirection(TraversalDirection.down);
-          print('kReleaseMode (false) : arrowDown');
-        });
-      } else if (event.logicalKey == LogicalKeyboardKey.arrowLeft) {
-        setState(() {
-          _focusNode.previousFocus();
-          print('kReleaseMode (false) : arrowLeft');
-        });
-      } else if (event.logicalKey == LogicalKeyboardKey.arrowRight) {
-        setState(() {
-          _focusNode.nextFocus();
-          print('kReleaseMode (false) : arrowRight');
-        });
-      } else if (event.logicalKey == LogicalKeyboardKey.tab) {
-        setState(() {
-          //_focusNode.nextFocus();
-          print('kReleaseMode (false) : tab');
-        });
-      } else if (event.logicalKey == LogicalKeyboardKey.enter) {
-        setState(() {
-          //_focusNode.nextFocus();
-          print('kReleaseMode (false) : enter');
-        });
+      if (event is RawKeyDownEvent) {
+        if (event.logicalKey == LogicalKeyboardKey.arrowUp) {
+          setState(() {
+            _focusNode.focusInDirection(TraversalDirection.up);
+            print('kReleaseMode (false) : arrowUp');
+          });
+        } else if (event.logicalKey == LogicalKeyboardKey.arrowDown) {
+          setState(() {
+            _focusNode.focusInDirection(TraversalDirection.down);
+            print('kReleaseMode (false) : arrowDown');
+          });
+        } else if (event.logicalKey == LogicalKeyboardKey.arrowLeft) {
+          setState(() {
+            _focusNode.previousFocus();
+            print('kReleaseMode (false) : arrowLeft');
+          });
+        } else if (event.logicalKey == LogicalKeyboardKey.arrowRight) {
+          setState(() {
+            _focusNode.nextFocus();
+            print('kReleaseMode (false) : arrowRight');
+          });
+        } else if (event.logicalKey == LogicalKeyboardKey.tab) {
+          setState(() {
+            //_focusNode.nextFocus();
+            print('kReleaseMode (false) : tab');
+          });
+        } else if (event.logicalKey == LogicalKeyboardKey.enter) {
+          setState(() {
+            //_focusNode.nextFocus();
+            print('kReleaseMode (false) : enter');
+          });
+        }
       }
+      return KeyEventResult.ignored;
     }
-    return KeyEventResult.ignored;
-  }
 
     return Scaffold(
       body: SafeArea(
         child: Focus(
-            focusNode: _focusNode,
-            onKey: _handleKeyEvent,
+          focusNode: _focusNode,
+          onKey: _handleKeyEvent,
           child: Padding(
             padding: EdgeInsets.all(1.5.w),
             child: Row(
@@ -151,7 +280,8 @@ class _MasterPanelState extends ConsumerState<MasterPanel> {
                                       Expanded(
                                         child: AlignedGridView.count(
                                           shrinkWrap: true,
-                                          physics: NeverScrollableScrollPhysics(),
+                                          physics:
+                                              NeverScrollableScrollPhysics(),
                                           crossAxisCount: 10,
                                           itemCount: 100,
                                           mainAxisSpacing: 0,
@@ -211,7 +341,8 @@ class _MasterPanelState extends ConsumerState<MasterPanel> {
                                       Expanded(
                                         child: AlignedGridView.count(
                                           shrinkWrap: true,
-                                          physics: NeverScrollableScrollPhysics(),
+                                          physics:
+                                              NeverScrollableScrollPhysics(),
                                           crossAxisCount: 10,
                                           itemCount: 20,
                                           mainAxisSpacing: 0,
@@ -243,8 +374,8 @@ class _MasterPanelState extends ConsumerState<MasterPanel> {
                                                       i < index * 10 + 10;
                                                       i++) {
                                                     total = total +
-                                                        global
-                                                            .numberPair[i + 100]!;
+                                                        global.numberPair[
+                                                            i + 100]!;
                                                   }
                                                   return Container(
                                                     alignment:
@@ -329,8 +460,8 @@ class _MasterPanelState extends ConsumerState<MasterPanel> {
                                     textAlign: TextAlign.start,
                                   ),
                                   Consumer(
-                                    builder: (BuildContext context, WidgetRef ref,
-                                        Widget? child) {
+                                    builder: (BuildContext context,
+                                        WidgetRef ref, Widget? child) {
                                       return _data.when(data: (dynamic data) {
                                         return Column(
                                           children: _data.value!.data!.map((e) {
@@ -342,8 +473,8 @@ class _MasterPanelState extends ConsumerState<MasterPanel> {
                                                 context);
                                           }).toList(),
                                         );
-                                      }, error:
-                                          (Object error, StackTrace stackTrace) {
+                                      }, error: (Object error,
+                                          StackTrace stackTrace) {
                                         return Text('Error');
                                       }, loading: () {
                                         return CircularProgressIndicator();
@@ -436,7 +567,9 @@ class _MasterPanelState extends ConsumerState<MasterPanel> {
                                             BorderRadius.circular(1.8.w)),
                                     child: Padding(
                                       padding: EdgeInsets.only(
-                                          top: 0.7.h, bottom: 0.7.h, left: 0.8.w),
+                                          top: 0.7.h,
+                                          bottom: 0.7.h,
+                                          left: 0.8.w),
                                       child: Row(
                                         crossAxisAlignment:
                                             CrossAxisAlignment.center,
@@ -475,7 +608,9 @@ class _MasterPanelState extends ConsumerState<MasterPanel> {
                                             BorderRadius.circular(1.8.w)),
                                     child: Padding(
                                       padding: EdgeInsets.only(
-                                          top: 0.7.h, bottom: 0.7.h, left: 1.8.w),
+                                          top: 0.7.h,
+                                          bottom: 0.7.h,
+                                          left: 1.8.w),
                                       child: Row(
                                         crossAxisAlignment:
                                             CrossAxisAlignment.center,
@@ -514,7 +649,9 @@ class _MasterPanelState extends ConsumerState<MasterPanel> {
                                             BorderRadius.circular(1.8.w)),
                                     child: Padding(
                                       padding: EdgeInsets.only(
-                                          top: 0.7.h, bottom: 0.7.h, left: 1.8.w),
+                                          top: 0.7.h,
+                                          bottom: 0.7.h,
+                                          left: 1.8.w),
                                       child: Row(
                                         crossAxisAlignment:
                                             CrossAxisAlignment.center,
@@ -570,10 +707,10 @@ Widget numberBox(int index) {
   }
 
   pointController.selection = TextSelection(
-                      baseOffset: 0,
-                      extentOffset: pointController.text.length,
-                    );
-  
+    baseOffset: 0,
+    extentOffset: pointController.text.length,
+  );
+
   return Consumer(
       builder: (BuildContext context, WidgetRef ref, Widget? child) {
     return Container(
@@ -623,29 +760,28 @@ Widget controls() {
   final Function(String) callback;
 
   cuttingUpController.selection = TextSelection(
-                      baseOffset: 0,
-                      extentOffset: cuttingUpController.text.length,
-                    );
-                    cuttingDownController.selection = TextSelection(
-                      baseOffset: 0,
-                      extentOffset: cuttingDownController.text.length,
-                    );
-                    dabbaUpController.selection = TextSelection(
-                      baseOffset: 0,
-                      extentOffset: dabbaUpController.text.length,
-                    );
-                    dabbaDownController.selection = TextSelection(
-                      baseOffset: 0,
-                      extentOffset: dabbaDownController.text.length,
-                    );
-                    percentController.selection = TextSelection(
-                      baseOffset: 0,
-                      extentOffset: percentController.text.length,
-                    );
+    baseOffset: 0,
+    extentOffset: cuttingUpController.text.length,
+  );
+  cuttingDownController.selection = TextSelection(
+    baseOffset: 0,
+    extentOffset: cuttingDownController.text.length,
+  );
+  dabbaUpController.selection = TextSelection(
+    baseOffset: 0,
+    extentOffset: dabbaUpController.text.length,
+  );
+  dabbaDownController.selection = TextSelection(
+    baseOffset: 0,
+    extentOffset: dabbaDownController.text.length,
+  );
+  percentController.selection = TextSelection(
+    baseOffset: 0,
+    extentOffset: percentController.text.length,
+  );
 
   return Consumer(
       builder: (BuildContext context, WidgetRef ref, Widget? child) {
-
     return Column(
       children: [
         Row(

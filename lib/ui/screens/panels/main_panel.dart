@@ -13,7 +13,6 @@ import 'package:ms_sheet/ui/screens/panels/master_panel.dart';
 import 'package:ms_sheet/ui/styles/color.dart';
 import 'package:ms_sheet/widgets/laddi_popup.dart';
 import 'package:sizer/sizer.dart';
-
 import '../../../models/agents_response_entity.dart';
 import '../../../widgets/delete_confirmation_popup.dart';
 import '../../styles/design.dart';
@@ -22,6 +21,8 @@ bool updatePanel = false;
 bool updatePanelStatus = false;
 int selectedAgentId = 0;
 int selectedIndex = 0;
+final FocusNode _focusNode = FocusNode();
+final FocusNode focusNode = FocusNode();
 
 class MainPanel extends ConsumerStatefulWidget {
   final int sheet_id;
@@ -34,8 +35,7 @@ class MainPanel extends ConsumerStatefulWidget {
 }
 
 class _MainPanelState extends ConsumerState<MainPanel> {
-  final FocusNode _focusNode = FocusNode();
-  final FocusNode focusAmount = FocusNode();
+  bool focusAmount = false;
   int? entryBox, entryAmt;
   AgentsResponseData? selectedAgents;
   final TextEditingController textEditingController = TextEditingController();
@@ -56,7 +56,7 @@ class _MainPanelState extends ConsumerState<MainPanel> {
     textEditingController.dispose();
     entryBoxController.dispose();
     entryAmtController.dispose();
-    _focusNode.dispose();
+    // _focusNode.dispose();
     super.dispose();
   }
 
@@ -213,9 +213,8 @@ class _MainPanelState extends ConsumerState<MainPanel> {
     );
   }
 
-  KeyEventResult _handleKeyEvent(FocusNode node, RawKeyEvent event) {
+  void _handleKeyEvent(RawKeyEvent event) {
     if (event is RawKeyDownEvent) {
-      
       // switch (event.logicalKey) {
       //   case LogicalKeyboardKey.arrowUp:
       //     setState(() {
@@ -266,19 +265,22 @@ class _MainPanelState extends ConsumerState<MainPanel> {
           _focusNode.nextFocus();
           debugPrint('kReleaseMode (false) : arrowRight');
         });
-        } else if (event.logicalKey == LogicalKeyboardKey.tab) {
-          setState(() {
-            //_focusNode.nextFocus();
-            print('kReleaseMode (false) : tab');
-          });
-        } else if (event.logicalKey == LogicalKeyboardKey.enter) {
-          setState(() {
-            //_focusNode.nextFocus();
-            print('kReleaseMode (false) : enter');
-          });
+      } else if (event.logicalKey == LogicalKeyboardKey.tab) {
+        setState(() {
+          print('kReleaseMode (false) : tab');
+        });
+      } else if (event.logicalKey == LogicalKeyboardKey.enter) {
+        if (focusAmount) {
+          _focusNode.previousFocus();
+          _focusNode.previousFocus();
+          enterBtn();
+        }
+        setState(() {
+          print('kReleaseMode (false) : enter');
+        });
       }
     }
-    return KeyEventResult.ignored;
+    //return KeyEventResult.handled;
   }
 
   @override
@@ -305,8 +307,8 @@ class _MainPanelState extends ConsumerState<MainPanel> {
     }
     return Scaffold(
         body: SafeArea(
-      child: Focus(
-        focusNode: _focusNode,
+      child: RawKeyboardListener(
+        focusNode: focusNode,
         onKey: _handleKeyEvent,
         child: Padding(
           padding: EdgeInsets.all(1.5.w),
@@ -830,31 +832,36 @@ class _MainPanelState extends ConsumerState<MainPanel> {
                                           child: Row(
                                             children: [
                                               Expanded(
-                                                child: TextField(
-                                                  textInputAction: TextInputAction.next,
-                                                  controller:
-                                                      entryBoxController,
-                                                  textAlign: TextAlign.start,
-                                                  scribbleEnabled: true,
-                                                  style: const TextStyle(
-                                                      color: ColorsRes.mainBlue,
-                                                      fontWeight:
-                                                          FontWeight.w500),
-                                                  decoration: InputDecoration(
-                                                    hintText: 'Enter box no.',
-                                                    isCollapsed: true,
-                                                    contentPadding:
-                                                        EdgeInsets.only(
-                                                            left: 1.2.w,
-                                                            top: 0.5.w,
-                                                            bottom: 0.5.w),
-                                                    hoverColor:
-                                                        ColorsRes.lightBlue,
-                                                    border:
-                                                        const OutlineInputBorder(
-                                                            borderSide:
-                                                                BorderSide
-                                                                    .none),
+                                                child: Focus(
+                                                  focusNode: _focusNode,
+                                                  child: TextField(
+                                                    textInputAction:
+                                                        TextInputAction.next,
+                                                    controller:
+                                                        entryBoxController,
+                                                    textAlign: TextAlign.start,
+                                                    scribbleEnabled: true,
+                                                    style: const TextStyle(
+                                                        color:
+                                                            ColorsRes.mainBlue,
+                                                        fontWeight:
+                                                            FontWeight.w500),
+                                                    decoration: InputDecoration(
+                                                      hintText: 'Enter box no.',
+                                                      isCollapsed: true,
+                                                      contentPadding:
+                                                          EdgeInsets.only(
+                                                              left: 1.2.w,
+                                                              top: 0.5.w,
+                                                              bottom: 0.5.w),
+                                                      hoverColor:
+                                                          ColorsRes.lightBlue,
+                                                      border:
+                                                          const OutlineInputBorder(
+                                                              borderSide:
+                                                                  BorderSide
+                                                                      .none),
+                                                    ),
                                                   ),
                                                 ),
                                               ),
@@ -876,25 +883,41 @@ class _MainPanelState extends ConsumerState<MainPanel> {
                                             vertical: 0.7.h,
                                             horizontal: 2.w,
                                           ),
-                                          child: TextField(
-                                            textInputAction: TextInputAction.next,
-                                            focusNode: focusAmount,
-                                            controller: entryAmtController,
-                                            textAlign: TextAlign.start,
-                                            scribbleEnabled: true,
-                                            style: const TextStyle(
-                                                color: ColorsRes.mainBlue,
-                                                fontWeight: FontWeight.w500),
-                                            decoration: InputDecoration(
-                                              hintText: 'Amount',
-                                              isCollapsed: true,
-                                              contentPadding: EdgeInsets.only(
-                                                  left: 1.2.w,
-                                                  top: 0.5.w,
-                                                  bottom: 0.5.w),
-                                              hoverColor: ColorsRes.lightBlue,
-                                              border: const OutlineInputBorder(
-                                                  borderSide: BorderSide.none),
+                                          child: Focus(
+                                            focusNode: _focusNode,
+                                            child: Focus(
+                                              canRequestFocus: false,
+                                              onFocusChange: (focus) {
+                                                focusAmount = focus;
+                                                debugPrint(
+                                                    'Amount Focus : $focus');
+                                              },
+                                              child: TextField(
+                                                textInputAction:
+                                                    TextInputAction.next,
+                                                controller: entryAmtController,
+                                                textAlign: TextAlign.start,
+                                                scribbleEnabled: true,
+                                                style: const TextStyle(
+                                                    color: ColorsRes.mainBlue,
+                                                    fontWeight:
+                                                        FontWeight.w500),
+                                                decoration: InputDecoration(
+                                                  hintText: 'Amount',
+                                                  isCollapsed: true,
+                                                  contentPadding:
+                                                      EdgeInsets.only(
+                                                          left: 1.2.w,
+                                                          top: 0.5.w,
+                                                          bottom: 0.5.w),
+                                                  hoverColor:
+                                                      ColorsRes.lightBlue,
+                                                  border:
+                                                      const OutlineInputBorder(
+                                                          borderSide:
+                                                              BorderSide.none),
+                                                ),
+                                              ),
                                             ),
                                           ),
                                         ),
@@ -902,55 +925,7 @@ class _MainPanelState extends ConsumerState<MainPanel> {
                                     ),
                                     InkWell(
                                       onTap: () {
-                                        if (selectedAgents != null) {
-                                          if (entryBoxController
-                                              .text.length.isEven) {
-                                            for (int i = 0;
-                                                i <
-                                                    entryBoxController
-                                                        .text.length;
-                                                i++) {
-                                              entryBox = int.parse(
-                                                  entryBoxController.text[i] +
-                                                      entryBoxController
-                                                          .text[i + 1]);
-                                              entryAmt = int.parse(
-                                                  entryAmtController.text);
-                                              global.numberPair[entryBox!] =
-                                                  (global.numberPair[
-                                                          entryBox])! +
-                                                      entryAmt!;
-                                              global.pairKey.add(entryBox!);
-                                              global.pairValue.add(entryAmt!);
-                                              i = i + 1;
-                                            }
-                                          } else {
-                                            for (int i = 0;
-                                                i <
-                                                    entryBoxController
-                                                        .text.length;
-                                                i++) {
-                                              entryBox = int.parse(
-                                                  entryBoxController.text[i] +
-                                                      entryBoxController
-                                                          .text[i + 1] +
-                                                      entryBoxController
-                                                          .text[i + 2]);
-                                              entryAmt = int.parse(
-                                                  entryAmtController.text);
-                                              global.numberPair[entryBox!] =
-                                                  (global.numberPair[
-                                                          entryBox])! +
-                                                      entryAmt!;
-                                              global.pairKey.add(entryBox!);
-                                              global.pairValue.add(entryAmt!);
-                                              i = i + 2;
-                                            }
-                                          }
-                                          ref.refresh(numberPairProvider);
-                                        } else {
-                                          _showToast('Select Any Client');
-                                        }
+                                        enterBtn();
                                       },
                                       child: DesignConfig.flatButtonWithIcon(
                                         ColorsRes.mainBlue,
@@ -1066,6 +1041,38 @@ class _MainPanelState extends ConsumerState<MainPanel> {
       ),
     ));
   }
+
+  void enterBtn() {
+    if (selectedAgents != null) {
+      if (entryBoxController.text.length.isEven) {
+        for (int i = 0; i < entryBoxController.text.length; i++) {
+          entryBox = int.parse(
+              entryBoxController.text[i] + entryBoxController.text[i + 1]);
+          entryAmt = int.parse(entryAmtController.text);
+          global.numberPair[entryBox!] =
+              (global.numberPair[entryBox])! + entryAmt!;
+          global.pairKey.add(entryBox!);
+          global.pairValue.add(entryAmt!);
+          i = i + 1;
+        }
+      } else {
+        for (int i = 0; i < entryBoxController.text.length; i++) {
+          entryBox = int.parse(entryBoxController.text[i] +
+              entryBoxController.text[i + 1] +
+              entryBoxController.text[i + 2]);
+          entryAmt = int.parse(entryAmtController.text);
+          global.numberPair[entryBox!] =
+              (global.numberPair[entryBox])! + entryAmt!;
+          global.pairKey.add(entryBox!);
+          global.pairValue.add(entryAmt!);
+          i = i + 2;
+        }
+      }
+      ref.refresh(numberPairProvider);
+    } else {
+      _showToast('Select Any Client');
+    }
+  }
 }
 
 Widget numberBox(int index) {
@@ -1082,47 +1089,54 @@ Widget numberBox(int index) {
         extentOffset: pointController.text.length,
       );
 
-      return Container(
-        padding: EdgeInsets.only(left: 1.w),
-        decoration: BoxDecoration(
-            border: Border.all(width: 0.5, color: ColorsRes.greyLightColor)),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              (index + 1).toString(),
-              style: TextStyle(fontSize: 0.8.h, color: Colors.grey),
+      return FocusScope(
+        child: Focus(
+          focusNode: _focusNode,
+          // onKey: _handleKeyEvent,
+          child: Container(
+            padding: EdgeInsets.only(left: 1.w),
+            decoration: BoxDecoration(
+                border:
+                    Border.all(width: 0.5, color: ColorsRes.greyLightColor)),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  (index + 1).toString(),
+                  style: TextStyle(fontSize: 0.8.h, color: Colors.grey),
+                ),
+                TextField(
+                  autofocus: true,
+                  textInputAction: TextInputAction.next,
+                  controller: pointController,
+                  onChanged: (value) {
+                    if (value.isNotEmpty) {
+                      global.numberPair[index + 1] = int.parse(value);
+                    }
+                  },
+                  onTap: () {
+                    print("onTap: $index");
+                    selectedIndex = index;
+                    pointController.selection = TextSelection(
+                      baseOffset: 0,
+                      extentOffset: pointController.text.length,
+                    );
+                  },
+                  textAlign: TextAlign.end,
+                  scribbleEnabled: true,
+                  style: const TextStyle(
+                      color: ColorsRes.mainBlue, fontWeight: FontWeight.w500),
+                  decoration: InputDecoration(
+                    isCollapsed: true,
+                    contentPadding:
+                        EdgeInsets.only(left: 1.2.w, top: 0.5.w, bottom: 0.5.w),
+                    hoverColor: ColorsRes.lightBlue,
+                    border: OutlineInputBorder(borderSide: BorderSide.none),
+                  ),
+                ),
+              ],
             ),
-            TextField(
-              autofocus: true,
-              textInputAction: TextInputAction.next,
-              controller: pointController,
-              onChanged: (value) {
-                if (value.isNotEmpty) {
-                  global.numberPair[index + 1] = int.parse(value);
-                }
-              },
-              onTap: () {
-                print("onTap: $index");
-                selectedIndex = index;
-                pointController.selection = TextSelection(
-                  baseOffset: 0,
-                  extentOffset: pointController.text.length,
-                );
-              },
-              textAlign: TextAlign.end,
-              scribbleEnabled: true,
-              style: const TextStyle(
-                  color: ColorsRes.mainBlue, fontWeight: FontWeight.w500),
-              decoration: InputDecoration(
-                isCollapsed: true,
-                contentPadding:
-                    EdgeInsets.only(left: 1.2.w, top: 0.5.w, bottom: 0.5.w),
-                hoverColor: ColorsRes.lightBlue,
-                border: OutlineInputBorder(borderSide: BorderSide.none),
-              ),
-            ),
-          ],
+          ),
         ),
       );
     },
