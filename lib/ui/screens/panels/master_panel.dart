@@ -14,7 +14,7 @@ import '../../styles/design.dart';
 
 var _selectedList;
 var selectPairList;
-var checkBox;
+List<int> checkBox=[];
 bool commCheck = false,
     pattiCheck = false,
     inOutCheck = false,
@@ -164,7 +164,7 @@ class _MasterPanelState extends ConsumerState<MasterPanel> {
       roundCheck = false;
      _selectedList =null;
     selectPairList=global.numberPair;
-    checkBox = null;
+    checkBox.clear();
       super.dispose();
     }
     
@@ -1098,6 +1098,14 @@ Widget clientsList(
     ExtraDataParameter extraDataParameter,
     Map<int, int> pair,
     BuildContext context) {
+
+    Map<int, int> result = convertPair(data);
+  int total = 0;
+
+  for (int i = 0 * 10; i < 120; i++) {
+    total = total + result[i + 1]!;
+  }
+
   String selected = "";
   return Container(
     margin: EdgeInsets.only(top: 1.w),
@@ -1139,7 +1147,7 @@ Widget clientsList(
                         color: const Color.fromARGB(255, 0, 0, 0)),
                   ),
                   Text(
-                    'Total : 1200',
+                    'Total : $total',
                     textAlign: TextAlign.left,
                     style: TextStyle(
                       fontSize: 1.2.w,
@@ -1155,15 +1163,31 @@ Widget clientsList(
             child: Container(),
           ),
           Consumer(builder: (_, WidgetRef ref, __) {
-            final _dataAgents = ref.watch(agentsDataProvider);
+            final _dataAgents = ref.watch(agentsDataProvider);            
 
             return Checkbox(
-              value: checkBox == data.id ? true : false,
+              value: checkBox.contains(data.id) ? true : false,
               onChanged: (value) {
-                checkBox = data.id!;
-                global.numberPair = pair;
-                _selectedList = data;
-                selectPairList = convertPair(data);
+                if (value!) {
+                  checkBox.add(data.id!);
+                  for(int i=0; i<global.numberPair.length-1; i++){
+                      global.numberPair[i] = global.numberPair[i]! + pair[i]!;
+                  }
+                   _selectedList = global.numberPair;
+                selectPairList = global.numberPair;
+                } else {
+                  checkBox.remove(data.id!);
+                  for(int i=0; i<global.numberPair.length-1; i++){
+                      global.numberPair[i] = global.numberPair[i]! - pair[i]!;
+                  }
+                   _selectedList = global.numberPair;
+                selectPairList = global.numberPair;
+                }
+
+                // checkBox = data.id!;
+                // global.numberPair = pair;
+                // _selectedList = data;
+                // selectPairList = convertPair(data);
                 selectedAgents = _dataAgents.value!.data!
                     .where((item) => item.id == data.agentId)
                     .toList()[0];

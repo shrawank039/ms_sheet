@@ -1,18 +1,18 @@
 import 'dart:convert';
 
-SignupResponse signupResponseFromJson(String str) =>
-    SignupResponse.fromJson(json.decode(str));
+ProfileResponse profileResponseFromJson(String str) =>
+    ProfileResponse.fromJson(json.decode(str));
 
-String signupResponseToJson(SignupResponse data) => json.encode(data.toJson());
+String profileResponseToJson(ProfileResponse data) => json.encode(data.toJson());
 
-class SignupResponse {
+class ProfileResponse {
   bool? success;
   Data? data;
   String? message;
 
-  SignupResponse({this.success, this.data, this.message});
+  ProfileResponse({this.success, this.data, this.message});
 
-  SignupResponse.fromJson(Map<String, dynamic> json) {
+  ProfileResponse.fromJson(Map<String, dynamic> json) {
     if(json["success"] is bool) {
       success = json["success"];
     }

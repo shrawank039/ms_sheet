@@ -11,6 +11,7 @@ import 'package:ms_sheet/providers/data_providers.dart';
 import 'package:ms_sheet/repositories/panel_repository.dart';
 import 'package:ms_sheet/ui/screens/panels/master_panel.dart';
 import 'package:ms_sheet/ui/styles/color.dart';
+import 'package:ms_sheet/widgets/cp_popup.dart';
 import 'package:ms_sheet/widgets/laddi_popup.dart';
 import 'package:sizer/sizer.dart';
 import '../../../models/agents_response_entity.dart';
@@ -56,7 +57,6 @@ class _MainPanelState extends ConsumerState<MainPanel> {
     textEditingController.dispose();
     entryBoxController.dispose();
     entryAmtController.dispose();
-    // _focusNode.dispose();
     super.dispose();
   }
 
@@ -359,7 +359,8 @@ class _MainPanelState extends ConsumerState<MainPanel> {
                       ),
                       Expanded(
                         child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Expanded(
                               flex: 4,
@@ -370,7 +371,7 @@ class _MainPanelState extends ConsumerState<MainPanel> {
                                       Expanded(
                                         child: AlignedGridView.count(
                                           physics:
-                                              NeverScrollableScrollPhysics(),
+                                              const NeverScrollableScrollPhysics(),
                                           shrinkWrap: true,
                                           crossAxisCount: 10,
                                           itemCount: 100,
@@ -404,7 +405,8 @@ class _MainPanelState extends ConsumerState<MainPanel> {
                                                       i < index * 10 + 10;
                                                       i++) {
                                                     total = total +
-                                                        global.numberPair[i]!;
+                                                        global
+                                                            .numberPair[i + 1]!;
                                                   }
                                                   return Container(
                                                     alignment:
@@ -462,7 +464,7 @@ class _MainPanelState extends ConsumerState<MainPanel> {
                                                       i++) {
                                                     total = total +
                                                         global.numberPair[
-                                                            i + 100]!;
+                                                            i + 101]!;
                                                   }
                                                   return Container(
                                                     alignment:
@@ -584,15 +586,24 @@ class _MainPanelState extends ConsumerState<MainPanel> {
                                       ),
                                     ),
                                     Expanded(
-                                      child: DesignConfig.flatButtonWithIcon(
-                                        ColorsRes.mainBlue,
-                                        1.6.w,
-                                        FontAwesomeIcons.paste,
-                                        ColorsRes.white,
-                                        1.6.w,
-                                        'C/P',
-                                        2.w,
-                                        ColorsRes.white,
+                                      child: InkWell(
+                                        onTap: () {
+                                          showDialog(
+                                              context: context,
+                                              builder: (context) => CPPopup(
+                                                  widget.sheet_id,
+                                                  widget.date));
+                                        },
+                                        child: DesignConfig.flatButtonWithIcon(
+                                          ColorsRes.mainBlue,
+                                          1.6.w,
+                                          FontAwesomeIcons.paste,
+                                          ColorsRes.white,
+                                          1.6.w,
+                                          'C/P',
+                                          2.w,
+                                          ColorsRes.white,
+                                        ),
                                       ),
                                     ),
                                     InkWell(
@@ -604,7 +615,7 @@ class _MainPanelState extends ConsumerState<MainPanel> {
                                                   widget.sheet_id,
                                                   selectedAgents!.id!,
                                                   widget.date,
-                                                  global.numberPair.toString(),
+                                                  global.numberPair.toString().trim(),
                                                   global.pairKey,
                                                   global.pairValue,
                                                   total);
@@ -626,7 +637,7 @@ class _MainPanelState extends ConsumerState<MainPanel> {
                                                       selectedAgents!.id!,
                                                       widget.date,
                                                       global.numberPair
-                                                          .toString(),
+                                                          .toString().trim(),
                                                       global.pairKey,
                                                       global.pairValue,
                                                       total);
@@ -1048,6 +1059,9 @@ class _MainPanelState extends ConsumerState<MainPanel> {
         for (int i = 0; i < entryBoxController.text.length; i++) {
           entryBox = int.parse(
               entryBoxController.text[i] + entryBoxController.text[i + 1]);
+          if (entryBox == 00) {
+            entryBox = 100;
+          }
           entryAmt = int.parse(entryAmtController.text);
           global.numberPair[entryBox!] =
               (global.numberPair[entryBox])! + entryAmt!;
@@ -1079,7 +1093,7 @@ Widget numberBox(int index) {
   final TextEditingController pointController = TextEditingController();
 
   if (global.numberPair[index + 1]! > 0) {
-    pointController.text = global.numberPair[index + 1].toString();
+    pointController.text = global.numberPair[index + 1].toString().trim();
   }
 
   return Consumer(
@@ -1111,7 +1125,9 @@ Widget numberBox(int index) {
                   controller: pointController,
                   onChanged: (value) {
                     if (value.isNotEmpty) {
-                      global.numberPair[index + 1] = int.parse(value);
+                      global.numberPair[index + 1] = int.parse(value.trim());
+                    } else {
+                      global.numberPair[index + 1] = 0;
                     }
                   },
                   onTap: () {
@@ -1201,6 +1217,30 @@ Widget pairList(int index) {
 
 Widget clientsList(PanelResponseData data,
     ExtraDataParameter extraDataParameter, BuildContext context) {
+  List<String> str = data.pair!
+      .replaceAll("{", "")
+      .replaceAll("}", "")
+      .replaceAll("\"", "")
+      .replaceAll("'", "")
+      .split(",");
+  Map<int, int> result = {};
+  for (int i = 0; i < str.length; i++) {
+    List<String> s = str[i].split(":");
+    result.putIfAbsent(int.parse(s[0].trim()), () => int.parse(s[1].trim()));
+  }
+
+  int maxPair = 0;
+  int total = 0;
+  String highestPair = '';
+
+  for (int i = 0 * 10; i < 120; i++) {
+    total = total + result[i + 1]!;
+    if (maxPair < result[i + 1]!) {
+      maxPair = result[i + 1]!;
+      highestPair = '${i+1}/${maxPair}';
+    }
+  }
+
   return Container(
     margin: EdgeInsets.only(top: 1.w),
     decoration: DesignConfig.boxDecorationContainerCardShadow(
@@ -1241,7 +1281,7 @@ Widget clientsList(PanelResponseData data,
                 Row(
                   children: [
                     Text(
-                      'Pair: 90/0',
+                      'Pair: $highestPair',
                       textAlign: TextAlign.left,
                       style: TextStyle(
                         fontSize: 1.3.w,
@@ -1253,7 +1293,7 @@ Widget clientsList(PanelResponseData data,
                       width: 1.w,
                     ),
                     Text(
-                      'Total : 1750',
+                      'Total : ${total}',
                       textAlign: TextAlign.left,
                       style: TextStyle(
                         fontSize: 1.3.w,
@@ -1289,40 +1329,42 @@ Widget clientsList(PanelResponseData data,
             builder: (_, WidgetRef ref, __) {
               return IconButton(
                 onPressed: () {
-                  List<String> str = data.pair!
-                      .replaceAll("{", "")
-                      .replaceAll("}", "")
-                      .replaceAll("\"", "")
-                      .replaceAll("'", "")
-                      .split(",");
-                  Map<int, int> result = {};
-                  for (int i = 0; i < str.length; i++) {
-                    List<String> s = str[i].split(":");
-                    result.putIfAbsent(
-                        int.parse(s[0].trim()), () => int.parse(s[1].trim()));
-                  }
+                  // List<String> str = data.pair!
+                  //     .replaceAll("{", "")
+                  //     .replaceAll("}", "")
+                  //     .replaceAll("\"", "")
+                  //     .replaceAll("'", "")
+                  //     .split(",");
+                  // Map<int, int> result = {};
+                  // for (int i = 0; i < str.length; i++) {
+                  //   List<String> s = str[i].split(":");
+                  //   result.putIfAbsent(
+                  //       int.parse(s[0].trim()), () => int.parse(s[1].trim()));
+                  // }
                   global.numberPair = result;
                   selectedAgentId = data.agentId!;
                   updatePanel = true;
 
-                  final pairKey = data.pair_key!
-                      .replaceAll("[", "")
-                      .replaceAll("]", "")
-                      .replaceAll("\"", "")
-                      .split(',');
+                  if (data.pair_key!.isNotEmpty && data.pair_value != '[]') {
+                    final pairKey = data.pair_key!
+                        .replaceAll("[", "")
+                        .replaceAll("]", "")
+                        .replaceAll("\"", "")
+                        .split(',');
 
-                  for (int i = 0; i < pairKey.length; i++) {
-                    global.pairKey.add(int.parse(pairKey[i].trim()));
-                  }
+                    for (int i = 0; i < pairKey.length; i++) {
+                      global.pairKey.add(int.parse(pairKey[i].trim()));
+                    }
 
-                  final pairValue = data.pair_value!
-                      .replaceAll("[", "")
-                      .replaceAll("]", "")
-                      .replaceAll("\"", "")
-                      .split(',');
+                    final pairValue = data.pair_value!
+                        .replaceAll("[", "")
+                        .replaceAll("]", "")
+                        .replaceAll("\"", "")
+                        .split(',');
 
-                  for (int i = 0; i < pairValue.length; i++) {
-                    global.pairValue.add(int.parse(pairValue[i].trim()));
+                    for (int i = 0; i < pairValue.length; i++) {
+                      global.pairValue.add(int.parse(pairValue[i].trim()));
+                    }
                   }
 
                   ref.refresh(numberPairProvider);

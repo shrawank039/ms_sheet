@@ -5,7 +5,7 @@ import 'package:ms_sheet/ui/screens/home/pages/khata.dart';
 import 'package:ms_sheet/ui/screens/home/pages/sheets.dart';
 import 'package:ms_sheet/ui/styles/color.dart';
 import 'package:sizer/sizer.dart';
-
+import 'package:ms_sheet/global.dart' as global;
 import '../../styles/design.dart';
 
 class MobileHome extends StatefulWidget {
@@ -170,7 +170,7 @@ Widget userDetails() {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Jay T',
+              '${global.prefs.get('name')}',
               textAlign: TextAlign.left,
               style: TextStyle(
                   fontSize: 4.w,
@@ -178,7 +178,7 @@ Widget userDetails() {
                   color: const Color.fromARGB(255, 0, 0, 0)),
             ),
             Text(
-              '+91 1234567890',
+              '${global.prefs.get('mobile_number')}',
               textAlign: TextAlign.left,
               style: TextStyle(
                 fontSize: 2.8.w,

@@ -12,7 +12,7 @@ import 'package:ms_sheet/ui/screens/home/pages/sheets.dart';
 import 'package:ms_sheet/ui/screens/home/pages/sheets_history.dart';
 import 'package:ms_sheet/ui/styles/color.dart';
 import 'package:sizer/sizer.dart';
-
+import 'package:ms_sheet/global.dart' as global;
 import '../../styles/design.dart';
 
 class PCHome extends StatefulWidget {
@@ -74,6 +74,7 @@ class _PCHomeState extends State<PCHome> {
                 Container(
                   padding:
                       EdgeInsets.symmetric(horizontal: 1.w, vertical: 1.2.h),
+                      margin: EdgeInsets.symmetric(horizontal: 2.w),
                   width: 30.w,
                   decoration: DesignConfig.boxDecorationContainerCardShadow(
                       ColorsRes.white,
@@ -516,7 +517,7 @@ Widget userDetails(String currentPage) {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Jay T',
+              '${global.prefs.get('name')}',
               textAlign: TextAlign.left,
               style: TextStyle(
                   fontSize: 2.w,
@@ -524,7 +525,7 @@ Widget userDetails(String currentPage) {
                   color: const Color.fromARGB(255, 0, 0, 0)),
             ),
             Text(
-              '+91 1234567890',
+              '${global.prefs.get('mobile_number')}',
               textAlign: TextAlign.left,
               style: TextStyle(
                 fontSize: 1.5.w,

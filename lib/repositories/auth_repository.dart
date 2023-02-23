@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:ms_sheet/global.dart' as global;
+import 'package:ms_sheet/models/profile_response.dart';
 
 import '../app_config.dart';
 import '../models/login_response.dart';
@@ -11,81 +12,123 @@ import '../models/signup_response.dart';
 
 class AuthRepository {
   Future<LoginResponse> getLoginResponse(
-      @required String email, @required String password) async {
-    var post_body = jsonEncode({
-      "email": "${email}",
-      "password": "$password",
+      String email, String password) async {
+    var postBody = jsonEncode({
+      "mobile_number": email,
+      "password": password,
     });
 
     Uri url = Uri.parse("${AppConfig.BASE_URL}/login");
     final response = await http.post(url,
-        headers: await global.getApiHeaders(true), body: post_body);
+        headers: await global.getApiHeaders(true), body: postBody);
+
     print('getLoginResponse : ${response.body}');
+
     return loginResponseFromJson(response.body);
   }
 
-  Future<LoginResponse> getSocialLoginResponse(@required String social_provider,
-      @required String name, @required String email, @required String provider,
-      {access_token = ""}) async {
-    email = email == ("null") ? "" : email;
+  Future<LoginResponse> getSocialLoginResponse(String socialProvider,
+      String name, String email, String provider) async {
 
-    var post_body = jsonEncode({
-      "name": "${name}",
+    var postBody = jsonEncode({
+      "name": name,
       "email": email,
-      "provider": "$provider",
-      "social_provider": "$social_provider",
-      "access_token": "$access_token"
+      "provider": provider,
+      "social_provider": socialProvider
     });
 
     Uri url = Uri.parse("${AppConfig.BASE_URL}/auth/social-login");
     final response = await http.post(url,
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: post_body);
-    print(post_body);
-    print(response.body.toString());
+        headers: await global.getApiHeaders(true), body: postBody);
+    debugPrint(postBody);
+    debugPrint(response.body.toString());
     return loginResponseFromJson(response.body);
   }
 
   Future<SignupResponse> getSignupResponse(
-      @required String name,
-      @required String email_or_phone,
-      @required String password,
-      @required String passowrd_confirmation,
-      @required String register_by) async {
-    var post_body = jsonEncode({
-      "name": "$name",
-      "email_or_phone": "${email_or_phone}",
-      "password": "$password",
-      "password_confirmation": "${passowrd_confirmation}",
-      "register_by": "$register_by"
+      String name,
+    //  String email,
+      String password,
+      String mobileNumber) async {
+    var postBody = jsonEncode({
+      "name": name,
+     // "email": email,
+      "mobile_number": mobileNumber,
+      "password": password
     });
 
-    Uri url = Uri.parse("${AppConfig.BASE_URL}/auth/signup");
+    Uri url = Uri.parse("${AppConfig.BASE_URL}/register");
     final response = await http.post(url,
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: post_body);
-
+        headers: await global.getApiHeaders(true), body: postBody);
+    debugPrint('getSignupResponse : ${response.body}');
     return signupResponseFromJson(response.body);
   }
 
-  Future<PasswordConfirmResponse> getPasswordConfirmResponse(
-      @required String verification_code, @required String password) async {
-    var post_body = jsonEncode(
-        {"verification_code": "$verification_code", "password": "$password"});
+  Future<SignupResponse> updateProfileResponse(
+      String name,
+      String email,
+      String mobileNumber) async {
+    var postBody = jsonEncode({
+      "name": name,
+      "email": email,
+      "mobile_number": mobileNumber
+    });
+
+    Uri url = Uri.parse("${AppConfig.BASE_URL}/profile");
+    final response = await http.post(url,
+        headers: await global.getApiHeaders(true), body: postBody);
+    debugPrint('updateProfileResponse : ${response.body}');
+    return signupResponseFromJson(response.body);
+  }
+
+  Future<ProfileResponse> getProfileResponse() async {
+
+    Uri url = Uri.parse("${AppConfig.BASE_URL}/profile");
+    final response =
+        await http.get(url, headers: await global.getApiHeaders(true));
+    debugPrint('getProfileResponse : ${response.body}');
+    return profileResponseFromJson(response.body);
+  }
+
+  Future<PasswordResponse> changePassword(
+      String password) async {
+    var postBody = jsonEncode(
+        {"password": password});
 
     Uri url = Uri.parse(
-      "${AppConfig.BASE_URL}/auth/password/confirm_reset",
+      "${AppConfig.BASE_URL}/password/change",
     );
     final response = await http.post(url,
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: post_body);
-
-    return passwordConfirmResponseFromJson(response.body);
+        headers: await global.getApiHeaders(true), body: postBody);
+debugPrint('changePassword : ${response.body}');
+    return passwordResponseFromJson(response.body);
   }
+
+  Future<PasswordResponse> getOTP(
+      String mobile_number) async {
+    var postBody = jsonEncode(
+        {"mobile_number": mobile_number});
+    Uri url = Uri.parse(
+      "${AppConfig.BASE_URL}/otp/send",
+    );
+    final response = await http.post(url,
+        headers: await global.getApiHeaders(true), body: postBody);
+debugPrint('getOTP : ${response.body}');
+    return passwordResponseFromJson(response.body);
+  }
+
+  Future<PasswordResponse> verifyOTP(
+      String mobile_number, String otp) async {
+    var postBody = jsonEncode(
+        {"mobile_number": mobile_number, "otp":otp});
+
+    Uri url = Uri.parse(
+      "${AppConfig.BASE_URL}/otp/verify",
+    );
+    final response = await http.post(url,
+        headers: await global.getApiHeaders(true), body: postBody);
+debugPrint('verifyOTP : ${response.body}');
+    return passwordResponseFromJson(response.body);
+  }
+
 }

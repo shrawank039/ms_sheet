@@ -1,32 +1,29 @@
-// To parse this JSON data, do
-//
-//     final passwordConfirmResponse = passwordConfirmResponseFromJson(jsonString);
-
 import 'dart:convert';
 
-PasswordConfirmResponse passwordConfirmResponseFromJson(String str) =>
-    PasswordConfirmResponse.fromJson(json.decode(str));
+PasswordResponse passwordResponseFromJson(String str) =>
+    PasswordResponse.fromJson(json.decode(str));
 
-String passwordConfirmResponseToJson(PasswordConfirmResponse data) =>
-    json.encode(data.toJson());
+String passwordResponseToJson(PasswordResponse data) => json.encode(data.toJson());
 
-class PasswordConfirmResponse {
-  PasswordConfirmResponse({
-    this.result,
-    this.message,
-  });
-
-  bool? result;
+class PasswordResponse {
+  bool? success;
   String? message;
 
-  factory PasswordConfirmResponse.fromJson(Map<String, dynamic> json) =>
-      PasswordConfirmResponse(
-        result: json["result"],
-        message: json["message"],
-      );
+  PasswordResponse({this.success, this.message});
 
-  Map<String, dynamic> toJson() => {
-        "result": result,
-        "message": message,
-      };
+  PasswordResponse.fromJson(Map<String, dynamic> json) {
+    if(json["success"] is bool) {
+      success = json["success"];
+    }
+    if(json["message"] is String) {
+      message = json["message"];
+    }
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> _data = <String, dynamic>{};
+    _data["success"] = success;
+    _data["message"] = message;
+    return _data;
+  }
 }

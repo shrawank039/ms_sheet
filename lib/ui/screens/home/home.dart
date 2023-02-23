@@ -21,7 +21,6 @@ class _HomeState extends State<Home> {
           // Mobile = Small (smaller than 640px)
           // Tablet = Medium (641px to 1007px)
           // Laptop = Large (1008px and larger)
-          //login(context);
           if (constraints.maxWidth < 640) {
             return BottomNavigationWidget();
           } else {
@@ -30,15 +29,6 @@ class _HomeState extends State<Home> {
         },
       ),
     );
-  }
-}
-
-void login(BuildContext context) async {
-  var loginResponse =
-      await AuthRepository().getLoginResponse('aeimesh@gmail.com', '123456');
-  if (loginResponse.success = true) {
-    AuthHelper().setUserData(loginResponse);
-    print('AuthHelper1 : Bearer ${global.prefs.get('token')}');
   }
 }
 

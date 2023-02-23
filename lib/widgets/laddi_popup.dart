@@ -93,7 +93,7 @@ class _LaddiPopupState extends ConsumerState<LaddiPopup> {
                         //maxLength: 1,
                         keyboardType: TextInputType.number,
                         textAlign: TextAlign.center,
-                        style: TextStyle(
+                        style: const TextStyle(
                             fontSize: 15.0,
                             fontFamily: 'Arial',
                             fontWeight: FontWeight.w500),
@@ -127,7 +127,7 @@ class _LaddiPopupState extends ConsumerState<LaddiPopup> {
                         controller: toController,
                         keyboardType: TextInputType.number,
                         textAlign: TextAlign.center,
-                        style: TextStyle(
+                        style: const TextStyle(
                             fontSize: 15.0,
                             fontFamily: 'Arial',
                             fontWeight: FontWeight.w500),
@@ -164,7 +164,7 @@ class _LaddiPopupState extends ConsumerState<LaddiPopup> {
                         },
                         keyboardType: TextInputType.number,
                         textAlign: TextAlign.center,
-                        style: TextStyle(
+                        style: const TextStyle(
                             fontSize: 15.0,
                             fontFamily: 'Arial',
                             fontWeight: FontWeight.w500),

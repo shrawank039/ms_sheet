@@ -2,11 +2,12 @@ import 'dart:async';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:ms_sheet/global.dart' as global;
+import 'package:ms_sheet/ui/screens/login/reset_pass_screen.dart';
 import 'package:otp_text_field/otp_field.dart';
 import 'package:otp_text_field/style.dart';
 import 'package:sizer/sizer.dart';
-
 import '../../../helper/auth_helper.dart';
 import '../../../helper/function.dart';
 import '../../../repositories/auth_repository.dart';
@@ -17,7 +18,9 @@ import '../home/home.dart';
 import '../noInternet/nointernet.dart';
 
 class Otp extends StatefulWidget {
-  const Otp({Key? key}) : super(key: key);
+  final String name, mobile, pass, type;
+  const Otp(this.name, this.mobile, this.pass, this.type, {Key? key})
+      : super(key: key);
 
   @override
   _OtpState createState() => _OtpState();
@@ -26,26 +29,19 @@ class Otp extends StatefulWidget {
 class _OtpState extends State<Otp> {
   String otpNumber = ''; //otp number
   List otpText = []; //otp number as list for 6 boxes
-  List otpPattern = [1, 2, 3, 4, 5, 6]; //list to create number of input box
+  List otpPattern = [1, 2, 3, 4]; //list to create number of input box
   var resendTime = 60; //otp resend time
   late Timer timer; //timer for resend time
-  String _error =
-      ''; //otp error string to show if error occurs in otp validation
+//otp error string to show if error occurs in otp validation
   TextEditingController otpController =
       TextEditingController(); //otp textediting controller
-  TextEditingController first = TextEditingController();
-  TextEditingController second = TextEditingController();
-  TextEditingController third = TextEditingController();
-  TextEditingController fourth = TextEditingController();
-  TextEditingController fifth = TextEditingController();
-  TextEditingController sixth = TextEditingController();
   bool _loading = false; //loading screen showing
-  String phnumber = '1234567890';
 
   @override
   void initState() {
     _loading = false;
     timers();
+    getOtp();
     super.initState();
   }
 
@@ -55,37 +51,52 @@ class _OtpState extends State<Otp> {
     super.dispose();
   }
 
+  getOtp() async {
+     var verifyResponse = await AuthRepository()
+            .getOTP(widget.mobile);
+        if (verifyResponse.success = true) {
+         
+        } else {
+        }
+  }
+
 //otp is false
   otpFalse() async {
     _loading = true;
-    otpController.text = '123456';
+    otpController.text = '1234';
     otpNumber = otpController.text;
   }
 
 //auto verify otp
-  verifyOtp() async {
+  verifyOtp(String otpNumber) async {
     try {
-      // await FirebaseAuth.instance.signInWithCredential(credentials);
-
-      var verify = true;
+      var verify = false;
       credentials = null;
+      // await FirebaseAuth.instance.signInWithCredential(credentials);
+        var verifyResponse = await AuthRepository()
+            .verifyOTP(widget.mobile, otpNumber);
+        if (verifyResponse.success = true) {
+          verify = true;
+        } else {
+        }
 
-      if (verify == true) {
-        var loginResponse = await AuthRepository()
-            .getLoginResponse('aeimesh@gmail.com', '123456');
-        if (loginResponse.success = true) {
-          AuthHelper().setUserData(loginResponse);
-          print('AuthHelper1 : Bearer ${global.prefs.get('token')}');
+      if (verify == true && widget.type=='register') {
+        var registerResponse = await AuthRepository()
+            .getSignupResponse(widget.name, widget.mobile, widget.pass);
+        if (registerResponse.success = true) {
+          AuthHelper().setUserData(registerResponse);
           Navigator.pushReplacement(
               context, MaterialPageRoute(builder: (context) => Home()));
         }
+      } else if (verify == true && widget.type=='pass') {
+          Navigator.pushReplacement(
+              context, MaterialPageRoute(builder: (context) => ResetPassScreen()));
       }
     } on FirebaseAuthException catch (error) {
       if (error.code == 'invalid-verification-code') {
         setState(() {
           otpController.clear();
           otpNumber = '';
-          _error = 'Wrong OTP!!!';
         });
       }
     }
@@ -161,7 +172,7 @@ class _OtpState extends State<Otp> {
                               ),
                               const SizedBox(height: 10),
                               Text(
-                                '+91' + phnumber,
+                                '+91 ${widget.mobile}',
                                 style: TextStyle(
                                     fontSize: 6.sp,
                                     color: Colors.black,
@@ -172,7 +183,7 @@ class _OtpState extends State<Otp> {
                               Container(
                                 alignment: Alignment.center,
                                 child: OTPTextField(
-                                  length: 6,
+                                  length: 4,
                                   width: 80.w,
                                   style: TextStyle(fontSize: 8.sp),
                                   textFieldAlignment:
@@ -183,7 +194,7 @@ class _OtpState extends State<Otp> {
                                     setState(() {
                                       otpNumber = pin;
                                     });
-                                    if (pin.length == 6) {
+                                    if (pin.length == 4) {
                                       FocusManager.instance.primaryFocus
                                           ?.unfocus();
                                     }
@@ -199,73 +210,67 @@ class _OtpState extends State<Otp> {
                                 alignment: Alignment.center,
                                 child: Button(
                                   onTap: () async {
-                                    if (otpNumber.length == 6) {
+                                    if (otpNumber.length == 4) {
                                       timer.cancel();
                                       setState(() {
                                         _loading = true;
-                                        _error = '';
                                       });
                                       // firebase code send true
                                       try {
-                                        PhoneAuthCredential credential =
-                                            PhoneAuthProvider.credential(
-                                                verificationId: verId,
-                                                smsCode: otpNumber);
+                                        verifyOtp(otpNumber);
+                                        // PhoneAuthCredential credential =
+                                        //     PhoneAuthProvider.credential(
+                                        //         verificationId: verId,
+                                        //         smsCode: otpNumber);
 
-                                        // Sign the user in (or link) with the credential
-                                        await FirebaseAuth.instance
-                                            .signInWithCredential(credential);
+                                        // // Sign the user in (or link) with the credential
+                                        // await FirebaseAuth.instance
+                                        //     .signInWithCredential(credential);
 
-                                        var verify = true;
-                                        if (verify == true) {
-                                          var loginResponse =
-                                              await AuthRepository()
-                                                  .getLoginResponse(
-                                                      'aeimesh@gmail.com',
-                                                      '123456');
-                                          if (loginResponse.success = true) {
-                                            AuthHelper()
-                                                .setUserData(loginResponse);
-                                            print(
-                                                'AuthHelper3 : Bearer ${global.prefs.get('access_token')}');
-                                            Navigator.pushReplacement(
-                                                context,
-                                                MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        Home()));
-                                          }
-                                        }
+                                        // var verify = true;
+                                        // if (verify == true) {
+                                        //   var loginResponse =
+                                        //       await AuthRepository()
+                                        //           .getLoginResponse(
+                                        //               'aeimesh@gmail.com',
+                                        //               '123456');
+                                        //   if (loginResponse.success = true) {
+                                        //     AuthHelper()
+                                        //         .setUserData(loginResponse);
+                                        //     debugPrint(
+                                        //         'AuthHelper3 : Bearer ${global.prefs.get('access_token')}');
+                                        //     Navigator.pushReplacement(
+                                        //         context,
+                                        //         MaterialPageRoute(
+                                        //             builder: (context) =>
+                                        //                 Home()));
+                                        //   }
+                                        // }
                                       } on FirebaseAuthException catch (error) {
                                         if (error.code == 'Invalid OTP') {
                                           setState(() {
                                             otpController.clear();
                                             otpNumber = '';
-                                            _error = 'Wrong OTP';
                                             _loading = false;
                                           });
                                         }
                                       }
                                     } else if (resendTime == 0 &&
-                                        otpNumber.length != 6) {
+                                        otpNumber.length != 4) {
                                       setState(() {
                                         setState(() {
                                           resendTime = 60;
                                         });
                                         timers();
                                       });
-                                      phoneAuth('+91' + phnumber);
-                                    } else {
-                                      if (true) {
-                                        _loading = true;
-                                        verifyOtp();
-                                      }
+                                      phoneAuth('+91${widget.mobile}');
                                     }
                                   },
                                   borcolor:
-                                      (resendTime != 0 && otpNumber.length != 6)
+                                      (resendTime != 0 && otpNumber.length != 4)
                                           ? underline
                                           : null,
-                                  text: (otpNumber.length == 6)
+                                  text: (otpNumber.length == 4)
                                       ? 'Verify'
                                       : (resendTime == 0)
                                           ? 'Resend'
@@ -273,7 +278,7 @@ class _OtpState extends State<Otp> {
                                               ' ' +
                                               resendTime.toString(),
                                   color:
-                                      (resendTime != 0 && otpNumber.length != 6)
+                                      (resendTime != 0 && otpNumber.length != 4)
                                           ? underline
                                           : null,
                                 ),

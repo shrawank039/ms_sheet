@@ -6,6 +6,7 @@ import 'package:responsive_framework/responsive_wrapper.dart';
 import 'package:sizer/sizer.dart';
 import 'firebase_options.dart';
 import 'ui/screens/home/home.dart';
+import 'package:ms_sheet/global.dart' as global;
 
 GlobalKey globalKey = GlobalKey();
 
@@ -15,6 +16,8 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+
+  global.getApiHeaders(false);
 }
 
 class MsSheet extends StatefulWidget {

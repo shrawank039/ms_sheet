@@ -3,10 +3,13 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:iconly/iconly.dart';
 import 'package:ms_sheet/ui/screens/home/pages/settings/add_sheets.dart';
 import 'package:ms_sheet/ui/screens/login/login_screen.dart';
+import 'package:ms_sheet/ui/screens/login/profile_screen.dart';
+import 'package:ms_sheet/ui/screens/login/register_screen.dart';
+import 'package:ms_sheet/ui/screens/login/reset_pass_screen.dart';
 import 'package:ms_sheet/ui/styles/color.dart';
 import 'package:ms_sheet/ui/styles/design.dart';
 import 'package:sizer/sizer.dart';
-
+import 'package:ms_sheet/global.dart' as global;
 import '../../login/otp_page.dart';
 
 class Settings extends StatefulWidget {
@@ -19,154 +22,157 @@ class _SettingsState extends State<Settings> {
   Widget build(BuildContext context) {
     return Expanded(
       child: Column(
-        children: [
-          topBar(),
-          SizedBox(
-            height: 3.w,
-          ),
-          Expanded(
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Expanded(
-                  flex: 2,
-                  child: Column(
-                    children: [
-                      Container(
-                          margin: EdgeInsets.only(top: 1.w),
-                          padding:
-                              EdgeInsets.only(top: 2.w, bottom: 1.8.w, right: 1.w),
-                          decoration: DesignConfig.boxDecorationContainerCardShadow(
-                              ColorsRes.white,
-                              const Color.fromRGBO(44, 39, 46, 0.059),
-                              16.0,
-                              3,
-                              3,
-                              20,
-                              0),
-                          child: Column(
-                            children: [
-                              Padding(
-                                padding: EdgeInsets.only(left: 1.0.w, right: 1.w),
-                                child: Row(
-                                  children: [
-                                    IconButton(
-                                        onPressed: () {},
-                                        hoverColor: Colors.transparent,
-                                        icon: Icon(
-                                          Icons.arrow_back,
-                                          color: ColorsRes.darkGrey,
-                                          size: 2.8.w,
-                                        )),
-                                    Text(
-                                      'Settings',
-                                      style: TextStyle(
-                                          color: ColorsRes.darkGrey,
-                                          fontSize: 2.0.w),
-                                    ),
-                                    Expanded(
-                                        child: SizedBox(
-                                      width: 2.w,
-                                    )),
-                                    Card(
-                                      margin: EdgeInsets.only(left: 2.w),
-                                      color: ColorsRes.lightBlue,
-                                      elevation: 0,
-                                      shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(1.5.w)),
-                                      child: Padding(
-                                        padding: EdgeInsets.only(
-                                            top: 0.7.h, bottom: 0.7.h, left: 1.8.w),
-                                        child: Row(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.center,
-                                          children: [
-                                            SizedBox(
-                                              width: 0.1.w,
-                                            ),
-                                            Icon(
-                                              FontAwesomeIcons.wallet,
-                                              color: ColorsRes.mainBlue,
-                                              size: 2.5.w,
-                                            ),
-                                            SizedBox(
-                                              width: 1.0.h,
-                                            ),
-                                            Text(
-                                              "2300",
-                                              style: TextStyle(
-                                                color: ColorsRes.mainBlue,
-                                                fontSize: 2.w,
+          children: [
+            topBar(),
+            SizedBox(
+              height: 3.w,
+            ),
+            Expanded(
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Expanded(
+                    child: Column(
+                      children: [
+                        Container(
+                            padding: EdgeInsets.only(
+                                top: 2.w, bottom: 1.8.w, right: 1.w),
+                            decoration:
+                                DesignConfig.boxDecorationContainerCardShadow(
+                                    ColorsRes.white,
+                                    const Color.fromRGBO(44, 39, 46, 0.059),
+                                    16.0,
+                                    3,
+                                    3,
+                                    20,
+                                    0),
+                            child: Column(
+                              children: [
+                                Padding(
+                                  padding:
+                                      EdgeInsets.only(left: 1.0.w, right: 1.w),
+                                  child: Row(
+                                    children: [
+                                      IconButton(
+                                          onPressed: () {},
+                                          hoverColor: Colors.transparent,
+                                          icon: Icon(
+                                            Icons.arrow_back,
+                                            color: ColorsRes.darkGrey,
+                                            size: 2.8.w,
+                                          )),
+                                      Text(
+                                        'Settings',
+                                        style: TextStyle(
+                                            color: ColorsRes.darkGrey,
+                                            fontSize: 2.0.w),
+                                      ),
+                                    const Spacer(),
+                                      Card(
+                                        margin: EdgeInsets.only(left: 2.w),
+                                        color: ColorsRes.lightBlue,
+                                        elevation: 0,
+                                        shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(1.5.w)),
+                                        child: Padding(
+                                          padding: EdgeInsets.only(
+                                              top: 0.7.h,
+                                              bottom: 0.7.h,
+                                              left: 1.8.w),
+                                          child: Row(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.center,
+                                            children: [
+                                              SizedBox(
+                                                width: 0.1.w,
                                               ),
-                                            ),
-                                            SizedBox(
-                                              width: 2.5.w,
-                                            )
-                                          ],
+                                              Icon(
+                                                FontAwesomeIcons.wallet,
+                                                color: ColorsRes.mainBlue,
+                                                size: 2.5.w,
+                                              ),
+                                              SizedBox(
+                                                width: 1.0.h,
+                                              ),
+                                              Text(
+                                                "2300",
+                                                style: TextStyle(
+                                                  color: ColorsRes.mainBlue,
+                                                  fontSize: 2.w,
+                                                ),
+                                              ),
+                                              SizedBox(
+                                                width: 2.5.w,
+                                              )
+                                            ],
+                                          ),
                                         ),
                                       ),
-                                    ),
-                                  ],
+                                   
+                                    ],
+                                  ),
                                 ),
-                              ),
-                              SizedBox(
-                                height: 1.w,
-                              ),
-                              Padding(
-                                padding: EdgeInsets.symmetric(horizontal: 2.w),
-                                child: userDetails(),
-                              ),
-                            ],
-                          )),
-                      SizedBox(
-                        height: 3.w,
-                      ),
-                      settingButtons(Icons.create_new_folder, 'Add Sheet',
-                          'Create and edit sheets'),
-                      SizedBox(
-                        height: 1.5.w,
-                      ),
-                      InkWell(
-                        onTap: () {
-                          Navigator.push(context,
-                              MaterialPageRoute(builder: (context) => LoginScreen()));
-                        },
-                        child: settingButtons(Icons.login, 'Login Details',
-                            'Change you login details or logout'),
-                      ),
-                      SizedBox(
-                        height: 1.5.w,
-                      ),
-                      InkWell(
-                        onTap: () {
-                          Navigator.push(context,
-                              MaterialPageRoute(builder: (context) => const Otp()));
-                        },
-                        child: settingButtons(Icons.password, 'Change Password',
-                            'Change you password'),
-                      ),
-                      SizedBox(
-                        height: 1.5.w,
-                      ),
-                      settingButtons(Icons.mobile_friendly, 'Recharge',
-                          'Create and Recharge your wallet'),
-                      SizedBox(
-                        height: 1.5.w,
-                      ),
-                      settingButtons(
-                          Icons.mobile_friendly, 'About Us', 'Check About Us'),
-                    ],
+                                SizedBox(
+                                  height: 1.w,
+                                ),
+                                Padding(
+                                  padding: EdgeInsets.symmetric(horizontal: 2.w),
+                                  child: userDetails(),
+                                ),
+                              ],
+                            )),
+                        SizedBox(
+                          height: 3.w,
+                        ),
+                        settingButtons(Icons.create_new_folder, 'Add Sheet',
+                            'Create and edit sheets'),
+                        SizedBox(
+                          height: 1.5.w,
+                        ),
+                        InkWell(
+                          onTap: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => ProfileScreen()));
+                          },
+                          child: settingButtons(Icons.login, 'Login Details',
+                              'Change you login details or logout'),
+                        ),
+                        SizedBox(
+                          height: 1.5.w,
+                        ),
+                        InkWell(
+                          onTap: () {
+                           Navigator.push(
+                            context, MaterialPageRoute(builder: (context) => Otp('', '${global.prefs.get('mobile_number')}', '', 'pass')));
+                    
+                          },
+                          child: settingButtons(Icons.password, 'Change Password',
+                              'Change you password'),
+                        ),
+                        SizedBox(
+                          height: 1.5.w,
+                        ),
+                        settingButtons(Icons.mobile_friendly, 'Recharge',
+                            'Create and Recharge your wallet'),
+                        SizedBox(
+                          height: 1.5.w,
+                        ),
+                        settingButtons(
+                            Icons.mobile_friendly, 'About Us', 'Check About Us'),
+                      ],
+                    ),
                   ),
-                ),
-                SizedBox(
-                  width: 3.w,
-                ),
-                const AddSheets(),
-              ],
-            ),
-          )
-        ],
+                  SizedBox(
+                    width: 3.w,
+                  ),
+                  const AddSheets(),
+                ],
+              ),
+            )
+          ],
       ),
     );
   }
@@ -259,7 +265,7 @@ Widget userDetails() {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Jay T',
+              '${global.prefs.get('name')}',
               textAlign: TextAlign.left,
               style: TextStyle(
                   fontSize: 2.w,
@@ -267,7 +273,7 @@ Widget userDetails() {
                   color: const Color.fromARGB(255, 0, 0, 0)),
             ),
             Text(
-              '+91 1234567890',
+              '${global.prefs.get('mobile_number')}',
               textAlign: TextAlign.left,
               style: TextStyle(
                 fontSize: 1.5.w,
