@@ -67,7 +67,8 @@ class _PCHomeState extends State<PCHome> {
                 SizedBox(
                   height: 0.8.h,
                 ),
-                userDetails(currentPage),
+                global.prefs !=null ?
+                userDetails(currentPage):Container(),
                 SizedBox(
                   height: 1.h,
                 ),
