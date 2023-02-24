@@ -13,10 +13,18 @@ import 'package:ms_sheet/ui/screens/panels/master_panel.dart';
 import 'package:ms_sheet/ui/styles/color.dart';
 import 'package:ms_sheet/widgets/cp_popup.dart';
 import 'package:ms_sheet/widgets/laddi_popup.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:screenshot/screenshot.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:sizer/sizer.dart';
 import '../../../models/agents_response_entity.dart';
 import '../../../widgets/delete_confirmation_popup.dart';
 import '../../styles/design.dart';
+import 'dart:io';
+import 'dart:typed_data';
+import 'package:pdf/pdf.dart';
+import 'package:pdf/widgets.dart' as pw;
 
 bool updatePanel = false;
 bool updatePanelStatus = false;
@@ -42,6 +50,7 @@ class _MainPanelState extends ConsumerState<MainPanel> {
   final TextEditingController textEditingController = TextEditingController();
   final TextEditingController entryBoxController = TextEditingController();
   final TextEditingController entryAmtController = TextEditingController();
+  ScreenshotController screenshotController = ScreenshotController();
   late FToast fToast;
 
   @override
@@ -283,6 +292,34 @@ class _MainPanelState extends ConsumerState<MainPanel> {
     //return KeyEventResult.handled;
   }
 
+  shareImage() async {
+    final uint8List = await screenshotController.capture();
+    String tempPath = (await getTemporaryDirectory()).path;
+    String fileName ="myFile";
+    if (await Permission.storage.request().isGranted) {
+      File file = await File('$tempPath/$fileName.png').create();
+      file.writeAsBytesSync(uint8List!);
+      //getPdf(uint8List);
+      await Share.shareFiles([file.path]);
+    }
+  }
+
+  // Future getPdf(Uint8List screenShot) async {
+  //   pw.Document pdf = pw.Document();
+  //   pdf.addPage(
+  //     pw.Page(
+  //       pageFormat: PdfPageFormat.a4,
+  //       build: (pw.Context context) {
+  //         return pw.Expanded(
+  //             child: pw.Image(PdfImage.file(pdf.document, bytes: screenShot),
+  //                 fit: pw.BoxFit.contain));
+  //       },
+  //     ),
+  //   );
+  //   File pdfFile = File('Your path + File name');
+  //   pdfFile.writeAsBytesSync(pdf.save());
+  // }
+
   @override
   Widget build(BuildContext context) {
     final ExtraDataParameter extraDataParameter =
@@ -358,204 +395,207 @@ class _MainPanelState extends ConsumerState<MainPanel> {
                         ],
                       ),
                       Expanded(
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Expanded(
-                              flex: 4,
-                              child: Column(
-                                children: [
-                                  Row(
-                                    children: [
-                                      Expanded(
-                                        child: AlignedGridView.count(
-                                          physics:
-                                              const NeverScrollableScrollPhysics(),
-                                          shrinkWrap: true,
-                                          crossAxisCount: 10,
-                                          itemCount: 100,
-                                          mainAxisSpacing: 0,
-                                          crossAxisSpacing: 0,
-                                          itemBuilder: (context, index) {
-                                            return numberBox(index);
-                                          },
+                        child: Screenshot(
+                          controller: screenshotController,
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Expanded(
+                                flex: 4,
+                                child: Column(
+                                  children: [
+                                    Row(
+                                      children: [
+                                        Expanded(
+                                          child: AlignedGridView.count(
+                                            physics:
+                                                const NeverScrollableScrollPhysics(),
+                                            shrinkWrap: true,
+                                            crossAxisCount: 10,
+                                            itemCount: 100,
+                                            mainAxisSpacing: 0,
+                                            crossAxisSpacing: 0,
+                                            itemBuilder: (context, index) {
+                                              return numberBox(index);
+                                            },
+                                          ),
                                         ),
-                                      ),
-                                      Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          Padding(
-                                            padding: EdgeInsets.all(1.w),
-                                            child: SizedBox(
-                                              width: 8.w,
-                                              child: AlignedGridView.count(
-                                                physics:
-                                                    const NeverScrollableScrollPhysics(),
-                                                scrollDirection: Axis.vertical,
-                                                shrinkWrap: true,
-                                                crossAxisCount: 1,
-                                                itemCount: 10,
-                                                mainAxisSpacing: 0,
-                                                crossAxisSpacing: 0,
-                                                itemBuilder: (context, index) {
-                                                  int total = 0;
-                                                  for (int i = index * 10;
-                                                      i < index * 10 + 10;
-                                                      i++) {
-                                                    total = total +
-                                                        global
-                                                            .numberPair[i + 1]!;
-                                                  }
-                                                  return Container(
-                                                    alignment:
-                                                        Alignment.centerLeft,
-                                                    height: 5.5.w,
-                                                    child: Text(
-                                                      "$total",
-                                                      style: TextStyle(
-                                                          fontSize: 2.2.w),
-                                                    ),
-                                                  );
-                                                },
+                                        Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            Padding(
+                                              padding: EdgeInsets.all(1.w),
+                                              child: SizedBox(
+                                                width: 8.w,
+                                                child: AlignedGridView.count(
+                                                  physics:
+                                                      const NeverScrollableScrollPhysics(),
+                                                  scrollDirection: Axis.vertical,
+                                                  shrinkWrap: true,
+                                                  crossAxisCount: 1,
+                                                  itemCount: 10,
+                                                  mainAxisSpacing: 0,
+                                                  crossAxisSpacing: 0,
+                                                  itemBuilder: (context, index) {
+                                                    int total = 0;
+                                                    for (int i = index * 10;
+                                                        i < index * 10 + 10;
+                                                        i++) {
+                                                      total = total +
+                                                          global
+                                                              .numberPair[i + 1]!;
+                                                    }
+                                                    return Container(
+                                                      alignment:
+                                                          Alignment.centerLeft,
+                                                      height: 5.5.w,
+                                                      child: Text(
+                                                        "$total",
+                                                        style: TextStyle(
+                                                            fontSize: 2.2.w),
+                                                      ),
+                                                    );
+                                                  },
+                                                ),
                                               ),
                                             ),
-                                          ),
-                                        ],
-                                      ),
-                                    ],
-                                  ),
-                                  Row(
-                                    children: [
-                                      Expanded(
-                                        child: AlignedGridView.count(
-                                          shrinkWrap: true,
-                                          crossAxisCount: 10,
-                                          itemCount: 20,
-                                          mainAxisSpacing: 0,
-                                          crossAxisSpacing: 0,
-                                          itemBuilder: (context, index) {
-                                            return numberBox(index + 100);
-                                          },
+                                          ],
                                         ),
-                                      ),
-                                      Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          Padding(
-                                            padding: EdgeInsets.all(1.w),
-                                            child: SizedBox(
-                                              width: 8.w,
-                                              child: AlignedGridView.count(
-                                                physics:
-                                                    const NeverScrollableScrollPhysics(),
-                                                scrollDirection: Axis.vertical,
-                                                shrinkWrap: true,
-                                                crossAxisCount: 1,
-                                                itemCount: 2,
-                                                mainAxisSpacing: 0,
-                                                crossAxisSpacing: 0,
-                                                itemBuilder: (context, index) {
-                                                  int total = 0;
-                                                  for (int i = index * 10;
-                                                      i < index * 10 + 10;
-                                                      i++) {
-                                                    total = total +
-                                                        global.numberPair[
-                                                            i + 101]!;
-                                                  }
-                                                  return Container(
-                                                    alignment:
-                                                        Alignment.centerLeft,
-                                                    height: 5.5.w,
-                                                    child: Text(
-                                                      "$total",
-                                                      style: TextStyle(
-                                                          fontSize: 2.2.w),
-                                                    ),
-                                                  );
-                                                },
+                                      ],
+                                    ),
+                                    Row(
+                                      children: [
+                                        Expanded(
+                                          child: AlignedGridView.count(
+                                            shrinkWrap: true,
+                                            crossAxisCount: 10,
+                                            itemCount: 20,
+                                            mainAxisSpacing: 0,
+                                            crossAxisSpacing: 0,
+                                            itemBuilder: (context, index) {
+                                              return numberBox(index + 100);
+                                            },
+                                          ),
+                                        ),
+                                        Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            Padding(
+                                              padding: EdgeInsets.all(1.w),
+                                              child: SizedBox(
+                                                width: 8.w,
+                                                child: AlignedGridView.count(
+                                                  physics:
+                                                      const NeverScrollableScrollPhysics(),
+                                                  scrollDirection: Axis.vertical,
+                                                  shrinkWrap: true,
+                                                  crossAxisCount: 1,
+                                                  itemCount: 2,
+                                                  mainAxisSpacing: 0,
+                                                  crossAxisSpacing: 0,
+                                                  itemBuilder: (context, index) {
+                                                    int total = 0;
+                                                    for (int i = index * 10;
+                                                        i < index * 10 + 10;
+                                                        i++) {
+                                                      total = total +
+                                                          global.numberPair[
+                                                              i + 101]!;
+                                                    }
+                                                    return Container(
+                                                      alignment:
+                                                          Alignment.centerLeft,
+                                                      height: 5.5.w,
+                                                      child: Text(
+                                                        "$total",
+                                                        style: TextStyle(
+                                                            fontSize: 2.2.w),
+                                                      ),
+                                                    );
+                                                  },
+                                                ),
                                               ),
                                             ),
-                                          ),
-                                        ],
-                                      ),
-                                    ],
-                                  ),
-                                  Row(
-                                    children: [
-                                      Expanded(
-                                        child: Container(
-                                          width: 2.w,
+                                          ],
                                         ),
-                                      ),
-                                      Text(
-                                        "Total: ",
-                                        style: TextStyle(
-                                            fontSize: 2.2.w,
-                                            color: ColorsRes.darkGrey,
-                                            fontWeight: FontWeight.w400),
-                                      ),
-                                      Container(
-                                        width: 9.w,
-                                        alignment: Alignment.centerLeft,
-                                        height: 5.5.w,
-                                        child: Text(
-                                          "$total",
+                                      ],
+                                    ),
+                                    Row(
+                                      children: [
+                                        Expanded(
+                                          child: Container(
+                                            width: 2.w,
+                                          ),
+                                        ),
+                                        Text(
+                                          "Total: ",
                                           style: TextStyle(
                                               fontSize: 2.2.w,
-                                              color: ColorsRes.mainBlue,
-                                              fontWeight: FontWeight.w600),
+                                              color: ColorsRes.darkGrey,
+                                              fontWeight: FontWeight.w400),
                                         ),
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                            ),
-                            Expanded(
-                              child: Column(
-                                children: <Widget>[
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      const Expanded(
+                                        Container(
+                                          width: 9.w,
+                                          alignment: Alignment.centerLeft,
+                                          height: 5.5.w,
                                           child: Text(
-                                        "Pair",
-                                        textAlign: TextAlign.center,
-                                        style: TextStyle(
-                                            color: ColorsRes.grayColor),
-                                      )),
-                                      const Expanded(
-                                          child: Text(
-                                        "Amount",
-                                        textAlign: TextAlign.center,
-                                        style: TextStyle(
-                                            color: ColorsRes.grayColor),
-                                      )),
-                                      SizedBox(
-                                        width: 4.w,
-                                      )
-                                    ],
-                                  ),
-                                  SizedBox(
-                                    height: 2.w,
-                                  ),
-                                  Expanded(
-                                    child: ListView.builder(
-                                      shrinkWrap: true,
-                                      itemCount: global.pairKey.length,
-                                      itemBuilder: (context, index) {
-                                        return pairList(index);
-                                      },
+                                            "$total",
+                                            style: TextStyle(
+                                                fontSize: 2.2.w,
+                                                color: ColorsRes.mainBlue,
+                                                fontWeight: FontWeight.w600),
+                                          ),
+                                        ),
+                                      ],
                                     ),
-                                  ),
-                                ],
+                                  ],
+                                ),
                               ),
-                            ),
-                          ],
+                              Expanded(
+                                child: Column(
+                                  children: <Widget>[
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                        const Expanded(
+                                            child: Text(
+                                          "Pair",
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                              color: ColorsRes.grayColor),
+                                        )),
+                                        const Expanded(
+                                            child: Text(
+                                          "Amount",
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                              color: ColorsRes.grayColor),
+                                        )),
+                                        SizedBox(
+                                          width: 4.w,
+                                        )
+                                      ],
+                                    ),
+                                    SizedBox(
+                                      height: 2.w,
+                                    ),
+                                    Expanded(
+                                      child: ListView.builder(
+                                        shrinkWrap: true,
+                                        itemCount: global.pairKey.length,
+                                        itemBuilder: (context, index) {
+                                          return pairList(index);
+                                        },
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                       Row(
@@ -615,7 +655,9 @@ class _MainPanelState extends ConsumerState<MainPanel> {
                                                   widget.sheet_id,
                                                   selectedAgents!.id!,
                                                   widget.date,
-                                                  global.numberPair.toString().trim(),
+                                                  global.numberPair
+                                                      .toString()
+                                                      .trim(),
                                                   global.pairKey,
                                                   global.pairValue,
                                                   total);
@@ -637,7 +679,8 @@ class _MainPanelState extends ConsumerState<MainPanel> {
                                                       selectedAgents!.id!,
                                                       widget.date,
                                                       global.numberPair
-                                                          .toString().trim(),
+                                                          .toString()
+                                                          .trim(),
                                                       global.pairKey,
                                                       global.pairValue,
                                                       total);
@@ -1008,15 +1051,18 @@ class _MainPanelState extends ConsumerState<MainPanel> {
                             ),
                             child: Row(
                               children: [
-                                DesignConfig.flatButtonWithIcon(
-                                  ColorsRes.lightBlue,
-                                  1.6.w,
-                                  FontAwesomeIcons.print,
-                                  ColorsRes.mainBlue,
-                                  2.6.w,
-                                  'Print',
-                                  2.w,
-                                  ColorsRes.mainBlue,
+                                GestureDetector(
+                                  onTap: (){ shareImage();},
+                                  child: DesignConfig.flatButtonWithIcon(
+                                    ColorsRes.lightBlue,
+                                    1.6.w,
+                                    FontAwesomeIcons.print,
+                                    ColorsRes.mainBlue,
+                                    2.6.w,
+                                    'Print',
+                                    2.w,
+                                    ColorsRes.mainBlue,
+                                  ),
                                 ),
                                 GestureDetector(
                                   onTap: () {
@@ -1237,7 +1283,7 @@ Widget clientsList(PanelResponseData data,
     total = total + result[i + 1]!;
     if (maxPair < result[i + 1]!) {
       maxPair = result[i + 1]!;
-      highestPair = '${i+1}/${maxPair}';
+      highestPair = '${i + 1}/${maxPair}';
     }
   }
 
