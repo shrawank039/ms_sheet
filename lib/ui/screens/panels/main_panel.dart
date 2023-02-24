@@ -295,13 +295,23 @@ class _MainPanelState extends ConsumerState<MainPanel> {
   shareImage() async {
     final uint8List = await screenshotController.capture();
     String tempPath = (await getTemporaryDirectory()).path;
-    String fileName ="myFile";
-    if (await Permission.storage.request().isGranted) {
-      File file = await File('$tempPath/$fileName.png').create();
-      file.writeAsBytesSync(uint8List!);
-      //getPdf(uint8List);
-      await Share.shareFiles([file.path]);
-    }
+    String fileName ='${DateTime.now().microsecondsSinceEpoch}';
+    // if (await Permission.storage.request().isGranted) {
+    //   File file = await File('$tempPath/$fileName.png').create();
+    //   file.writeAsBytesSync(uint8List!);
+    //   //getPdf(uint8List);
+    //   await Share.shareFiles([file.path]);
+    // }
+final directory = (await getApplicationDocumentsDirectory()).path; //from path_provide package
+var path = directory;
+
+screenshotController.captureAndSave(
+    path, //set path where screenshot will be saved
+    fileName:fileName
+);
+
+await Share.shareFiles([path]);
+
   }
 
   // Future getPdf(Uint8List screenShot) async {
