@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:http/http.dart';
 import 'package:ms_sheet/global.dart' as global;
 import 'package:ms_sheet/models/panel_response_entity.dart';
 import 'package:ms_sheet/providers/data_providers.dart';
@@ -295,40 +296,48 @@ class _MainPanelState extends ConsumerState<MainPanel> {
   shareImage() async {
     final uint8List = await screenshotController.capture();
     String tempPath = (await getTemporaryDirectory()).path;
-    String fileName ='${DateTime.now().microsecondsSinceEpoch}';
+    String fileName = '${DateTime.now().microsecondsSinceEpoch}';
     // if (await Permission.storage.request().isGranted) {
     //   File file = await File('$tempPath/$fileName.png').create();
     //   file.writeAsBytesSync(uint8List!);
     //   //getPdf(uint8List);
     //   await Share.shareFiles([file.path]);
     // }
-final directory = (await getApplicationDocumentsDirectory()).path; //from path_provide package
-var path = directory;
+    final directory = (await getApplicationDocumentsDirectory())
+        .path; //from path_provide package
+    var path = directory;
 
-screenshotController.captureAndSave(
-    path, //set path where screenshot will be saved
-    fileName:fileName
-);
+    screenshotController.captureAndSave(
+        path, //set path where screenshot will be saved
+        fileName: fileName);
 
-await Share.shareFiles([path]);
-
+    await Share.shareFiles([path]);
+    getPdf(uint8List!, path);
   }
 
-  // Future getPdf(Uint8List screenShot) async {
-  //   pw.Document pdf = pw.Document();
-  //   pdf.addPage(
-  //     pw.Page(
-  //       pageFormat: PdfPageFormat.a4,
-  //       build: (pw.Context context) {
-  //         return pw.Expanded(
-  //             child: pw.Image(PdfImage.file(pdf.document, bytes: screenShot),
-  //                 fit: pw.BoxFit.contain));
-  //       },
-  //     ),
-  //   );
-  //   File pdfFile = File('Your path + File name');
-  //   pdfFile.writeAsBytesSync(pdf.save());
-  // }
+  Future getPdf(Uint8List screenShot, var path) async {
+    String fileName = '${DateTime.now().microsecondsSinceEpoch}';
+    final directory = (await getApplicationDocumentsDirectory())
+        .path; //from path_provide package
+
+final image = pw.MemoryImage(
+  File(path).readAsBytesSync(),
+);
+
+    pw.Document pdf = pw.Document();
+    pdf.addPage(
+      pw.Page(
+        pageFormat: PdfPageFormat.a4,
+        build: (pw.Context context) {
+          return pw.Expanded(
+              child: pw.Image(image),
+                  );
+        },
+      ),
+    );
+    File pdfFile = File('$directory$fileName.pdf');
+    await pdfFile.writeAsBytes(await pdf.save());
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -442,20 +451,22 @@ await Share.shareFiles([path]);
                                                 child: AlignedGridView.count(
                                                   physics:
                                                       const NeverScrollableScrollPhysics(),
-                                                  scrollDirection: Axis.vertical,
+                                                  scrollDirection:
+                                                      Axis.vertical,
                                                   shrinkWrap: true,
                                                   crossAxisCount: 1,
                                                   itemCount: 10,
                                                   mainAxisSpacing: 0,
                                                   crossAxisSpacing: 0,
-                                                  itemBuilder: (context, index) {
+                                                  itemBuilder:
+                                                      (context, index) {
                                                     int total = 0;
                                                     for (int i = index * 10;
                                                         i < index * 10 + 10;
                                                         i++) {
                                                       total = total +
-                                                          global
-                                                              .numberPair[i + 1]!;
+                                                          global.numberPair[
+                                                              i + 1]!;
                                                     }
                                                     return Container(
                                                       alignment:
@@ -500,13 +511,15 @@ await Share.shareFiles([path]);
                                                 child: AlignedGridView.count(
                                                   physics:
                                                       const NeverScrollableScrollPhysics(),
-                                                  scrollDirection: Axis.vertical,
+                                                  scrollDirection:
+                                                      Axis.vertical,
                                                   shrinkWrap: true,
                                                   crossAxisCount: 1,
                                                   itemCount: 2,
                                                   mainAxisSpacing: 0,
                                                   crossAxisSpacing: 0,
-                                                  itemBuilder: (context, index) {
+                                                  itemBuilder:
+                                                      (context, index) {
                                                     int total = 0;
                                                     for (int i = index * 10;
                                                         i < index * 10 + 10;
@@ -568,7 +581,8 @@ await Share.shareFiles([path]);
                                 child: Column(
                                   children: <Widget>[
                                     Row(
-                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
                                       children: [
                                         const Expanded(
                                             child: Text(
@@ -1062,7 +1076,9 @@ await Share.shareFiles([path]);
                             child: Row(
                               children: [
                                 GestureDetector(
-                                  onTap: (){ shareImage();},
+                                  onTap: () {
+                                    shareImage();
+                                  },
                                   child: DesignConfig.flatButtonWithIcon(
                                     ColorsRes.lightBlue,
                                     1.6.w,
