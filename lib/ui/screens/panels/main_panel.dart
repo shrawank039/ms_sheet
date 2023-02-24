@@ -309,10 +309,10 @@ class _MainPanelState extends ConsumerState<MainPanel> {
 
     screenshotController.captureAndSave(
         path, //set path where screenshot will be saved
-        fileName: fileName);
+        fileName: '$fileName.jpg');
 
     await Share.shareFiles([path]);
-    getPdf(uint8List!, path);
+    //getPdf(uint8List!, path);
   }
 
   Future getPdf(Uint8List screenShot, var path) async {
@@ -335,7 +335,7 @@ final image = pw.MemoryImage(
         },
       ),
     );
-    File pdfFile = File('$directory$fileName.pdf');
+    File pdfFile = File('$directory/$fileName.pdf');
     await pdfFile.writeAsBytes(await pdf.save());
   }
 
