@@ -11,8 +11,7 @@ import '../models/password_confirm_response.dart';
 import '../models/signup_response.dart';
 
 class AuthRepository {
-  Future<LoginResponse> getLoginResponse(
-      String email, String password) async {
+  Future<LoginResponse> getLoginResponse(String email, String password) async {
     var postBody = jsonEncode({
       "mobile_number": email,
       "password": password,
@@ -27,32 +26,14 @@ class AuthRepository {
     return loginResponseFromJson(response.body);
   }
 
-  Future<LoginResponse> getSocialLoginResponse(String socialProvider,
-      String name, String email, String provider) async {
-
-    var postBody = jsonEncode({
-      "name": name,
-      "email": email,
-      "provider": provider,
-      "social_provider": socialProvider
-    });
-
-    Uri url = Uri.parse("${AppConfig.BASE_URL}/auth/social-login");
-    final response = await http.post(url,
-        headers: await global.getApiHeaders(true), body: postBody);
-    debugPrint(postBody);
-    debugPrint(response.body.toString());
-    return loginResponseFromJson(response.body);
-  }
-
   Future<SignupResponse> getSignupResponse(
       String name,
-    //  String email,
+      //  String email,
       String password,
       String mobileNumber) async {
     var postBody = jsonEncode({
       "name": name,
-     // "email": email,
+      // "email": email,
       "mobile_number": mobileNumber,
       "password": password
     });
@@ -65,14 +46,9 @@ class AuthRepository {
   }
 
   Future<SignupResponse> updateProfileResponse(
-      String name,
-      String email,
-      String mobileNumber) async {
-    var postBody = jsonEncode({
-      "name": name,
-      "email": email,
-      "mobile_number": mobileNumber
-    });
+      String name, String email, String mobileNumber) async {
+    var postBody = jsonEncode(
+        {"name": name, "email": email, "mobile_number": mobileNumber});
 
     Uri url = Uri.parse("${AppConfig.BASE_URL}/profile");
     final response = await http.post(url,
@@ -82,7 +58,6 @@ class AuthRepository {
   }
 
   Future<ProfileResponse> getProfileResponse() async {
-
     Uri url = Uri.parse("${AppConfig.BASE_URL}/profile");
     final response =
         await http.get(url, headers: await global.getApiHeaders(true));
@@ -90,45 +65,38 @@ class AuthRepository {
     return profileResponseFromJson(response.body);
   }
 
-  Future<PasswordResponse> changePassword(
-      String password) async {
-    var postBody = jsonEncode(
-        {"password": password});
+  Future<PasswordResponse> changePassword(String password) async {
+    var postBody = jsonEncode({"password": password});
 
     Uri url = Uri.parse(
       "${AppConfig.BASE_URL}/password/change",
     );
     final response = await http.post(url,
         headers: await global.getApiHeaders(true), body: postBody);
-debugPrint('changePassword : ${response.body}');
+    debugPrint('changePassword : ${response.body}');
     return passwordResponseFromJson(response.body);
   }
 
-  Future<PasswordResponse> getOTP(
-      String mobile_number) async {
-    var postBody = jsonEncode(
-        {"mobile_number": mobile_number});
+  Future<PasswordResponse> getOTP(String mobile_number) async {
+    var postBody = jsonEncode({"mobile_number": mobile_number});
     Uri url = Uri.parse(
       "${AppConfig.BASE_URL}/otp/send",
     );
     final response = await http.post(url,
         headers: await global.getApiHeaders(true), body: postBody);
-debugPrint('getOTP : ${response.body}');
+    debugPrint('getOTP : ${response.body}');
     return passwordResponseFromJson(response.body);
   }
 
-  Future<PasswordResponse> verifyOTP(
-      String mobile_number, String otp) async {
-    var postBody = jsonEncode(
-        {"mobile_number": mobile_number, "otp":otp});
+  Future<PasswordResponse> verifyOTP(String mobile_number, String otp) async {
+    var postBody = jsonEncode({"mobile_number": mobile_number, "otp": otp});
 
     Uri url = Uri.parse(
       "${AppConfig.BASE_URL}/otp/verify",
     );
     final response = await http.post(url,
         headers: await global.getApiHeaders(true), body: postBody);
-debugPrint('verifyOTP : ${response.body}');
+    debugPrint('verifyOTP : ${response.body}');
     return passwordResponseFromJson(response.body);
   }
-
 }

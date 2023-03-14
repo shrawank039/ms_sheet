@@ -4,7 +4,7 @@ class AuthHelper {
   setUserData(loginResponse) async {
     if (loginResponse.success == true) {
       await global.prefs.setString('token', loginResponse.user.token);
-      await global.prefs.setString('id', loginResponse.user.id);
+      await global.prefs.setInt('id', loginResponse.user.id);
       await global.prefs.setString('name', loginResponse.user.name);
       await global.prefs.setString('email', loginResponse.user.email);
       await global.prefs

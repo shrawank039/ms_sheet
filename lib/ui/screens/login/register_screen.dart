@@ -13,7 +13,6 @@ class RegisterScreen extends StatefulWidget {
 }
 
 class _RegisterScreenState extends State<RegisterScreen> {
-
   late TextEditingController _controllerName;
   late TextEditingController _controllerMobile;
   late TextEditingController _controllerPass;
@@ -32,11 +31,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
       body: Center(
         child: Container(
           margin: const EdgeInsets.all(50),
-          width: 100.w<640 ? 80.w: 500.0,
-         // padding: EdgeInsets.symmetric(horizontal: 50.w, vertical: 50),
+          width: 100.w < 640 ? 80.w : 500.0,
+          // padding: EdgeInsets.symmetric(horizontal: 50.w, vertical: 50),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Padding(
                 padding: EdgeInsets.all(1.w),
@@ -84,7 +83,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   5.w,
                   TextInputType.text,
                   _controllerName),
-                  DesignConfig.inputBoxDecorated(
+              DesignConfig.inputBoxDecorated(
                   ColorsRes.lightBlue,
                   1.5.w,
                   17,
@@ -104,28 +103,36 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   _controllerPass),
               const SizedBox(height: 50),
               Card(
-                  margin: EdgeInsets.only(left: 1.w, right: 1.w, top: 2.w),
-                  color: ColorsRes.mainBlue,
-                  elevation: 0,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(2.5.w)),
-                  child: InkWell(
-                    onTap: () async {
-                      Navigator.push(
-                            context, MaterialPageRoute(builder: (context) => Otp(_controllerName.text, _controllerMobile.text, _controllerPass.text, 'register')));
-                    },
-                    child: Container(
-                      height: 50.0,
-                      alignment: Alignment.center,
-                      child: const Text(
-                        'Register',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(color: ColorsRes.white, fontSize: 17),
-                      ),
+                margin: EdgeInsets.only(left: 1.w, right: 1.w, top: 2.w),
+                color: ColorsRes.mainBlue,
+                elevation: 0,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(2.5.w)),
+                child: InkWell(
+                  onTap: () async {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => Otp(
+                                _controllerName.text,
+                                _controllerMobile.text,
+                                _controllerPass.text,
+                                'register')));
+                  },
+                  child: Container(
+                    height: 50.0,
+                    alignment: Alignment.center,
+                    child: const Text(
+                      'Register',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(color: ColorsRes.white, fontSize: 17),
                     ),
                   ),
                 ),
-              const SizedBox(height: 16,),
+              ),
+              const SizedBox(
+                height: 16,
+              ),
             ],
           ),
         ),

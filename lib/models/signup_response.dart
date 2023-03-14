@@ -13,13 +13,13 @@ class SignupResponse {
   SignupResponse({this.success, this.data, this.message});
 
   SignupResponse.fromJson(Map<String, dynamic> json) {
-    if(json["success"] is bool) {
+    if (json["success"] is bool) {
       success = json["success"];
     }
-    if(json["data"] is Map) {
+    if (json["data"] is Map) {
       data = json["data"] == null ? null : Data.fromJson(json["data"]);
     }
-    if(json["message"] is String) {
+    if (json["message"] is String) {
       message = json["message"];
     }
   }
@@ -27,7 +27,7 @@ class SignupResponse {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> _data = <String, dynamic>{};
     _data["success"] = success;
-    if(data != null) {
+    if (data != null) {
       _data["data"] = data?.toJson();
     }
     _data["message"] = message;
@@ -44,16 +44,16 @@ class Data {
   Data({this.id, this.name, this.email, this.mobileNumber});
 
   Data.fromJson(Map<String, dynamic> json) {
-    if(json["id"] is int) {
+    if (json["id"] is int) {
       id = json["id"];
     }
-    if(json["name"] is String) {
+    if (json["name"] is String) {
       name = json["name"];
     }
-    if(json["email"] is String) {
+    if (json["email"] is String) {
       email = json["email"];
     }
-    if(json["mobile_number"] is String) {
+    if (json["mobile_number"] is String) {
       mobileNumber = json["mobile_number"];
     }
   }

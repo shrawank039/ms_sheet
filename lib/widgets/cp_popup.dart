@@ -187,6 +187,7 @@ class _CPPopupState extends ConsumerState<CPPopup> {
     );
   }
 }
+
 extension Numeric on String {
   bool get isNumeric => num.tryParse(this) != null ? true : false;
 }

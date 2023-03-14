@@ -67,7 +67,8 @@ class DefaultFirebaseOptions {
     messagingSenderId: '764263533315',
     projectId: 'ms-excel-sheet',
     storageBucket: 'ms-excel-sheet.appspot.com',
-    iosClientId: '764263533315-euiq0tps1ohkmhpa1vsf4h3kk0qqro5u.apps.googleusercontent.com',
+    iosClientId:
+        '764263533315-euiq0tps1ohkmhpa1vsf4h3kk0qqro5u.apps.googleusercontent.com',
     iosBundleId: 'com.example.msSheet',
   );
 
@@ -77,7 +78,8 @@ class DefaultFirebaseOptions {
     messagingSenderId: '764263533315',
     projectId: 'ms-excel-sheet',
     storageBucket: 'ms-excel-sheet.appspot.com',
-    iosClientId: '764263533315-euiq0tps1ohkmhpa1vsf4h3kk0qqro5u.apps.googleusercontent.com',
+    iosClientId:
+        '764263533315-euiq0tps1ohkmhpa1vsf4h3kk0qqro5u.apps.googleusercontent.com',
     iosBundleId: 'com.example.msSheet',
   );
 }

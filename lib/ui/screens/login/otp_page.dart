@@ -52,12 +52,9 @@ class _OtpState extends State<Otp> {
   }
 
   getOtp() async {
-     var verifyResponse = await AuthRepository()
-            .getOTP(widget.mobile);
-        if (verifyResponse.success = true) {
-         
-        } else {
-        }
+    var verifyResponse = await AuthRepository().getOTP(widget.mobile);
+    if (verifyResponse.success = true) {
+    } else {}
   }
 
 //otp is false
@@ -73,14 +70,12 @@ class _OtpState extends State<Otp> {
       var verify = false;
       credentials = null;
       // await FirebaseAuth.instance.signInWithCredential(credentials);
-        var verifyResponse = await AuthRepository()
-            .verifyOTP(widget.mobile, otpNumber);
-        if (verifyResponse.success = true) {
-          verify = true;
-        } else {
-        }
-
-      if (verify == true && widget.type=='register') {
+      var verifyResponse =
+          await AuthRepository().verifyOTP(widget.mobile, otpNumber);
+      if (verifyResponse.success = true) {
+        verify = true;
+      } else {}
+      if (verify == true && widget.type == 'register') {
         var registerResponse = await AuthRepository()
             .getSignupResponse(widget.name, widget.mobile, widget.pass);
         if (registerResponse.success = true) {
@@ -88,9 +83,9 @@ class _OtpState extends State<Otp> {
           Navigator.pushReplacement(
               context, MaterialPageRoute(builder: (context) => Home()));
         }
-      } else if (verify == true && widget.type=='pass') {
-          Navigator.pushReplacement(
-              context, MaterialPageRoute(builder: (context) => ResetPassScreen()));
+      } else if (verify == true && widget.type == 'pass') {
+        Navigator.pushReplacement(context,
+            MaterialPageRoute(builder: (context) => ResetPassScreen()));
       }
     } on FirebaseAuthException catch (error) {
       if (error.code == 'invalid-verification-code') {

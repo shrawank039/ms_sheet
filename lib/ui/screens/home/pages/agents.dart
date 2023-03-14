@@ -31,6 +31,7 @@ class _SheetsState extends ConsumerState<Agents> {
   Widget build(BuildContext context) {
     final _data = ref.watch(agentsDataProvider);
     print('agentsDataProvider : ${_data.value?.message}');
+
     return LayoutBuilder(
       builder: (BuildContext context, BoxConstraints constraints) {
         // Mobile = Small (smaller than 640px)
@@ -534,7 +535,8 @@ class _CreateAgentSectionState extends ConsumerState<CreateAgentSection> {
                         builder: (BuildContext context, WidgetRef ref,
                             Widget? child) {
                           return _data.when(data: (dynamic data) {
-                            if (selectedAgents != null || selectedAgentsReference !=0) {
+                            if (selectedAgents != null ||
+                                selectedAgentsReference != 0) {
                               // PC Layout
                               selectedAgents = null;
                               selectedAgents = _data.value!.data!
@@ -655,15 +657,15 @@ class _CreateAgentSectionState extends ConsumerState<CreateAgentSection> {
                   child: InkWell(
                     onTap: () async {
                       if (_controllerName.text.isNotEmpty &&
-                          _controllerMobile.text.isNotEmpty &&
-                          _controllerPair.text.isNotEmpty &&
-                          _controllerInOut.text.isNotEmpty &&
-                          _controllerCommission.text.isNotEmpty &&
-                          _controllerPatti.text.isNotEmpty &&
-                          _controllerReferenceComm.text.isNotEmpty &&
-                          _controllerIncentive.text.isNotEmpty
+                              _controllerMobile.text.isNotEmpty &&
+                              _controllerPair.text.isNotEmpty &&
+                              _controllerInOut.text.isNotEmpty &&
+                              _controllerCommission.text.isNotEmpty &&
+                              _controllerPatti.text.isNotEmpty &&
+                              _controllerReferenceComm.text.isNotEmpty &&
+                              _controllerIncentive.text.isNotEmpty
                           //&& selectedAgents!.name!.isNotEmpty
-                      ) {
+                          ) {
                         var addAgent = updateAgent
                             ? await AgentsRepository().updateAgent(
                                 selectedAgents!.id!,
@@ -673,7 +675,7 @@ class _CreateAgentSectionState extends ConsumerState<CreateAgentSection> {
                                 _controllerInOut.text,
                                 _controllerCommission.text,
                                 _controllerPatti.text,
-                                  selectedAgentsReference.toString(),
+                                selectedAgentsReference.toString(),
                                 _controllerReferenceComm.text,
                                 _controllerIncentive.text)
                             : await AgentsRepository().addAgent(
@@ -683,7 +685,7 @@ class _CreateAgentSectionState extends ConsumerState<CreateAgentSection> {
                                 _controllerInOut.text,
                                 _controllerCommission.text,
                                 _controllerPatti.text,
-                                  selectedAgentsReference,
+                                selectedAgentsReference,
                                 _controllerReferenceComm.text,
                                 _controllerIncentive.text);
                         if (addAgent.success == true) {
@@ -1012,15 +1014,15 @@ class _CreateAgentSectionMobileState
                   child: InkWell(
                     onTap: () async {
                       if (_controllerName.text.isNotEmpty &&
-                          _controllerMobile.text.isNotEmpty &&
-                          _controllerPair.text.isNotEmpty &&
-                          _controllerInOut.text.isNotEmpty &&
-                          _controllerCommission.text.isNotEmpty &&
-                          _controllerPatti.text.isNotEmpty &&
-                          _controllerReferenceComm.text.isNotEmpty &&
-                          _controllerIncentive.text.isNotEmpty
-                         // && selectedAgents!.name!.isNotEmpty
-                      ) {
+                              _controllerMobile.text.isNotEmpty &&
+                              _controllerPair.text.isNotEmpty &&
+                              _controllerInOut.text.isNotEmpty &&
+                              _controllerCommission.text.isNotEmpty &&
+                              _controllerPatti.text.isNotEmpty &&
+                              _controllerReferenceComm.text.isNotEmpty &&
+                              _controllerIncentive.text.isNotEmpty
+                          // && selectedAgents!.name!.isNotEmpty
+                          ) {
                         var addAgent = updateAgent
                             ? await AgentsRepository().updateAgent(
                                 selectedAgents!.id!,
@@ -1030,7 +1032,7 @@ class _CreateAgentSectionMobileState
                                 _controllerInOut.text,
                                 _controllerCommission.text,
                                 _controllerPatti.text,
-                            selectedAgentsReference.toString(),
+                                selectedAgentsReference.toString(),
                                 _controllerReferenceComm.text,
                                 _controllerIncentive.text)
                             : await AgentsRepository().addAgent(

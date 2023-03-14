@@ -309,7 +309,7 @@ class _MainPanelState extends ConsumerState<MainPanel> {
 
     screenshotController.captureAndSave(
         path, //set path where screenshot will be saved
-        fileName: '$fileName.jpg');
+        fileName: '$fileName.png');
 
     await Share.shareFiles([path]);
     //getPdf(uint8List!, path);
@@ -320,9 +320,9 @@ class _MainPanelState extends ConsumerState<MainPanel> {
     final directory = (await getApplicationDocumentsDirectory())
         .path; //from path_provide package
 
-final image = pw.MemoryImage(
-  File(path).readAsBytesSync(),
-);
+    final image = pw.MemoryImage(
+      File(path).readAsBytesSync(),
+    );
 
     pw.Document pdf = pw.Document();
     pdf.addPage(
@@ -330,8 +330,8 @@ final image = pw.MemoryImage(
         pageFormat: PdfPageFormat.a4,
         build: (pw.Context context) {
           return pw.Expanded(
-              child: pw.Image(image),
-                  );
+            child: pw.Image(image),
+          );
         },
       ),
     );

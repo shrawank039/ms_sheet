@@ -3,7 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:iconly/iconly.dart';
 import 'package:ms_sheet/models/wallet_balance_entity.dart';
 import 'package:ms_sheet/models/wallet_transactions_entity.dart';
-import 'package:ms_sheet/repositories/wallet_repo.dart';
 import 'package:ms_sheet/ui/styles/color.dart';
 import 'package:ms_sheet/ui/styles/design.dart';
 import 'package:sizer/sizer.dart';
@@ -12,17 +11,18 @@ import '../../../../models/wallet_client_entity.dart';
 import '../../../../providers/data_providers.dart';
 
 final controller = PageController(
-  initialPage: 0,
+  initialPage: 1,
 );
 WalletClientData? selectedClient;
-var agentID;
+ExtraDataParameter extraDataParameter = ExtraDataParameter(dataList: [8]);
+var clientTransProvider;
 
-class Wallet extends ConsumerStatefulWidget {
+class KhataClient extends ConsumerStatefulWidget {
   @override
-  ConsumerState<Wallet> createState() => _SheetsState();
+  ConsumerState<KhataClient> createState() => _SheetsState();
 }
 
-class _SheetsState extends ConsumerState<Wallet> {
+class _SheetsState extends ConsumerState<KhataClient> {
   @override
   void dispose() {
     controller.dispose();
@@ -33,10 +33,7 @@ class _SheetsState extends ConsumerState<Wallet> {
   Widget build(BuildContext context) {
     final _data = ref.watch(walletClinetsDataProvider);
     final walletBal = ref.watch(walletBalDataProvider);
-    ExtraDataParameter extraDataParameter =
-        ExtraDataParameter(dataList: [agentID]);
-    final clientTransProvider =
-        ref.watch(clientTranDataProvider(extraDataParameter));
+    clientTransProvider = ref.watch(clientTranDataProvider(extraDataParameter));
 
     return Expanded(
       child: PageView(
@@ -556,8 +553,6 @@ Widget body(BuildContext context, AsyncValue<WalletClientEntity> _data,
 
 Widget bodyTran(BuildContext context,
     AsyncValue<WalletTransactionsEntity> clientTransProvider) {
-  TextEditingController controllerAmt = TextEditingController(text: '');
-  TextEditingController controllerDetails = TextEditingController(text: '');
   bool mobile = MediaQuery.of(context).size.width < 640;
   return mobile == true
       ? Column(
@@ -581,7 +576,7 @@ Widget bodyTran(BuildContext context,
                         (BuildContext context, WidgetRef ref, Widget? child) {
                       return clientTransProvider.when(data: (dynamic data) {
                         print(
-                            'clientTransProvider m : ${clientTransProvider.value?.data}');
+                            'agentsDataProvider 0 : ${clientTransProvider.value?.data}');
                         return Column(
                           children: [
                             Row(
@@ -768,7 +763,7 @@ Widget bodyTran(BuildContext context,
               builder: (BuildContext context, WidgetRef ref, Widget? child) {
                 return clientTransProvider.when(data: (dynamic data) {
                   print(
-                      'clientTransProvider list : ${clientTransProvider.value?.data}');
+                      'clientTransProvider 0 : ${clientTransProvider.value?.data}');
                   return Column(
                     children:
                         clientTransProvider.value!.data!.transactions!.map((e) {
@@ -789,285 +784,230 @@ Widget bodyTran(BuildContext context,
           children: [
             Expanded(
               flex: 2,
-              child: Consumer(
-                builder: (BuildContext context, WidgetRef ref, Widget? child) {
-                  return clientTransProvider.when(data: (dynamic data) {
-                    print(
-                        'clientTransProvider pc : ${clientTransProvider.value?.data}');
-                    return Column(
-                      children: [
-                        Container(
-                            margin: EdgeInsets.only(top: 1.w),
-                            padding: EdgeInsets.only(top: 4.w, bottom: 2.w),
-                            decoration:
-                                DesignConfig.boxDecorationContainerCardShadow(
-                                    ColorsRes.white,
-                                    const Color.fromRGBO(44, 39, 46, 0.059),
-                                    16.0,
-                                    3,
-                                    3,
-                                    20,
-                                    0),
-                            child: Column(
-                              children: [
-                                Row(
+              child: Column(
+                children: [
+                  Container(
+                      margin: EdgeInsets.only(top: 1.w),
+                      padding: EdgeInsets.only(top: 4.w, bottom: 2.w),
+                      decoration: DesignConfig.boxDecorationContainerCardShadow(
+                          ColorsRes.white,
+                          const Color.fromRGBO(44, 39, 46, 0.059),
+                          16.0,
+                          3,
+                          3,
+                          20,
+                          0),
+                      child: Column(
+                        children: [
+                          Row(
+                            children: [
+                              Expanded(
+                                child: userDetails(),
+                              ),
+                              Container(
+                                height: 5.w,
+                                width: 1,
+                                color: ColorsRes.greyLightColor,
+                              ),
+                              Expanded(
+                                child: Column(
                                   children: [
-                                    Expanded(
-                                      child: userDetails(),
+                                    Text(
+                                      '₹${selectedClient?.balance}',
+                                      style: TextStyle(
+                                          color: ColorsRes.green,
+                                          fontFamily: 'Spartan',
+                                          fontSize: 2.5.w,
+                                          fontWeight: FontWeight.w600),
                                     ),
-                                    Container(
-                                      height: 5.w,
-                                      width: 1,
-                                      color: ColorsRes.greyLightColor,
+                                    SizedBox(
+                                      height: 1.w,
                                     ),
-                                    Expanded(
-                                      child: Column(
-                                        children: [
-                                          Text(
-                                            '₹${clientTransProvider.value?.data?.balance}',
-                                            style: TextStyle(
-                                                color: ColorsRes.green,
-                                                fontFamily: 'Spartan',
-                                                fontSize: 2.5.w,
-                                                fontWeight: FontWeight.w600),
-                                          ),
-                                          SizedBox(
-                                            height: 1.w,
-                                          ),
-                                          Text(
-                                            'Payable Amount',
-                                            style: TextStyle(
-                                              color: Color(0xFF979FC6),
-                                              fontSize: 1.7.w,
-                                            ),
-                                          ),
-                                        ],
+                                    Text(
+                                      'Payable Amount',
+                                      style: TextStyle(
+                                        color: Color(0xFF979FC6),
+                                        fontSize: 1.7.w,
                                       ),
                                     ),
                                   ],
                                 ),
-                                SizedBox(
-                                  height: 3.w,
-                                ),
-                                Row(
-                                  children: [
-                                    Expanded(
-                                      child: GestureDetector(
-                                        onTap: () {},
-                                        child: Card(
-                                          margin: EdgeInsets.symmetric(
-                                              horizontal: 2.2.w),
-                                          shape: RoundedRectangleBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(1.2.w)),
-                                          color: Color(0xFFf9f9f9),
-                                          elevation: 0,
-                                          child: Container(
-                                            padding: EdgeInsets.symmetric(
-                                                vertical: 1.w),
-                                            alignment: Alignment.center,
-                                            child: const Text(
-                                              'View Reports',
-                                              style: TextStyle(
-                                                  color: ColorsRes.mainBlue),
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            )),
-                        SizedBox(
-                          height: 3.w,
-                        ),
-                        Column(
-                          //mainAxisAlignment: MainAxisAlignment.center,
-                          children: <Widget>[
-                            Row(
-                              children: [
-                                Expanded(
-                                    child: Container(
-                                  alignment: Alignment.center,
-                                  // height: 9.w,
+                              ),
+                            ],
+                          ),
+                          SizedBox(
+                            height: 3.w,
+                          ),
+                          Row(
+                            children: [
+                              Expanded(
+                                child: GestureDetector(
+                                  onTap: () {},
                                   child: Card(
-                                    margin: EdgeInsets.only(top: 2.w),
+                                    margin:
+                                        EdgeInsets.symmetric(horizontal: 2.2.w),
                                     shape: RoundedRectangleBorder(
                                         borderRadius:
-                                            BorderRadius.circular(1.5.w)),
+                                            BorderRadius.circular(1.2.w)),
+                                    color: Color(0xFFf9f9f9),
                                     elevation: 0,
-                                    color: ColorsRes.lightWeightColor,
-                                    child: Padding(
-                                      padding: EdgeInsets.only(left: 1.w),
-                                      child: TextField(
-                                        controller: controllerAmt,
-                                        textAlign: TextAlign.start,
-                                        style: TextStyle(
-                                            fontSize: 2.5.w,
-                                            fontFamily: 'Arial',
-                                            fontWeight: FontWeight.w500),
-                                        decoration: const InputDecoration(
-                                          prefixIcon: Icon(
-                                            Icons.currency_rupee,
-                                            color: ColorsRes.darkGrey,
-                                          ),
-                                          isDense: true,
-                                          hintText: '00',
-                                          labelText: 'Amount',
-                                          hintStyle: TextStyle(
-                                              color:
-                                                  Color.fromARGB(50, 0, 0, 0)),
-                                          border: OutlineInputBorder(
-                                              borderSide: BorderSide.none),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                )),
-                              ],
-                            ),
-                            Row(
-                              children: [
-                                Expanded(
                                     child: Container(
-                                  alignment: Alignment.center,
-                                  // height: 9.w,
-                                  child: Card(
-                                    margin: EdgeInsets.only(top: 2.w),
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(1.5.w)),
-                                    elevation: 0,
-                                    color: ColorsRes.lightWeightColor,
-                                    child: Padding(
-                                      padding: EdgeInsets.only(left: 1.w),
-                                      child: TextField(
-                                        controller: controllerDetails,
-                                        textAlign: TextAlign.start,
+                                      padding:
+                                          EdgeInsets.symmetric(vertical: 1.w),
+                                      alignment: Alignment.center,
+                                      child: const Text(
+                                        'View Reports',
                                         style: TextStyle(
-                                            fontSize: 2.5.w,
-                                            fontFamily: 'Arial',
-                                            fontWeight: FontWeight.w500),
-                                        decoration: const InputDecoration(
-                                          prefixIcon: Icon(
-                                            Icons.info,
-                                            color: ColorsRes.darkGrey,
-                                          ),
-                                          isDense: true,
-                                          hintText: 'Optional',
-                                          labelText: 'Details',
-                                          hintStyle: TextStyle(
-                                              color:
-                                                  Color.fromARGB(50, 0, 0, 0)),
-                                          border: OutlineInputBorder(
-                                              borderSide: BorderSide.none),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                )),
-                              ],
-                            ),
-                            SizedBox(
-                              height: 1.w,
-                            ),
-                            Row(
-                              children: [
-                                Expanded(
-                                  child: GestureDetector(
-                                    onTap: () async {
-                                      var addTransaction = await WalletRepo()
-                                          .addTransaction(
-                                              agentID,
-                                              'pay',
-                                              controllerAmt.text,
-                                              controllerDetails.text);
-                                      if (addTransaction.success == true) {
-                                        ExtraDataParameter extraDataParameter =
-                                            ExtraDataParameter(
-                                                dataList: [agentID]);
-                                        ref.refresh(clientTranDataProvider(
-                                            extraDataParameter));
-                                        ref.refresh(walletClinetsDataProvider);
-                                      }
-                                    },
-                                    child: Card(
-                                      margin: EdgeInsets.only(
-                                          right: 1.w, top: 1.5.w),
-                                      color: ColorsRes.red,
-                                      elevation: 0,
-                                      shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(1.6.w)),
-                                      child: Container(
-                                        height: 6.w,
-                                        width: 25.w,
-                                        alignment: Alignment.center,
-                                        child: Text(
-                                          'Pay',
-                                          textAlign: TextAlign.center,
-                                          style: TextStyle(
-                                              color: ColorsRes.white,
-                                              fontSize: 2.w),
-                                        ),
+                                            color: ColorsRes.mainBlue),
                                       ),
                                     ),
                                   ),
                                 ),
-                                Expanded(
-                                  child: GestureDetector(
-                                    onTap: () async {
-                                      var addTransaction = await WalletRepo()
-                                          .addTransaction(
-                                              agentID,
-                                              'receive',
-                                              controllerAmt.text,
-                                              controllerDetails.text);
-                                      if (addTransaction.success == true) {
-                                        ExtraDataParameter extraDataParameter =
-                                            ExtraDataParameter(
-                                                dataList: [agentID]);
-                                        ref.refresh(clientTranDataProvider(
-                                            extraDataParameter));
-                                        ref.refresh(walletClinetsDataProvider);
-                                      }
-                                    },
-                                    child: Card(
-                                      margin: EdgeInsets.only(
-                                          right: 1.w, top: 1.5.w),
-                                      color: ColorsRes.green,
-                                      elevation: 0,
-                                      shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(1.6.w)),
-                                      child: Container(
-                                        height: 6.w,
-                                        width: 25.w,
-                                        alignment: Alignment.center,
-                                        child: Text(
-                                          'Receive',
-                                          textAlign: TextAlign.center,
-                                          style: TextStyle(
-                                              color: ColorsRes.white,
-                                              fontSize: 2.w),
-                                        ),
-                                      ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      )),
+                  SizedBox(
+                    height: 3.w,
+                  ),
+                  Column(
+                    //mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Row(
+                        children: [
+                          Expanded(
+                              child: Container(
+                            alignment: Alignment.center,
+                            // height: 9.w,
+                            child: Card(
+                              margin: EdgeInsets.only(top: 2.w),
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(1.5.w)),
+                              elevation: 0,
+                              color: ColorsRes.lightWeightColor,
+                              child: Padding(
+                                padding: EdgeInsets.only(left: 1.w),
+                                child: TextField(
+                                  textAlign: TextAlign.start,
+                                  style: TextStyle(
+                                      fontSize: 2.5.w,
+                                      fontFamily: 'Arial',
+                                      fontWeight: FontWeight.w500),
+                                  decoration: const InputDecoration(
+                                    prefixIcon: Icon(
+                                      Icons.currency_rupee,
+                                      color: ColorsRes.darkGrey,
                                     ),
+                                    isDense: true,
+                                    hintText: '00',
+                                    labelText: 'Amount',
+                                    hintStyle: TextStyle(
+                                        color: Color.fromARGB(50, 0, 0, 0)),
+                                    border: OutlineInputBorder(
+                                        borderSide: BorderSide.none),
                                   ),
                                 ),
-                              ],
+                              ),
                             ),
-                          ],
-                        ),
-                      ],
-                    );
-                  }, error: (Object error, StackTrace stackTrace) {
-                    return Text('Error');
-                  }, loading: () {
-                    return CircularProgressIndicator();
-                  });
-                },
+                          )),
+                        ],
+                      ),
+                      Row(
+                        children: [
+                          Expanded(
+                              child: Container(
+                            alignment: Alignment.center,
+                            // height: 9.w,
+                            child: Card(
+                              margin: EdgeInsets.only(top: 2.w),
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(1.5.w)),
+                              elevation: 0,
+                              color: ColorsRes.lightWeightColor,
+                              child: Padding(
+                                padding: EdgeInsets.only(left: 1.w),
+                                child: TextField(
+                                  textAlign: TextAlign.start,
+                                  style: TextStyle(
+                                      fontSize: 2.5.w,
+                                      fontFamily: 'Arial',
+                                      fontWeight: FontWeight.w500),
+                                  decoration: const InputDecoration(
+                                    prefixIcon: Icon(
+                                      Icons.info,
+                                      color: ColorsRes.darkGrey,
+                                    ),
+                                    isDense: true,
+                                    hintText: 'Optional',
+                                    labelText: 'Details',
+                                    hintStyle: TextStyle(
+                                        color: Color.fromARGB(50, 0, 0, 0)),
+                                    border: OutlineInputBorder(
+                                        borderSide: BorderSide.none),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          )),
+                        ],
+                      ),
+                      SizedBox(
+                        height: 1.w,
+                      ),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: GestureDetector(
+                              onTap: () {},
+                              child: Card(
+                                margin: EdgeInsets.only(right: 1.w, top: 1.5.w),
+                                color: ColorsRes.red,
+                                elevation: 0,
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(1.6.w)),
+                                child: Container(
+                                  height: 6.w,
+                                  width: 25.w,
+                                  alignment: Alignment.center,
+                                  child: Text(
+                                    'Pay',
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        color: ColorsRes.white, fontSize: 2.w),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                          Expanded(
+                            child: GestureDetector(
+                              onTap: () {},
+                              child: Card(
+                                margin: EdgeInsets.only(right: 1.w, top: 1.5.w),
+                                color: ColorsRes.green,
+                                elevation: 0,
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(1.6.w)),
+                                child: Container(
+                                  height: 6.w,
+                                  width: 25.w,
+                                  alignment: Alignment.center,
+                                  child: Text(
+                                    'Receive',
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        color: ColorsRes.white, fontSize: 2.w),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ],
               ),
             ),
             SizedBox(
@@ -1079,7 +1019,7 @@ Widget bodyTran(BuildContext context,
                 builder: (BuildContext context, WidgetRef ref, Widget? child) {
                   return clientTransProvider.when(data: (dynamic data) {
                     print(
-                        'clientTransProvider pc list : ${clientTransProvider.value!.data}');
+                        'clientTransProvider 0 : ${clientTransProvider.value!.data}');
                     return Column(
                       children: clientTransProvider.value!.data!.transactions!
                           .map((e) {
@@ -1320,11 +1260,9 @@ Widget transactionList(
           ),
           IconButton(
             onPressed: () {
-              agentID = walletClient.agentId!;
-              ExtraDataParameter extraDataParameter =
+              extraDataParameter =
                   ExtraDataParameter(dataList: [walletClient.agentId]);
               ref.refresh(clientTranDataProvider(extraDataParameter));
-              ref.refresh(walletClinetsDataProvider);
               selectedClient = walletClient;
               controller.jumpToPage(1);
             },

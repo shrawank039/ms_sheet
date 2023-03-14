@@ -67,15 +67,14 @@ class _PCHomeState extends State<PCHome> {
                 SizedBox(
                   height: 0.8.h,
                 ),
-                global.prefs !=null ?
-                userDetails(currentPage):Container(),
+                global.prefs != null ? userDetails(currentPage) : Container(),
                 SizedBox(
                   height: 1.h,
                 ),
                 Container(
                   padding:
                       EdgeInsets.symmetric(horizontal: 1.w, vertical: 1.2.h),
-                      margin: EdgeInsets.symmetric(horizontal: 2.w),
+                  margin: EdgeInsets.symmetric(horizontal: 2.w),
                   width: 30.w,
                   decoration: DesignConfig.boxDecorationContainerCardShadow(
                       ColorsRes.white,

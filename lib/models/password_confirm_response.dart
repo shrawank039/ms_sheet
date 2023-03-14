@@ -3,7 +3,8 @@ import 'dart:convert';
 PasswordResponse passwordResponseFromJson(String str) =>
     PasswordResponse.fromJson(json.decode(str));
 
-String passwordResponseToJson(PasswordResponse data) => json.encode(data.toJson());
+String passwordResponseToJson(PasswordResponse data) =>
+    json.encode(data.toJson());
 
 class PasswordResponse {
   bool? success;
@@ -12,10 +13,10 @@ class PasswordResponse {
   PasswordResponse({this.success, this.message});
 
   PasswordResponse.fromJson(Map<String, dynamic> json) {
-    if(json["success"] is bool) {
+    if (json["success"] is bool) {
       success = json["success"];
     }
-    if(json["message"] is String) {
+    if (json["message"] is String) {
       message = json["message"];
     }
   }

@@ -15,7 +15,6 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-
   late TextEditingController _controllerEmail;
   late TextEditingController _controllerPass;
 
@@ -32,11 +31,11 @@ class _LoginScreenState extends State<LoginScreen> {
       body: Center(
         child: Container(
           margin: const EdgeInsets.all(50),
-          width: 100.w<640 ? 80.w: 500.0,
-         // padding: EdgeInsets.symmetric(horizontal: 50.w, vertical: 50),
+          width: 100.w < 640 ? 80.w : 500.0,
+          // padding: EdgeInsets.symmetric(horizontal: 50.w, vertical: 50),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Padding(
                 padding: EdgeInsets.all(1.w),
@@ -93,50 +92,56 @@ class _LoginScreenState extends State<LoginScreen> {
                   5.w,
                   TextInputType.visiblePassword,
                   _controllerPass),
-
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                            context, MaterialPageRoute(builder: (context) => RegisterScreen()));
-                    },
-                    child: Container(
-                      margin: const EdgeInsets.all(10),
-                      alignment: Alignment.bottomRight,
-                      child: const Text(
-                      'or, Register',
-                      style: TextStyle(decoration:TextDecoration.underline, fontSize: 16, color: ColorsRes.mainBlue),
+              GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => RegisterScreen()));
+                },
+                child: Container(
+                  margin: const EdgeInsets.all(10),
+                  alignment: Alignment.bottomRight,
+                  child: const Text(
+                    'or, Register',
+                    style: TextStyle(
+                        decoration: TextDecoration.underline,
+                        fontSize: 16,
+                        color: ColorsRes.mainBlue),
                   ),
-                    ),
-                  ),
+                ),
+              ),
               const SizedBox(height: 50),
               Card(
-                  margin: EdgeInsets.only(left: 1.w, right: 1.w, top: 2.w),
-                  color: ColorsRes.mainBlue,
-                  elevation: 0,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(2.5.w)),
-                  child: InkWell(
-                    onTap: () async {
-                      var loginResponse = await AuthRepository()
-                          .getLoginResponse(_controllerEmail.text, _controllerPass.text);
-                      if (loginResponse.success = true) {
-                        AuthHelper().setUserData(loginResponse);
-                        Navigator.pushReplacement(
-                            context, MaterialPageRoute(builder: (context) => Home()));
-                      }
-                    },
-                    child: Container(
-                      height: 50.0,
-                      alignment: Alignment.center,
-                      child: const Text(
-                        'Login',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(color: ColorsRes.white, fontSize: 17),
-                      ),
+                margin: EdgeInsets.only(left: 1.w, right: 1.w, top: 2.w),
+                color: ColorsRes.mainBlue,
+                elevation: 0,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(2.5.w)),
+                child: InkWell(
+                  onTap: () async {
+                    var loginResponse = await AuthRepository().getLoginResponse(
+                        _controllerEmail.text, _controllerPass.text);
+                    if (loginResponse.success = true) {
+                      AuthHelper().setUserData(loginResponse);
+                      Navigator.pushReplacement(context,
+                          MaterialPageRoute(builder: (context) => Home()));
+                    }
+                  },
+                  child: Container(
+                    height: 50.0,
+                    alignment: Alignment.center,
+                    child: const Text(
+                      'Login',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(color: ColorsRes.white, fontSize: 17),
                     ),
                   ),
                 ),
-              const SizedBox(height: 16,),
+              ),
+              const SizedBox(
+                height: 16,
+              ),
             ],
           ),
         ),

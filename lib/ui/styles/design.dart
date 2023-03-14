@@ -143,6 +143,7 @@ class DesignConfig {
       ),
     );
   }
+
   static Container inputBoxPassword(
       Color BgColor,
       double radius,
@@ -158,7 +159,7 @@ class DesignConfig {
       child: Card(
         margin: EdgeInsets.only(left: 1.w, right: 1.w, top: 2.w),
         shape:
-        RoundedRectangleBorder(borderRadius: BorderRadius.circular(radius)),
+            RoundedRectangleBorder(borderRadius: BorderRadius.circular(radius)),
         elevation: 0,
         color: BgColor,
         child: Padding(

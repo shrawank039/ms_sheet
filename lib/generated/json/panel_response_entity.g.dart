@@ -70,6 +70,8 @@ Map<String, dynamic> $PanelResponseDataToJson(PanelResponseData entity) {
   data['sheet_id'] = entity.sheetId;
   data['agent_id'] = entity.agentId;
   data['pair'] = entity.pair;
+  data['pair_key'] = entity.pair_key;
+  data['pair_value'] = entity.pair_value;
   data['date'] = entity.date;
   data['name'] = entity.name;
   return data;

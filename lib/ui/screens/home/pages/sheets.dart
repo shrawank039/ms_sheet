@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:iconly/iconly.dart';
 import 'package:intl/intl.dart';
 import 'package:ms_sheet/models/sheets_response_entity.dart';
+import 'package:ms_sheet/providers/data_providers.dart';
 import 'package:ms_sheet/ui/screens/panels/main_panel.dart';
 import 'package:ms_sheet/ui/screens/panels/master_panel.dart';
 import 'package:ms_sheet/ui/styles/color.dart';
@@ -18,14 +20,14 @@ DateTime now = DateTime.now();
 String dateToday = DateFormat.yMMMd('en_US').format(now);
 String dateOnly = DateFormat('yyyy-MM-dd').format(now);
 
-class Sheets extends StatefulWidget {
+class Sheets extends ConsumerStatefulWidget {
   const Sheets({super.key});
 
   @override
-  State<Sheets> createState() => _SheetsState();
+  ConsumerState<Sheets> createState() => _SheetsState();
 }
 
-class _SheetsState extends State<Sheets> {
+class _SheetsState extends ConsumerState<Sheets> {
   @override
   void initState() {
     // TODO: implement initState
@@ -35,20 +37,27 @@ class _SheetsState extends State<Sheets> {
 
   void getSheets() async {
     _sheetsList.clear();
-    var getSheets = await SheetsRepository().getSheets();
+    var getSheets = await SheetsRepository().getSheetsHome();
     if (getSheets.success == true) {
       setState(() {
         _sheetsList.addAll(getSheets.data!);
       });
-    } else{
-      Navigator.push(context,
-          MaterialPageRoute(builder: (context) => LoginScreen()));
+    } else {
+      Navigator.push(
+          context, MaterialPageRoute(builder: (context) => LoginScreen()));
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
+
+    final _data = ref.watch(sheetHomeDataProvider);
+    return 
+    Consumer(
+              builder: (BuildContext context, WidgetRef ref, Widget? child) {
+                return _data.when(data: (dynamic data) {
+                  print('agentsDataProvider 0 : ${_data.value!.data}');
+                  return Expanded(
       child: LayoutBuilder(
         builder: (BuildContext context, BoxConstraints constraints) {
           // Mobile = Small (smaller than 640px)
@@ -62,6 +71,13 @@ class _SheetsState extends State<Sheets> {
         },
       ),
     );
+    }, error: (Object error, StackTrace stackTrace) {
+                  return Text('Error');
+                }, loading: () {
+                  return CircularProgressIndicator();
+                });
+              },
+            );
   }
 }
 
@@ -227,7 +243,8 @@ Widget SheetsCardPC(SheetsResponseData data, BuildContext context) {
                       onTap: () {
                         showDialog(
                             context: context,
-                            builder: (context) => DeclarePopup(data.id!,data.declared_result.toString()));
+                            builder: (context) => DeclarePopup(
+                                data.id!, data.declared_result.toString()));
                       },
                       child: DesignConfig.flatButton(
                         ColorsRes.lightBlue,
@@ -387,14 +404,14 @@ class _SheetsCardMoileState extends State<SheetsCardMoile> {
   }
 }
 
-class SheetsCreateSection extends StatefulWidget {
+class SheetsCreateSection extends ConsumerStatefulWidget {
   const SheetsCreateSection({super.key});
 
   @override
-  State<SheetsCreateSection> createState() => _SheetsCreateSectionState();
+  ConsumerState<SheetsCreateSection> createState() => _SheetsCreateSectionState();
 }
 
-class _SheetsCreateSectionState extends State<SheetsCreateSection> {
+class _SheetsCreateSectionState extends ConsumerState<SheetsCreateSection> {
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(
@@ -405,33 +422,33 @@ class _SheetsCreateSectionState extends State<SheetsCreateSection> {
         if (constraints.maxWidth < 640) {
           return Row(
             children: [
-              Expanded(
-                child: Card(
-                  color: ColorsRes.white,
-                  elevation: 0,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(2.5.w)),
-                  child: Padding(
-                    padding: EdgeInsets.symmetric(
-                        vertical: 1.2.h, horizontal: 3.8.w),
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: Text(
-                            'Select Sheet',
-                            style: TextStyle(
-                                color: ColorsRes.darkGrey, fontSize: 3.5.w),
-                          ),
-                        ),
-                        SizedBox(
-                          width: 8.w,
-                        ),
-                        Icon(Icons.arrow_drop_down),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
+              // Expanded(
+              //   child: Card(
+              //     color: ColorsRes.white,
+              //     elevation: 0,
+              //     shape: RoundedRectangleBorder(
+              //         borderRadius: BorderRadius.circular(2.5.w)),
+              //     child: Padding(
+              //       padding: EdgeInsets.symmetric(
+              //           vertical: 1.2.h, horizontal: 3.8.w),
+              //       child: Row(
+              //         children: [
+              //           Expanded(
+              //             child: Text(
+              //               'Select Sheet',
+              //               style: TextStyle(
+              //                   color: ColorsRes.darkGrey, fontSize: 3.5.w),
+              //             ),
+              //           ),
+              //           SizedBox(
+              //             width: 8.w,
+              //           ),
+              //           Icon(Icons.arrow_drop_down),
+              //         ],
+              //       ),
+              //     ),
+              //   ),
+              // ),
               Card(
                 margin: EdgeInsets.only(left: 2.w),
                 color: ColorsRes.mainBlue,
@@ -473,43 +490,51 @@ class _SheetsCreateSectionState extends State<SheetsCreateSection> {
                 ],
               ),
               Expanded(child: Container()),
-              Card(
-                margin: EdgeInsets.only(left: 2.w),
-                color: Color(0xfff9f9f9),
-                elevation: 0,
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(1.5.w)),
-                child: Padding(
-                  padding:
-                      EdgeInsets.symmetric(vertical: 0.7.h, horizontal: 1.8.w),
-                  child: Row(
-                    children: [
-                      Text(
-                        'Select Sheet',
-                        style: TextStyle(
-                            color: ColorsRes.darkGrey, fontSize: 1.7.w),
-                      ),
-                      SizedBox(
-                        width: 8.w,
-                      ),
-                      Icon(Icons.arrow_drop_down),
-                    ],
-                  ),
+              // Card(
+              //   margin: EdgeInsets.only(left: 2.w),
+              //   color: Color(0xfff9f9f9),
+              //   elevation: 0,
+              //   shape: RoundedRectangleBorder(
+              //       borderRadius: BorderRadius.circular(1.5.w)),
+              //   child: Padding(
+              //     padding:
+              //         EdgeInsets.symmetric(vertical: 0.7.h, horizontal: 1.8.w),
+              //     child: Row(
+              //       children: [
+              //         Text(
+              //           'Select Sheet',
+              //           style: TextStyle(
+              //               color: ColorsRes.darkGrey, fontSize: 1.7.w),
+              //         ),
+              //         SizedBox(
+              //           width: 8.w,
+              //         ),
+              //         Icon(Icons.arrow_drop_down),
+              //       ],
+              //     ),
+              //   ),
+              // ),
+              InkWell(
+                onTap: () async {
+                  var refreshSheet = await SheetsRepository().refreshSheets();
+                  if(refreshSheet.success == true){
+                    ref.refresh(sheetHomeDataProvider);
+                  }
+                },
+                child: Card(
+                  margin: EdgeInsets.only(left: 2.w),
+                  color: ColorsRes.mainBlue,
+                  elevation: 0,
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(1.5.w)),
+                  child: Padding(
+                      padding: EdgeInsets.symmetric(
+                          vertical: 0.7.h, horizontal: 2.2.w),
+                      child: Text(
+                        'Create',
+                        style: TextStyle(color: ColorsRes.white, fontSize: 1.7.w),
+                      )),
                 ),
-              ),
-              Card(
-                margin: EdgeInsets.only(left: 2.w),
-                color: ColorsRes.mainBlue,
-                elevation: 0,
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(1.5.w)),
-                child: Padding(
-                    padding: EdgeInsets.symmetric(
-                        vertical: 0.7.h, horizontal: 2.2.w),
-                    child: Text(
-                      'Create',
-                      style: TextStyle(color: ColorsRes.white, fontSize: 1.7.w),
-                    )),
               ),
             ],
           );

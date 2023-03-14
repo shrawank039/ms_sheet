@@ -35,7 +35,7 @@ class _SheetsHistoryState extends State<SheetsHistory> {
     var getSheets = await SheetsRepository().getSheetsHistory(date);
     if (getSheets.success == true) {
       setState(() {
-       // _controllerDate.text = DateTime.now().toString();
+        // _controllerDate.text = DateTime.now().toString();
         _sheetsList.addAll(getSheets.data!);
       });
     }
@@ -83,24 +83,23 @@ class _SheetsHistoryState extends State<SheetsHistory> {
                 elevation: 0,
                 color: const Color(0xFFf9f9f9),
                 child: Padding(
-                      padding: EdgeInsets.only(left: 1.w),
-                      child:
-                      DateTimePicker(
-                        type: DateTimePickerType.date,
-                        dateMask: 'yyyy-MM-dd',
-                        controller: _controllerDate,
-                        firstDate: DateTime(2000),
-                        lastDate: DateTime(2100),
-                        icon: Icon(Icons.event),
-                        dateLabelText: 'Select Date',
-                        timeLabelText: 'Declare Time',
-                        onChanged: (val) {
-                          setState(() {
-                            _controllerDate.text = val;
-                          });
-                          fetchSheetHistory(val);
-                        },
-                      ),
+                  padding: EdgeInsets.only(left: 1.w),
+                  child: DateTimePicker(
+                    type: DateTimePickerType.date,
+                    dateMask: 'yyyy-MM-dd',
+                    controller: _controllerDate,
+                    firstDate: DateTime(2000),
+                    lastDate: DateTime(2100),
+                    icon: Icon(Icons.event),
+                    dateLabelText: 'Select Date',
+                    timeLabelText: 'Declare Time',
+                    onChanged: (val) {
+                      setState(() {
+                        _controllerDate.text = val;
+                      });
+                      fetchSheetHistory(val);
+                    },
+                  ),
                 ),
               ),
             ),
@@ -129,10 +128,7 @@ class _SheetsHistoryState extends State<SheetsHistory> {
             Expanded(
               child: Column(
                 children: _sheetsList.map((e) {
-                  return sheetsList(
-                      e,
-                      _controllerDate.text.trim(),
-                      context);
+                  return sheetsList(e, _controllerDate.text.trim(), context);
                 }).toList(),
               ),
             ),

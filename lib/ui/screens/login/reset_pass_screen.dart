@@ -105,9 +105,7 @@ class _ResetPassScreenState extends State<ResetPassScreen> {
                       if (passResponse.success = true) {
                         Navigator.pop(context);
                       }
-                    } else{
-                      
-                    }
+                    } else {}
                   },
                   child: Container(
                     height: 50.0,
