@@ -117,7 +117,7 @@ class _SettingsState extends State<Settings> {
                               ),
                               Padding(
                                 padding: EdgeInsets.symmetric(horizontal: 2.w),
-                                child: userDetails(),
+                                child: userDetails(context),
                               ),
                             ],
                           )),
@@ -247,7 +247,7 @@ Widget topBar() {
   );
 }
 
-Widget userDetails() {
+Widget userDetails(BuildContext context) {
   return Row(
     children: [
       SizedBox(
@@ -294,7 +294,11 @@ Widget userDetails() {
         ),
       ),
       IconButton(
-          onPressed: () {},
+          onPressed: () {
+             Navigator.push(context,
+                              MaterialPageRoute(
+                                  builder: (context) => ProfileScreen()));
+          },
           icon: Icon(
             Icons.create,
             size: 2.5.w,

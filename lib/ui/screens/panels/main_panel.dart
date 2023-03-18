@@ -36,9 +36,10 @@ final FocusNode focusNode = FocusNode();
 
 class MainPanel extends ConsumerStatefulWidget {
   final int sheet_id;
+  final String sheet_name;
   final String date;
 
-  const MainPanel(this.sheet_id, this.date, {super.key});
+  const MainPanel(this.sheet_id, this.sheet_name, this.date, {super.key});
 
   @override
   ConsumerState<MainPanel> createState() => _MainPanelState();
@@ -57,6 +58,10 @@ class _MainPanelState extends ConsumerState<MainPanel> {
   @override
   void initState() {
     super.initState();
+    updatePanel = false;
+    updatePanelStatus = false;
+    selectedAgentId = 0;
+    selectedIndex = 0;
     fToast = FToast();
     fToast.init(context);
   }
@@ -75,127 +80,127 @@ class _MainPanelState extends ConsumerState<MainPanel> {
     entryBoxController.clear();
     entryAmtController.clear();
     global.numberPair = {
-      00: 0,
-      01: 0,
-      02: 0,
-      03: 0,
-      04: 0,
-      05: 0,
-      06: 0,
-      07: 0,
-      08: 0,
-      09: 0,
-      10: 0,
-      11: 0,
-      12: 0,
-      13: 0,
-      14: 0,
-      15: 0,
-      16: 0,
-      17: 0,
-      18: 0,
-      19: 0,
-      20: 0,
-      21: 0,
-      22: 0,
-      23: 0,
-      24: 0,
-      25: 0,
-      26: 0,
-      27: 0,
-      28: 0,
-      29: 0,
-      30: 0,
-      31: 0,
-      32: 0,
-      33: 0,
-      34: 0,
-      35: 0,
-      36: 0,
-      37: 0,
-      38: 0,
-      39: 0,
-      40: 0,
-      41: 0,
-      42: 0,
-      43: 0,
-      44: 0,
-      45: 0,
-      46: 0,
-      47: 0,
-      48: 0,
-      49: 0,
-      50: 0,
-      51: 0,
-      52: 0,
-      53: 0,
-      54: 0,
-      55: 0,
-      56: 0,
-      57: 0,
-      58: 0,
-      59: 0,
-      60: 0,
-      61: 0,
-      62: 0,
-      63: 0,
-      64: 0,
-      65: 0,
-      66: 0,
-      67: 0,
-      68: 0,
-      69: 0,
-      70: 0,
-      71: 0,
-      72: 0,
-      73: 0,
-      74: 0,
-      75: 0,
-      76: 0,
-      77: 0,
-      78: 0,
-      79: 0,
-      80: 0,
-      81: 0,
-      82: 0,
-      83: 0,
-      84: 0,
-      85: 0,
-      86: 0,
-      87: 0,
-      88: 0,
-      89: 0,
-      90: 0,
-      91: 0,
-      92: 0,
-      93: 0,
-      94: 0,
-      95: 0,
-      96: 0,
-      97: 0,
-      98: 0,
-      99: 0,
-      100: 0,
-      101: 0,
-      102: 0,
-      103: 0,
-      104: 0,
-      105: 0,
-      106: 0,
-      107: 0,
-      108: 0,
-      109: 0,
-      110: 0,
-      111: 0,
-      112: 0,
-      113: 0,
-      114: 0,
-      115: 0,
-      116: 0,
-      117: 0,
-      118: 0,
-      119: 0,
-      120: 0,
+      '00': 0,
+      '01': 0,
+      '02': 0,
+      '03': 0,
+      '04': 0,
+      '05': 0,
+      '06': 0,
+      '07': 0,
+      '08': 0,
+      '09': 0,
+      '10': 0,
+      '11': 0,
+      '12': 0,
+      '13': 0,
+      '14': 0,
+      '15': 0,
+      '16': 0,
+      '17': 0,
+      '18': 0,
+      '19': 0,
+      '20': 0,
+      '21': 0,
+      '22': 0,
+      '23': 0,
+      '24': 0,
+      '25': 0,
+      '26': 0,
+      '27': 0,
+      '28': 0,
+      '29': 0,
+      '30': 0,
+      '31': 0,
+      '32': 0,
+      '33': 0,
+      '34': 0,
+      '35': 0,
+      '36': 0,
+      '37': 0,
+      '38': 0,
+      '39': 0,
+      '40': 0,
+      '41': 0,
+      '42': 0,
+      '43': 0,
+      '44': 0,
+      '45': 0,
+      '46': 0,
+      '47': 0,
+      '48': 0,
+      '49': 0,
+      '50': 0,
+      '51': 0,
+      '52': 0,
+      '53': 0,
+      '54': 0,
+      '55': 0,
+      '56': 0,
+      '57': 0,
+      '58': 0,
+      '59': 0,
+      '60': 0,
+      '61': 0,
+      '62': 0,
+      '63': 0,
+      '64': 0,
+      '65': 0,
+      '66': 0,
+      '67': 0,
+      '68': 0,
+      '69': 0,
+      '70': 0,
+      '71': 0,
+      '72': 0,
+      '73': 0,
+      '74': 0,
+      '75': 0,
+      '76': 0,
+      '77': 0,
+      '78': 0,
+      '79': 0,
+      '80': 0,
+      '81': 0,
+      '82': 0,
+      '83': 0,
+      '84': 0,
+      '85': 0,
+      '86': 0,
+      '87': 0,
+      '88': 0,
+      '89': 0,
+      '90': 0,
+      '91': 0,
+      '92': 0,
+      '93': 0,
+      '94': 0,
+      '95': 0,
+      '96': 0,
+      '97': 0,
+      '98': 0,
+      '99': 0,
+      '100': 0,
+      '101': 0,
+      '102': 0,
+      '103': 0,
+      '104': 0,
+      '105': 0,
+      '106': 0,
+      '107': 0,
+      '108': 0,
+      '109': 0,
+      '110': 0,
+      '111': 0,
+      '112': 0,
+      '113': 0,
+      '114': 0,
+      '115': 0,
+      '116': 0,
+      '117': 0,
+      '118': 0,
+      '119': 0,
+      '120': 0,
     };
     global.pairKey.clear();
     global.pairValue.clear();
@@ -225,36 +230,6 @@ class _MainPanelState extends ConsumerState<MainPanel> {
 
   void _handleKeyEvent(RawKeyEvent event) {
     if (event is RawKeyDownEvent) {
-      // switch (event.logicalKey) {
-      //   case LogicalKeyboardKey.arrowUp:
-      //     setState(() {
-      //       _focusNode.focusInDirection(TraversalDirection.up);
-      //       debugPrint('kReleaseMode (false) : arrowUp');
-      //     });
-      //     break;
-      //   case LogicalKeyboardKey.arrowDown:
-      //     setState(() {
-      //       _focusNode.focusInDirection(TraversalDirection.down);
-      //       debugPrint('kReleaseMode (false) : arrowDown');
-      //     });
-      //     break;
-      //   case LogicalKeyboardKey.arrowLeft:
-      //     setState(() {
-      //       _focusNode.previousFocus();
-      //       debugPrint('kReleaseMode (false) : arrowLeft');
-      //     });
-      //     break;
-      //   case LogicalKeyboardKey.arrowRight:
-      //     setState(() {
-      //       _focusNode.nextFocus();
-      //       debugPrint('kReleaseMode (false) : arrowRight');
-      //     });
-      //     break;
-      //   default:
-      //     debugPrint("Invalid choice");
-      //     break;
-      // }
-
       if (event.logicalKey == LogicalKeyboardKey.arrowUp) {
         setState(() {
           _focusNode.focusInDirection(TraversalDirection.up);
@@ -351,7 +326,11 @@ class _MainPanelState extends ConsumerState<MainPanel> {
 
     var total = 0;
     for (int i = 0; i < global.numberPair.length; i++) {
-      total += global.numberPair[i]!;
+      String pairKey = i.toString();
+      if (i < 10) {
+        pairKey = pairKey.padLeft(2, '0');
+      }
+      total += global.numberPair[pairKey]!;
       entryBoxController.selection = TextSelection(
         baseOffset: 0,
         extentOffset: entryBoxController.text.length,
@@ -407,7 +386,7 @@ class _MainPanelState extends ConsumerState<MainPanel> {
                                 color: ColorsRes.darkGrey, fontSize: 2.5.w),
                           ),
                           Text(
-                            'Delhi',
+                            ' ${widget.sheet_name} - ${widget.date}',
                             style: TextStyle(
                                 color: ColorsRes.mainBlue, fontSize: 2.5.w),
                           ),
@@ -464,9 +443,15 @@ class _MainPanelState extends ConsumerState<MainPanel> {
                                                     for (int i = index * 10;
                                                         i < index * 10 + 10;
                                                         i++) {
+                                                      String pairKey =
+                                                          (i + 1).toString();
+                                                      if (i < 10) {
+                                                        pairKey = pairKey
+                                                            .padLeft(2, '0');
+                                                      }
                                                       total = total +
                                                           global.numberPair[
-                                                              i + 1]!;
+                                                              pairKey]!;
                                                     }
                                                     return Container(
                                                       alignment:
@@ -526,7 +511,8 @@ class _MainPanelState extends ConsumerState<MainPanel> {
                                                         i++) {
                                                       total = total +
                                                           global.numberPair[
-                                                              i + 101]!;
+                                                              (i + 101)
+                                                                  .toString()]!;
                                                     }
                                                     return Container(
                                                       alignment:
@@ -1096,7 +1082,7 @@ class _MainPanelState extends ConsumerState<MainPanel> {
                                         context,
                                         MaterialPageRoute(
                                             builder: (context) => MasterPanel(
-                                                widget.sheet_id, widget.date)));
+                                                widget.sheet_id, widget.sheet_name, widget.date)));
                                   },
                                   child: DesignConfig.flatButtonWithIcon(
                                     ColorsRes.mainBlue,
@@ -1134,10 +1120,15 @@ class _MainPanelState extends ConsumerState<MainPanel> {
           if (entryBox == 00) {
             entryBox = 100;
           }
+          String pairKey = entryBox.toString();
+          if (entryBox! < 10) {
+            pairKey = pairKey.padLeft(2, '0');
+          }
+
           entryAmt = int.parse(entryAmtController.text);
-          global.numberPair[entryBox!] =
-              (global.numberPair[entryBox])! + entryAmt!;
-          global.pairKey.add(entryBox!);
+          global.numberPair[pairKey] =
+              (global.numberPair[pairKey])! + entryAmt!;
+          global.pairKey.add(pairKey);
           global.pairValue.add(entryAmt!);
           i = i + 1;
         }
@@ -1146,10 +1137,16 @@ class _MainPanelState extends ConsumerState<MainPanel> {
           entryBox = int.parse(entryBoxController.text[i] +
               entryBoxController.text[i + 1] +
               entryBoxController.text[i + 2]);
+
+          String pairKey = entryBox.toString();
+          if (entryBox! < 10) {
+            pairKey = pairKey.padLeft(2, '0');
+          }
+
           entryAmt = int.parse(entryAmtController.text);
-          global.numberPair[entryBox!] =
-              (global.numberPair[entryBox])! + entryAmt!;
-          global.pairKey.add(entryBox!);
+          global.numberPair[pairKey] =
+              (global.numberPair[pairKey])! + entryAmt!;
+          global.pairKey.add(pairKey);
           global.pairValue.add(entryAmt!);
           i = i + 2;
         }
@@ -1164,8 +1161,17 @@ class _MainPanelState extends ConsumerState<MainPanel> {
 Widget numberBox(int index) {
   final TextEditingController pointController = TextEditingController();
 
-  if (global.numberPair[index + 1]! > 0) {
-    pointController.text = global.numberPair[index + 1].toString().trim();
+  String pairKey = index.toString();
+  if (index < 10) {
+    pairKey = pairKey.padLeft(2, '0');
+  }
+  String pairKey1 = (index + 1).toString();
+  if (index < 10) {
+    pairKey1 = pairKey1.padLeft(2, '0');
+  }
+
+  if (global.numberPair[pairKey1]! > 0) {
+    pointController.text = global.numberPair[pairKey1].toString().trim();
   }
 
   return Consumer(
@@ -1178,7 +1184,6 @@ Widget numberBox(int index) {
       return FocusScope(
         child: Focus(
           focusNode: _focusNode,
-          // onKey: _handleKeyEvent,
           child: Container(
             padding: EdgeInsets.only(left: 1.w),
             decoration: BoxDecoration(
@@ -1188,7 +1193,7 @@ Widget numberBox(int index) {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  (index + 1).toString(),
+                  pairKey1,
                   style: TextStyle(fontSize: 0.8.h, color: Colors.grey),
                 ),
                 TextField(
@@ -1197,18 +1202,19 @@ Widget numberBox(int index) {
                   controller: pointController,
                   onChanged: (value) {
                     if (value.isNotEmpty) {
-                      global.numberPair[index + 1] = int.parse(value.trim());
+                      global.numberPair[pairKey1] = int.parse(value.trim());
                     } else {
-                      global.numberPair[index + 1] = 0;
+                      global.numberPair[pairKey1] = 0;
                     }
                   },
                   onTap: () {
-                    print("onTap: $index");
-                    selectedIndex = index;
+                    print("onClickOurtside: $pairKey");
+                    selectedIndex = index;                 
                     pointController.selection = TextSelection(
                       baseOffset: 0,
                       extentOffset: pointController.text.length,
                     );
+                    ref.refresh(numberPairProvider);
                   },
                   textAlign: TextAlign.end,
                   scribbleEnabled: true,
@@ -1295,10 +1301,10 @@ Widget clientsList(PanelResponseData data,
       .replaceAll("\"", "")
       .replaceAll("'", "")
       .split(",");
-  Map<int, int> result = {};
+  Map<String, int> result = {};
   for (int i = 0; i < str.length; i++) {
     List<String> s = str[i].split(":");
-    result.putIfAbsent(int.parse(s[0].trim()), () => int.parse(s[1].trim()));
+    result.putIfAbsent((s[0].trim()), () => int.parse(s[1].trim()));
   }
 
   int maxPair = 0;
@@ -1306,9 +1312,13 @@ Widget clientsList(PanelResponseData data,
   String highestPair = '';
 
   for (int i = 0 * 10; i < 120; i++) {
-    total = total + result[i + 1]!;
-    if (maxPair < result[i + 1]!) {
-      maxPair = result[i + 1]!;
+    String pairKey = (i + 1).toString();
+    if (i < 10) {
+      pairKey = pairKey.padLeft(2, '0');
+    }
+    total = total + result[pairKey]!;
+    if (maxPair < result[pairKey]!) {
+      maxPair = result[pairKey]!;
       highestPair = '${i + 1}/${maxPair}';
     }
   }
@@ -1416,6 +1426,9 @@ Widget clientsList(PanelResponseData data,
                   global.numberPair = result;
                   selectedAgentId = data.agentId!;
                   updatePanel = true;
+                  updatePanelStatus = true;
+                  global.pairKey.clear();
+                  global.pairValue.clear();
 
                   if (data.pair_key!.isNotEmpty && data.pair_value != '[]') {
                     final pairKey = data.pair_key!
@@ -1425,7 +1438,7 @@ Widget clientsList(PanelResponseData data,
                         .split(',');
 
                     for (int i = 0; i < pairKey.length; i++) {
-                      global.pairKey.add(int.parse(pairKey[i].trim()));
+                      global.pairKey.add((pairKey[i].trim()));
                     }
 
                     final pairValue = data.pair_value!

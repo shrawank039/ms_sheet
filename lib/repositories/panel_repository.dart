@@ -10,7 +10,7 @@ import '../models/sheets_response_entity.dart';
 
 class PanelRepository {
   Future<PanelResponseEntity> addPanel(int sheet_id, int agent_id, String date,
-      var pair, List<int> pair_key, List<int> pair_value, int total) async {
+      var pair, List<String> pair_key, List<int> pair_value, int total) async {
     var postBody = jsonEncode({
       "sheet_id": sheet_id,
       "agent_id": agent_id,
@@ -33,7 +33,7 @@ class PanelRepository {
       int agent_id,
       String date,
       var pair,
-      List<int> pair_key,
+      List<String> pair_key,
       List<int> pair_value,
       int total) async {
     var postBody = jsonEncode({

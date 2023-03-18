@@ -321,11 +321,6 @@ Widget sheetsList(String? pic, SheetsResponseData data, BuildContext context) {
           Expanded(
             child: Container(),
           ),
-          // Image.asset(
-          //   'assets/icons/pin.png',
-          //   height: 3.w,
-          //   width: 3.w,
-          // ),
           SizedBox(
             width: 4.w,
           ),
@@ -337,8 +332,8 @@ Widget sheetsList(String? pic, SheetsResponseData data, BuildContext context) {
                       'sheet', const ExtraDataParameter(dataList: [])));
             },
             icon: Icon(
-              IconlyBroken.arrow_right,
-              color: ColorsRes.mainBlue,
+              Icons.delete,
+              color: ColorsRes.red,
               size: 3.w,
             ),
           ),

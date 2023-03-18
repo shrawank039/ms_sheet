@@ -154,9 +154,9 @@ class _CPPopupState extends ConsumerState<CPPopup> {
                             for (int i = 0; i < splitArray.length - 1; i++) {
                               if (splitArray[i].isNumeric) {
                                 int key = int.parse(splitArray[i]);
-                                global.numberPair[key] =
+                                global.numberPair[key.toString()] =
                                     (global.numberPair[key])! + intAmt;
-                                global.pairKey.add(key);
+                                global.pairKey.add(key.toString());
                                 global.pairValue.add(intAmt);
                               }
                             }

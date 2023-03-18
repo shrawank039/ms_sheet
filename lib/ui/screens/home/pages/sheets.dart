@@ -38,11 +38,9 @@ class _SheetsState extends ConsumerState<Sheets> {
     _sheetsList.clear();
     var getSheets = await SheetsRepository().getSheetsHome();
     if (getSheets.success == true) {
-      setState(() {
-        _sheetsList.addAll(getSheets.data!);
-      });
     } else {
-      Navigator.push(
+      // ignore: use_build_context_synchronously
+      Navigator.pushReplacement(
           context, MaterialPageRoute(builder: (context) => LoginScreen()));
     }
   }
@@ -51,12 +49,17 @@ class _SheetsState extends ConsumerState<Sheets> {
   Widget build(BuildContext context) {
 
     final _data = ref.watch(sheetHomeDataProvider);
-    return 
-    Consumer(
-              builder: (BuildContext context, WidgetRef ref, Widget? child) {
+
+    return Consumer(
+              builder: (BuildContext contex, WidgetRef ref, Widget? child) {
                 return _data.when(data: (dynamic data) {
-                  print('agentsDataProvider 0 : ${_data.value!.data}');
-                  return Expanded(
+                  print('agentsDataProvider r0 : ${_data.value!.data}');
+
+                  if (_data.value!.success == true) {
+            _sheetsList.clear();
+            _sheetsList.addAll(_data.value!.data!);
+          }
+      return Expanded(
       child: LayoutBuilder(
         builder: (BuildContext context, BoxConstraints constraints) {
           // Mobile = Small (smaller than 640px)
@@ -270,7 +273,7 @@ Widget SheetsCardPC(SheetsResponseData data, BuildContext context) {
                             context,
                             MaterialPageRoute(
                               builder: (context) =>
-                                  MasterPanel(data.id!, dateOnly),
+                                  MasterPanel(data.id!, data.name!, data.refreshedAt!),
                             ));
                       },
                       child: DesignConfig.flatButton(
@@ -288,7 +291,7 @@ Widget SheetsCardPC(SheetsResponseData data, BuildContext context) {
                               context,
                               MaterialPageRoute(
                                 builder: (context) =>
-                                    MainPanel(data.id!, dateOnly),
+                                    MainPanel(data.id!, data.name!, data.refreshedAt!),
                               ));
                         },
                         child: DesignConfig.flatButton(

@@ -206,7 +206,7 @@ Widget sheetsList(SheetsResponseData data, String date, BuildContext context) {
               Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => MasterPanel(data.id!, date),
+                    builder: (context) => MasterPanel(data.id!, data.name!, date),
                   ));
             },
             icon: Icon(

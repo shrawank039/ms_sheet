@@ -24,8 +24,9 @@ AgentsResponseData? selectedAgents;
 class MasterPanel extends ConsumerStatefulWidget {
   final int sheet_id;
   final String date;
+  final String sheet_name;
 
-  const MasterPanel(this.sheet_id, this.date, {super.key});
+  const MasterPanel(this.sheet_id, this.sheet_name, this.date, {super.key});
 
   @override
   ConsumerState<MasterPanel> createState() => _MasterPanelState();
@@ -35,128 +36,128 @@ class _MasterPanelState extends ConsumerState<MasterPanel> {
   @override
   void dispose() {
     global.numberPair = {
-      00: 0,
-      01: 0,
-      02: 0,
-      03: 0,
-      04: 0,
-      05: 0,
-      06: 0,
-      07: 0,
-      08: 0,
-      09: 0,
-      10: 0,
-      11: 0,
-      12: 0,
-      13: 0,
-      14: 0,
-      15: 0,
-      16: 0,
-      17: 0,
-      18: 0,
-      19: 0,
-      20: 0,
-      21: 0,
-      22: 0,
-      23: 0,
-      24: 0,
-      25: 0,
-      26: 0,
-      27: 0,
-      28: 0,
-      29: 0,
-      30: 0,
-      31: 0,
-      32: 0,
-      33: 0,
-      34: 0,
-      35: 0,
-      36: 0,
-      37: 0,
-      38: 0,
-      39: 0,
-      40: 0,
-      41: 0,
-      42: 0,
-      43: 0,
-      44: 0,
-      45: 0,
-      46: 0,
-      47: 0,
-      48: 0,
-      49: 0,
-      50: 0,
-      51: 0,
-      52: 0,
-      53: 0,
-      54: 0,
-      55: 0,
-      56: 0,
-      57: 0,
-      58: 0,
-      59: 0,
-      60: 0,
-      61: 0,
-      62: 0,
-      63: 0,
-      64: 0,
-      65: 0,
-      66: 0,
-      67: 0,
-      68: 0,
-      69: 0,
-      70: 0,
-      71: 0,
-      72: 0,
-      73: 0,
-      74: 0,
-      75: 0,
-      76: 0,
-      77: 0,
-      78: 0,
-      79: 0,
-      80: 0,
-      81: 0,
-      82: 0,
-      83: 0,
-      84: 0,
-      85: 0,
-      86: 0,
-      87: 0,
-      88: 0,
-      89: 0,
-      90: 0,
-      91: 0,
-      92: 0,
-      93: 0,
-      94: 0,
-      95: 0,
-      96: 0,
-      97: 0,
-      98: 0,
-      99: 0,
-      100: 0,
-      101: 0,
-      102: 0,
-      103: 0,
-      104: 0,
-      105: 0,
-      106: 0,
-      107: 0,
-      108: 0,
-      109: 0,
-      110: 0,
-      111: 0,
-      112: 0,
-      113: 0,
-      114: 0,
-      115: 0,
-      116: 0,
-      117: 0,
-      118: 0,
-      119: 0,
-      120: 0,
-    };
+  '00': 0,
+  '01': 0,
+  '02': 0,
+  '03': 0,
+  '04': 0,
+  '05': 0,
+  '06': 0,
+  '07': 0,
+  '08': 0,
+  '09': 0,
+  '10': 0,
+  '11': 0,
+  '12': 0,
+  '13': 0,
+  '14': 0,
+  '15': 0,
+  '16': 0,
+  '17': 0,
+  '18': 0,
+  '19': 0,
+  '20': 0,
+  '21': 0,
+  '22': 0,
+  '23': 0,
+  '24': 0,
+  '25': 0,
+  '26': 0,
+  '27': 0,
+  '28': 0,
+  '29': 0,
+  '30': 0,
+  '31': 0,
+  '32': 0,
+  '33': 0,
+  '34': 0,
+  '35': 0,
+  '36': 0,
+  '37': 0,
+  '38': 0,
+  '39': 0,
+  '40': 0,
+  '41': 0,
+  '42': 0,
+  '43': 0,
+  '44': 0,
+  '45': 0,
+  '46': 0,
+  '47': 0,
+  '48': 0,
+  '49': 0,
+  '50': 0,
+  '51': 0,
+  '52': 0,
+  '53': 0,
+  '54': 0,
+  '55': 0,
+  '56': 0,
+  '57': 0,
+  '58': 0,
+  '59': 0,
+  '60': 0,
+  '61': 0,
+  '62': 0,
+  '63': 0,
+  '64': 0,
+  '65': 0,
+  '66': 0,
+  '67': 0,
+  '68': 0,
+  '69': 0,
+  '70': 0,
+  '71': 0,
+  '72': 0,
+  '73': 0,
+  '74': 0,
+  '75': 0,
+  '76': 0,
+  '77': 0,
+  '78': 0,
+  '79': 0,
+  '80': 0,
+  '81': 0,
+  '82': 0,
+  '83': 0,
+  '84': 0,
+  '85': 0,
+  '86': 0,
+  '87': 0,
+  '88': 0,
+  '89': 0,
+  '90': 0,
+  '91': 0,
+  '92': 0,
+  '93': 0,
+  '94': 0,
+  '95': 0,
+  '96': 0,
+  '97': 0,
+  '98': 0,
+  '99': 0,
+  '100': 0,
+  '101': 0,
+  '102': 0,
+  '103': 0,
+  '104': 0,
+  '105': 0,
+  '106': 0,
+  '107': 0,
+  '108': 0,
+  '109': 0,
+  '110': 0,
+  '111': 0,
+  '112': 0,
+  '113': 0,
+  '114': 0,
+  '115': 0,
+  '116': 0,
+  '117': 0,
+  '118': 0,
+  '119': 0,
+  '120': 0,
+};
     commCheck = false;
     pattiCheck = false;
     inOutCheck = false;
@@ -178,7 +179,11 @@ class _MasterPanelState extends ConsumerState<MasterPanel> {
 
     var total = 0;
     for (int i = 0; i < global.numberPair.length; i++) {
-      total += global.numberPair[i]!;
+      String pairKey = i.toString();
+      if (i < 10) {
+        pairKey = pairKey.padLeft(2, '0');
+      }
+      total += global.numberPair[pairKey]!;
     }
 
     KeyEventResult _handleKeyEvent(FocusNode node, RawKeyEvent event) {
@@ -262,7 +267,7 @@ class _MasterPanelState extends ConsumerState<MasterPanel> {
                                   color: ColorsRes.darkGrey, fontSize: 2.5.w),
                             ),
                             Text(
-                              ' Delhi - Nov 27, 2022',
+                              ' ${widget.sheet_name} - ${widget.date}',
                               style: TextStyle(
                                   color: ColorsRes.mainBlue, fontSize: 2.5.w),
                             ),
@@ -311,8 +316,12 @@ class _MasterPanelState extends ConsumerState<MasterPanel> {
                                                   for (int i = index * 10;
                                                       i < index * 10 + 10;
                                                       i++) {
+                                                        String pairKey = i.toString();
+      if (i < 10) {
+        pairKey = pairKey.padLeft(2, '0');
+      }
                                                     total = total +
-                                                        global.numberPair[i]!;
+                                                        global.numberPair[pairKey]!;
                                                   }
                                                   return Container(
                                                     alignment:
@@ -372,9 +381,13 @@ class _MasterPanelState extends ConsumerState<MasterPanel> {
                                                   for (int i = index * 10;
                                                       i < index * 10 + 10;
                                                       i++) {
+                                                        String pairKey = (i+100).toString();
+      if (i < 10) {
+        pairKey = pairKey.padLeft(2, '0');
+      }
                                                     total = total +
                                                         global.numberPair[
-                                                            i + 100]!;
+                                                            pairKey]!;
                                                   }
                                                   return Container(
                                                     alignment:
@@ -557,88 +570,89 @@ class _MasterPanelState extends ConsumerState<MasterPanel> {
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  Card(
-                                    //margin: EdgeInsets.only(left: 1.w),
-                                    color: ColorsRes.lightBlue,
-                                    elevation: 0,
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(1.8.w)),
-                                    child: Padding(
-                                      padding: EdgeInsets.only(
-                                          top: 0.7.h,
-                                          bottom: 0.7.h,
-                                          left: 0.8.w),
-                                      child: Row(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.center,
-                                        children: [
-                                          SizedBox(
-                                            width: 0.1.w,
-                                          ),
-                                          Icon(
-                                            FontAwesomeIcons.share,
-                                            color: ColorsRes.mainBlue,
-                                            size: 2.w,
-                                          ),
-                                          SizedBox(
-                                            width: 1.0.w,
-                                          ),
-                                          Text(
-                                            'Share',
-                                            style: TextStyle(
-                                              color: ColorsRes.mainBlue,
-                                              fontSize: 1.5.w,
-                                            ),
-                                          ),
-                                          SizedBox(
-                                            width: 1.0.w,
-                                          )
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                  Card(
-                                    // margin: EdgeInsets.only(left: 2.w),
-                                    color: ColorsRes.lightBlue,
-                                    elevation: 0,
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(1.8.w)),
-                                    child: Padding(
-                                      padding: EdgeInsets.only(
-                                          top: 0.7.h,
-                                          bottom: 0.7.h,
-                                          left: 1.8.w),
-                                      child: Row(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.center,
-                                        children: [
-                                          SizedBox(
-                                            width: 0.1.w,
-                                          ),
-                                          Icon(
-                                            FontAwesomeIcons.whatsapp,
-                                            color: ColorsRes.mainBlue,
-                                            size: 2.w,
-                                          ),
-                                          SizedBox(
-                                            width: 1.0.w,
-                                          ),
-                                          Text(
-                                            'Share',
-                                            style: TextStyle(
-                                              color: ColorsRes.mainBlue,
-                                              fontSize: 1.5.w,
-                                            ),
-                                          ),
-                                          SizedBox(
-                                            width: 1.0.w,
-                                          )
-                                        ],
-                                      ),
-                                    ),
-                                  ),
+                                  // Card(
+                                  //   //margin: EdgeInsets.only(left: 1.w),
+                                  //   color: ColorsRes.lightBlue,
+                                  //   elevation: 0,
+                                  //   shape: RoundedRectangleBorder(
+                                  //       borderRadius:
+                                  //           BorderRadius.circular(1.8.w)),
+                                  //   child: Padding(
+                                  //     padding: EdgeInsets.only(
+                                  //         top: 0.7.h,
+                                  //         bottom: 0.7.h,
+                                  //         left: 0.8.w),
+                                  //     child: Row(
+                                  //       crossAxisAlignment:
+                                  //           CrossAxisAlignment.center,
+                                  //       children: [
+                                  //         SizedBox(
+                                  //           width: 0.1.w,
+                                  //         ),
+                                  //         Icon(
+                                  //           FontAwesomeIcons.share,
+                                  //           color: ColorsRes.mainBlue,
+                                  //           size: 2.w,
+                                  //         ),
+                                  //         SizedBox(
+                                  //           width: 1.0.w,
+                                  //         ),
+                                  //         Text(
+                                  //           'Share',
+                                  //           style: TextStyle(
+                                  //             color: ColorsRes.mainBlue,
+                                  //             fontSize: 1.5.w,
+                                  //           ),
+                                  //         ),
+                                  //         SizedBox(
+                                  //           width: 1.0.w,
+                                  //         )
+                                  //       ],
+                                  //     ),
+                                  //   ),
+                                  // ),
+ 
+                                  // Card(
+                                  //   // margin: EdgeInsets.only(left: 2.w),
+                                  //   color: ColorsRes.lightBlue,
+                                  //   elevation: 0,
+                                  //   shape: RoundedRectangleBorder(
+                                  //       borderRadius:
+                                  //           BorderRadius.circular(1.8.w)),
+                                  //   child: Padding(
+                                  //     padding: EdgeInsets.only(
+                                  //         top: 0.7.h,
+                                  //         bottom: 0.7.h,
+                                  //         left: 1.8.w),
+                                  //     child: Row(
+                                  //       crossAxisAlignment:
+                                  //           CrossAxisAlignment.center,
+                                  //       children: [
+                                  //         SizedBox(
+                                  //           width: 0.1.w,
+                                  //         ),
+                                  //         Icon(
+                                  //           FontAwesomeIcons.whatsapp,
+                                  //           color: ColorsRes.mainBlue,
+                                  //           size: 2.w,
+                                  //         ),
+                                  //         SizedBox(
+                                  //           width: 1.0.w,
+                                  //         ),
+                                  //         Text(
+                                  //           'Share',
+                                  //           style: TextStyle(
+                                  //             color: ColorsRes.mainBlue,
+                                  //             fontSize: 1.5.w,
+                                  //           ),
+                                  //         ),
+                                  //         SizedBox(
+                                  //           width: 1.0.w,
+                                  //         )
+                                  //       ],
+                                  //     ),
+                                  //   ),
+                                  // ),
                                   Card(
                                     //margin: EdgeInsets.only(left: 2.w),
                                     color: ColorsRes.lightBlue,
@@ -701,8 +715,13 @@ class _MasterPanelState extends ConsumerState<MasterPanel> {
 Widget numberBox(int index) {
   final TextEditingController pointController = TextEditingController();
 
-  if (global.numberPair[index + 1]! > 0) {
-    pointController.text = global.numberPair[index + 1].toString();
+    String pairKey = (index+1).toString();
+      if (index+1 < 10) {
+        pairKey = pairKey.padLeft(2, '0');
+      }
+
+  if (global.numberPair[pairKey]! > 0) {
+    pointController.text = global.numberPair[pairKey].toString();
   }
 
   pointController.selection = TextSelection(
@@ -738,7 +757,7 @@ Widget numberBox(int index) {
               border: const OutlineInputBorder(borderSide: BorderSide.none),
             ),
             onChanged: (value) {
-              global.numberPair[index + 1] = int.parse(value);
+              global.numberPair[pairKey] = int.parse(value);
               print('onChanged ${global.numberPair[index]}');
             },
           ),
@@ -804,9 +823,13 @@ Widget controls() {
                   }
                   global.numberPair = convertPair(_selectedList);
                   for (int i = 0; i < global.numberPair.length; i++) {
-                    if (global.numberPair[i]! > 0) {
-                      global.numberPair[i] =
-                          (global.numberPair[i]! - int.parse(value));
+                    String pairKey = i.toString();
+      if (i < 10) {
+        pairKey = pairKey.padLeft(2, '0');
+      }
+                    if (global.numberPair[pairKey]! > 0) {
+                      global.numberPair[pairKey] =
+                          (global.numberPair[pairKey]! - int.parse(value));
                     }
                   }
                   ref.refresh(numberPairProvider);
@@ -830,9 +853,13 @@ Widget controls() {
                   }
                   global.numberPair = convertPair(_selectedList);
                   for (int i = 0; i < global.numberPair.length; i++) {
-                    if (global.numberPair[i]! >= int.parse(value)) {
-                      global.numberPair[i] =
-                          (global.numberPair[i]! - int.parse(value));
+                    String pairKey = i.toString();
+      if (i < 10) {
+        pairKey = pairKey.padLeft(2, '0');
+      }
+                    if (global.numberPair[pairKey]! >= int.parse(value)) {
+                      global.numberPair[pairKey] =
+                          (global.numberPair[pairKey]! - int.parse(value));
                     }
                   }
                   ref.refresh(numberPairProvider);
@@ -856,10 +883,14 @@ Widget controls() {
                   }
                   global.numberPair = convertPair(_selectedList);
                   for (int i = 0; i < global.numberPair.length; i++) {
-                    if (global.numberPair[i]! > 0) {
+                    String pairKey = i.toString();
+      if (i < 10) {
+        pairKey = pairKey.padLeft(2, '0');
+      }
+                    if (global.numberPair[pairKey]! > 0) {
                       int percent = int.parse(value);
-                      var finalValue = (global.numberPair[i]! * percent) / 100;
-                      global.numberPair[i] = finalValue.toInt();
+                      var finalValue = (global.numberPair[pairKey]! * percent) / 100;
+                      global.numberPair[pairKey] = finalValue.toInt();
                     }
                   }
                   ref.refresh(numberPairProvider);
@@ -883,8 +914,12 @@ Widget controls() {
                   }
                   global.numberPair = convertPair(_selectedList);
                   for (int i = 0; i < global.numberPair.length; i++) {
-                    if (global.numberPair[i]! >= int.parse(value)) {
-                      global.numberPair[i] = 0;
+                    String pairKey = i.toString();
+      if (i < 10) {
+        pairKey = pairKey.padLeft(2, '0');
+      }
+                    if (global.numberPair[pairKey]! >= int.parse(value)) {
+                      global.numberPair[pairKey] = 0;
                     }
                   }
                   ref.refresh(numberPairProvider);
@@ -908,8 +943,12 @@ Widget controls() {
                   }
                   global.numberPair = convertPair(_selectedList);
                   for (int i = 0; i < global.numberPair.length; i++) {
-                    if (global.numberPair[i]! <= int.parse(value)) {
-                      global.numberPair[i] = 0;
+                    String pairKey = i.toString();
+      if (i < 10) {
+        pairKey = pairKey.padLeft(2, '0');
+      }
+                    if (global.numberPair[pairKey]! <= int.parse(value)) {
+                      global.numberPair[pairKey] = 0;
                     }
                   }
                   ref.refresh(numberPairProvider);
@@ -944,15 +983,23 @@ Widget controls() {
                           double.parse(selectedAgents!.pairRate!) / 100;
                       if (value) {
                         for (int i = 0; i < global.numberPair.length; i++) {
-                          if (global.numberPair[i]! > 0) {
-                            global.numberPair[i] = (global.numberPair[i]! -
+                          String pairKey = i.toString();
+      if (i < 10) {
+        pairKey = pairKey.padLeft(2, '0');
+      }
+                          if (global.numberPair[pairKey]! > 0) {
+                            global.numberPair[pairKey] = (global.numberPair[pairKey]! -
                                     (selectPairList[i]! * round))
                                 .toInt();
                           }
                         }
                       } else {
                         for (int i = 0; i < global.numberPair.length; i++) {
-                          global.numberPair[i] = (global.numberPair[i]! +
+                          String pairKey = i.toString();
+      if (i < 10) {
+        pairKey = pairKey.padLeft(2, '0');
+      }
+                          global.numberPair[pairKey] = (global.numberPair[pairKey]! +
                                   (selectPairList[i]! * round))
                               .toInt();
                         }
@@ -970,38 +1017,54 @@ Widget controls() {
                         ColorsRes.mainBlue,
                         inOutCheck, (value) {
                       inOutCheck = value;
-                      double inout = global.numberPair[101]! / 10;
-                      double inout2 = global.numberPair[110]! / 10;
+                      double inout = global.numberPair['101']! / 10;
+                      double inout2 = global.numberPair['110']! / 10;
                       if (global.numberPair[101]! > 0) {
                         if (value) {
                           for (int i = 0; i < 10; i++) {
                             int a = i * 10 + 1;
-                            global.numberPair[a] =
-                                (global.numberPair[a]! + inout).toInt();
+                            String pairKey = a.toString();
+      if (i < 10) {
+        pairKey = pairKey.padLeft(2, '0');
+      }
+                            global.numberPair[pairKey] =
+                                (global.numberPair[pairKey]! + inout).toInt();
                           }
                         } else {
                           for (int i = 0; i < 10; i++) {
                             int a = i * 10 + 1;
-                            if (global.numberPair[a]! > 0) {
-                              global.numberPair[a] =
-                                  (global.numberPair[a]! - inout).toInt();
+                            String pairKey = a.toString();
+      if (i < 10) {
+        pairKey = pairKey.padLeft(2, '0');
+      }
+                            if (global.numberPair[pairKey]! > 0) {
+                              global.numberPair[pairKey] =
+                                  (global.numberPair[pairKey]! - inout).toInt();
                             }
                           }
                         }
                       }
-                      if (global.numberPair[110]! > 0) {
+                      if (global.numberPair['110']! > 0) {
                         if (value) {
                           for (int i = 0; i < 10; i++) {
                             int a = i * 10 + 10;
-                            global.numberPair[a] =
-                                (global.numberPair[a]! + inout2).toInt();
+                            String pairKey = a.toString();
+      if (i < 10) {
+        pairKey = pairKey.padLeft(2, '0');
+      }
+                            global.numberPair[pairKey] =
+                                (global.numberPair[pairKey]! + inout2).toInt();
                           }
                         } else {
                           for (int i = 0; i < 10; i++) {
                             int a = i * 10 + 10;
-                            if (global.numberPair[a]! > 0) {
-                              global.numberPair[a] =
-                                  (global.numberPair[a]! - inout2).toInt();
+                            String pairKey = a.toString();
+      if (i < 10) {
+        pairKey = pairKey.padLeft(2, '0');
+      }
+                            if (global.numberPair[pairKey]! > 0) {
+                              global.numberPair[pairKey] =
+                                  (global.numberPair[pairKey]! - inout2).toInt();
                             }
                           }
                         }
@@ -1023,15 +1086,23 @@ Widget controls() {
                           double.parse(selectedAgents!.commission!) / 100;
                       if (value) {
                         for (int i = 0; i < global.numberPair.length; i++) {
-                          if (global.numberPair[i]! > 0) {
-                            global.numberPair[i] = (global.numberPair[i]! -
+                          String pairKey = i.toString();
+      if (i < 10) {
+        pairKey = pairKey.padLeft(2, '0');
+      }
+                          if (global.numberPair[pairKey]! > 0) {
+                            global.numberPair[pairKey] = (global.numberPair[pairKey]! -
                                     (selectPairList[i]! * commission))
                                 .toInt();
                           }
                         }
                       } else {
                         for (int i = 0; i < global.numberPair.length; i++) {
-                          global.numberPair[i] = (global.numberPair[i]! +
+                          String pairKey = i.toString();
+      if (i < 10) {
+        pairKey = pairKey.padLeft(2, '0');
+      }
+                          global.numberPair[pairKey] = (global.numberPair[pairKey]! +
                                   (selectPairList[i]! * commission))
                               .toInt();
                         }
@@ -1053,15 +1124,23 @@ Widget controls() {
                       double patti = double.parse(selectedAgents!.patti!) / 100;
                       if (value) {
                         for (int i = 0; i < global.numberPair.length; i++) {
-                          if (global.numberPair[i]! > 0) {
-                            global.numberPair[i] = (global.numberPair[i]! -
+                          String pairKey = i.toString();
+      if (i < 10) {
+        pairKey = pairKey.padLeft(2, '0');
+      }
+                          if (global.numberPair[pairKey]! > 0) {
+                            global.numberPair[i.toString()] = (global.numberPair[pairKey]! -
                                     (selectPairList[i]! * patti))
                                 .toInt();
                           }
                         }
                       } else {
                         for (int i = 0; i < global.numberPair.length; i++) {
-                          global.numberPair[i] = (global.numberPair[i]! +
+                          String pairKey = i.toString();
+      if (i < 10) {
+        pairKey = pairKey.padLeft(2, '0');
+      }
+                          global.numberPair[pairKey] = (global.numberPair[pairKey]! +
                                   (selectPairList[i]! * patti))
                               .toInt();
                         }
@@ -1095,13 +1174,17 @@ Widget controls() {
 Widget clientsList(
     PanelResponseData data,
     ExtraDataParameter extraDataParameter,
-    Map<int, int> pair,
+    Map<String, int> pair,
     BuildContext context) {
-  Map<int, int> result = convertPair(data);
+  Map<String, int> result = convertPair(data);
   int total = 0;
 
   for (int i = 0 * 10; i < 120; i++) {
-    total = total + result[i + 1]!;
+    String pairKey = (i+1).toString();
+      if (i < 10) {
+        pairKey = pairKey.padLeft(2, '0');
+      }
+    total = total + result[pairKey]!;
   }
 
   String selected = "";
@@ -1169,14 +1252,22 @@ Widget clientsList(
                 if (value!) {
                   checkBox.add(data.id!);
                   for (int i = 0; i < global.numberPair.length - 1; i++) {
-                    global.numberPair[i] = global.numberPair[i]! + pair[i]!;
+                    String pairKey = i.toString();
+      if (i < 10) {
+        pairKey = pairKey.padLeft(2, '0');
+      }
+                    global.numberPair[pairKey] = global.numberPair[pairKey]! + pair[pairKey]!;
                   }
                   _selectedList = global.numberPair;
                   selectPairList = global.numberPair;
                 } else {
                   checkBox.remove(data.id!);
                   for (int i = 0; i < global.numberPair.length - 1; i++) {
-                    global.numberPair[i] = global.numberPair[i]! - pair[i]!;
+                    String pairKey = i.toString();
+      if (i < 10) {
+        pairKey = pairKey.padLeft(2, '0');
+      }
+                    global.numberPair[pairKey] = global.numberPair[pairKey]! - pair[pairKey]!;
                   }
                   _selectedList = global.numberPair;
                   selectPairList = global.numberPair;
@@ -1200,17 +1291,17 @@ Widget clientsList(
   );
 }
 
-Map<int, int> convertPair(PanelResponseData data) {
+Map<String, int> convertPair(PanelResponseData data) {
   List<String> str = data.pair!
       .replaceAll("{", "")
       .replaceAll("}", "")
       .replaceAll("\"", "")
       .replaceAll("'", "")
       .split(",");
-  Map<int, int> result = {};
+  Map<String, int> result = {};
   for (int i = 0; i < str.length; i++) {
     List<String> s = str[i].split(":");
-    result.putIfAbsent(int.parse(s[0].trim()), () => int.parse(s[1].trim()));
+    result.putIfAbsent((s[0].trim()), () => int.parse(s[1].trim()));
   }
   return result;
 }

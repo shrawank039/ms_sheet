@@ -1,19 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sizer/sizer.dart';
 
+import '../providers/data_providers.dart';
 import '../repositories/panel_repository.dart';
 import '../ui/styles/color.dart';
 
-class DeclarePopup extends StatefulWidget {
+class DeclarePopup extends ConsumerStatefulWidget {
   final int sheet_id;
   final String result;
   const DeclarePopup(this.sheet_id, this.result, {super.key});
 
   @override
-  State<DeclarePopup> createState() => _DeclarePopupState();
+  ConsumerState<DeclarePopup> createState() => _DeclarePopupState();
 }
 
-class _DeclarePopupState extends State<DeclarePopup> {
+class _DeclarePopupState extends ConsumerState<DeclarePopup> {
   final resultController = TextEditingController();
   final firstDigitController = TextEditingController();
   final secondDigitController = TextEditingController();
@@ -227,6 +229,7 @@ class _DeclarePopupState extends State<DeclarePopup> {
                               firstDigitController.text = '';
                               secondDigitController.text = '';
                               resultController.text = '';
+                              ref.refresh(sheetHomeDataProvider);
                             });
                           }
                         },
@@ -259,6 +262,7 @@ class _DeclarePopupState extends State<DeclarePopup> {
                                     int.parse(resultController.text.trim()));
                             if (declareResult.success == true) {
                               Navigator.of(context).pop();
+                              ref.refresh(sheetHomeDataProvider);
                             }
                           } else {}
                         },
