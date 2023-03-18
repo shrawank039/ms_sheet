@@ -30,7 +30,6 @@ class Sheets extends ConsumerStatefulWidget {
 class _SheetsState extends ConsumerState<Sheets> {
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     getSheets();
   }
@@ -196,7 +195,7 @@ Widget SheetsCardPC(SheetsResponseData data, BuildContext context) {
                 Icons.airplane_ticket,
                 ColorsRes.green,
                 2.3.w,
-                dateToday,
+                data.refreshedAt!,
                 1.6.w,
                 ColorsRes.green,
               )
@@ -205,31 +204,42 @@ Widget SheetsCardPC(SheetsResponseData data, BuildContext context) {
           SizedBox(
             height: 2.4.w,
           ),
-          Row(
-            children: [
-              SizedBox(
-                width: 0.5.w,
-              ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    data.name!,
-                    style: TextStyle(
-                        color: ColorsRes.black,
-                        fontSize: 2.0.w,
-                        fontWeight: FontWeight.w500),
-                  ),
-                  Text(
-                    'Last Time: ${data.endTime}',
-                    style: TextStyle(
-                      color: ColorsRes.lightGrey,
-                      fontSize: 1.6.w,
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal:8.0),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Text(
+                      data.name!,
+                      style: TextStyle(
+                          color: ColorsRes.black,
+                          fontSize: 2.0.w,
+                          fontWeight: FontWeight.w500),
                     ),
-                  ),
-                ],
-              ),
-            ],
+                    Text(
+                      'Last Time: ${data.endTime}',
+                      style: TextStyle(
+                        color: ColorsRes.lightGrey,
+                        fontSize: 1.6.w,
+                      ),
+                    ),
+                  ],
+                ),
+                Text(
+                      data.declared_result==null?
+                      '':data.declared_result!,
+                      style: TextStyle(
+                          color: ColorsRes.black,
+                          fontSize: 4.0.w,
+                          fontWeight: FontWeight.w600),
+                    ),
+              ],
+            ),
           ),
           SizedBox(
             height: 1.5.w,

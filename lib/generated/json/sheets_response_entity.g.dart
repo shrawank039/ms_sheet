@@ -41,6 +41,10 @@ SheetsResponseData $SheetsResponseDataFromJson(Map<String, dynamic> json) {
   if (endTime != null) {
     sheetsResponseData.endTime = endTime;
   }
+  final String? refreshedAt = jsonConvert.convert<String>(json['refreshed_at']);
+  if (endTime != null) {
+    sheetsResponseData.refreshedAt = refreshedAt;
+  }
   final String? declared_result =
       jsonConvert.convert<String>(json['declared_result']);
   if (declared_result != null) {
@@ -59,6 +63,7 @@ Map<String, dynamic> $SheetsResponseDataToJson(SheetsResponseData entity) {
   data['id'] = entity.id;
   data['name'] = entity.name;
   data['end_time'] = entity.endTime;
+  data['refreshed_at'] = entity.refreshedAt;
   data['declared_result'] = entity.declared_result;
   data['declared_status'] = entity.declared_status;
   return data;

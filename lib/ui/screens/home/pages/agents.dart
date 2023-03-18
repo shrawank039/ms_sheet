@@ -11,7 +11,7 @@ import 'package:sizer/sizer.dart';
 import '../../../../models/agents_response_entity.dart';
 import '../../../utils/toast.dart';
 
-AgentsResponseData? selectedAgents;
+AgentsResponseData? selectedAgents, referenceAgent;
 bool updateAgent = false;
 int selectedAgentsReference = 0;
 
@@ -84,7 +84,7 @@ class _SheetsState extends ConsumerState<Agents> {
               SizedBox(
                 height: 4.w,
               ),
-              CreateAgentSection(),
+              const CreateAgentSection(),
               Expanded(
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -97,7 +97,7 @@ class _SheetsState extends ConsumerState<Agents> {
                         builder: (BuildContext context, WidgetRef ref,
                             Widget? child) {
                           return _data.when(data: (dynamic data) {
-                            print(
+                            debugPrint(
                                 'agentsDataProvider 0 : ${_data.value!.message}');
                             return Column(
                               children: _data.value!.data!.map((e) {
@@ -263,6 +263,7 @@ Widget agentsList(AgentsResponseData data, BuildContext context) {
               onPressed: () {
                 selectedAgents = data;
                 selectedAgentsReference = int.parse(data.referenceId!);
+                referenceAgent = selectedAgentsReference == 0? null: data;
                 updateAgent = true;
                 ref.refresh(agentsDataProvider);
               },
@@ -402,6 +403,7 @@ class _CreateAgentSectionState extends ConsumerState<CreateAgentSection> {
   void dispose() {
     textEditingController.dispose();
     selectedAgents = null;
+    referenceAgent = null;
     updateAgent = false;
     selectedAgentsReference = 0;
     super.dispose();
@@ -535,11 +537,11 @@ class _CreateAgentSectionState extends ConsumerState<CreateAgentSection> {
                         builder: (BuildContext context, WidgetRef ref,
                             Widget? child) {
                           return _data.when(data: (dynamic data) {
-                            if (selectedAgents != null ||
+                            if (referenceAgent != null ||
                                 selectedAgentsReference != 0) {
                               // PC Layout
-                              selectedAgents = null;
-                              selectedAgents = _data.value!.data!
+                              referenceAgent = null;
+                              referenceAgent = _data.value!.data!
                                   .where((item) =>
                                       item.id == selectedAgentsReference)
                                   .toList()[0];
@@ -571,11 +573,11 @@ class _CreateAgentSectionState extends ConsumerState<CreateAgentSection> {
                                           ),
                                         ))
                                     .toList(),
-                                value: selectedAgents,
+                                value: referenceAgent,
                                 onChanged: (value) {
                                   setState(() {
                                     selectedAgentsReference = value!.id!;
-                                    //selectedAgents = value;
+                                    referenceAgent = null;
                                   });
                                 },
                                 //itemHeight: 40,
@@ -592,10 +594,6 @@ class _CreateAgentSectionState extends ConsumerState<CreateAgentSection> {
                                     controller: textEditingController,
                                     decoration: InputDecoration(
                                       isDense: true,
-                                      // contentPadding: const EdgeInsets.symmetric(
-                                      //   horizontal: 10,
-                                      //   vertical: 8,
-                                      // ),
                                       hintText: 'Search for clients...',
                                       hintStyle: const TextStyle(fontSize: 12),
                                       border: OutlineInputBorder(

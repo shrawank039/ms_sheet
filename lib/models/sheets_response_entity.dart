@@ -28,6 +28,7 @@ class SheetsResponseData {
   String? name;
   @JSONField(name: "end_time")
   String? endTime;
+  String? refreshedAt;
   String? declared_result;
   int? declared_status;
 

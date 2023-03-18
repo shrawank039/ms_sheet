@@ -79,7 +79,7 @@ class _OtpState extends State<Otp> {
         var registerResponse = await AuthRepository()
             .getSignupResponse(widget.name, widget.mobile, widget.pass);
         if (registerResponse.success = true) {
-          AuthHelper().setUserData(registerResponse);
+          await AuthHelper().setUserData(registerResponse);
           Navigator.pushReplacement(
               context, MaterialPageRoute(builder: (context) => Home()));
         }

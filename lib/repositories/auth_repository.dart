@@ -29,8 +29,8 @@ class AuthRepository {
   Future<SignupResponse> getSignupResponse(
       String name,
       //  String email,
-      String password,
-      String mobileNumber) async {
+      String mobileNumber,
+      String password) async {
     var postBody = jsonEncode({
       "name": name,
       // "email": email,
