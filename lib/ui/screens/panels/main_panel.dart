@@ -767,15 +767,7 @@ class _MainPanelState extends ConsumerState<MainPanel> {
                                                     'DropdownButton2 0 : ${selectedAgents}');
                                               }
                                               return DropdownButtonHideUnderline(
-                                                child: DropdownButton2(
-                                                  dropdownDecoration:
-                                                      BoxDecoration(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            8),
-                                                    color:
-                                                        const Color(0xFFf9f9f9),
-                                                  ),
+                                                child: DropdownButton2<AgentsResponseData>(
                                                   hint: Text(
                                                     'Select Client',
                                                     style: TextStyle(
@@ -791,8 +783,7 @@ class _MainPanelState extends ConsumerState<MainPanel> {
                                                   items: _dataAgents
                                                       .value?.data!
                                                       .map((item) =>
-                                                          DropdownMenuItem<
-                                                              AgentsResponseData>(
+                                                          DropdownMenuItem(
                                                             value: item,
                                                             child: Text(
                                                               item.name
@@ -804,7 +795,7 @@ class _MainPanelState extends ConsumerState<MainPanel> {
                                                             ),
                                                           ))
                                                       .toList(),
-                                                  dropdownMaxHeight: 25.h,
+                                                  //dropdownMaxHeight: 25.h,
                                                   value: selectedAgents,
                                                   onChanged: updatePanelStatus
                                                       ? null
@@ -816,8 +807,10 @@ class _MainPanelState extends ConsumerState<MainPanel> {
                                                                 true;
                                                           });
                                                         },
+                                                        dropdownSearchData: DropdownSearchData(
                                                   searchController:
                                                       textEditingController,
+                                                      searchInnerWidgetHeight: 50,
                                                   searchInnerWidget: Padding(
                                                     padding:
                                                         const EdgeInsets.only(
@@ -855,7 +848,7 @@ class _MainPanelState extends ConsumerState<MainPanel> {
                                                     return (item.value
                                                         .toString()
                                                         .contains(searchValue));
-                                                  },
+                                                  },),
                                                   //This to clear the search value when you close the menu
                                                   onMenuStateChange: (isOpen) {
                                                     if (!isOpen) {

@@ -559,73 +559,78 @@ class _CreateAgentSectionState extends ConsumerState<CreateAgentSection> {
                                       item.id == selectedAgentsReference)
                                   .toList()[0];
                             }
-                            return DropdownButtonHideUnderline(
-                              child: DropdownButton2(
-                                dropdownDecoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(8),
-                                  color: const Color(0xFFf9f9f9),
-                                ),
-                                isExpanded: true,
-                                hint: Text(
-                                  'Select Reference',
-                                  style: TextStyle(
-                                    fontSize: 2.2.w,
-                                    color: const Color.fromARGB(
-                                        255, 174, 174, 174),
+                            return Center(
+                              child: DropdownButtonHideUnderline(
+                                child: DropdownButton2<AgentsResponseData>(
+                                  // dropdownDecoration: BoxDecoration(
+                                  //   borderRadius: BorderRadius.circular(8),
+                                  //   color: const Color(0xFFf9f9f9),
+                                  // ),
+                                  isExpanded: true,
+                                  hint: Text(
+                                    'Select Reference',
+                                    style: TextStyle(
+                                      fontSize: 2.2.w,
+                                      color: const Color.fromARGB(
+                                          255, 174, 174, 174),
+                                    ),
                                   ),
-                                ),
-                                items: _data.value?.data!
-                                    .map((item) =>
-                                        DropdownMenuItem<AgentsResponseData>(
-                                          value: item,
-                                          child: Text(
-                                            item.name.toString(),
-                                            style: const TextStyle(
-                                              fontSize: 14,
+                                  items: _data.value?.data!
+                                      .map((item) =>
+                                          DropdownMenuItem(
+                                            value: item,
+                                            child: Text(
+                                              item.name.toString(),
+                                              style: const TextStyle(
+                                                fontSize: 14,
+                                              ),
                                             ),
-                                          ),
-                                        ))
-                                    .toList(),
-                                value: referenceAgent,
-                                onChanged: (value) {
-                                  setState(() {
-                                    selectedAgentsReference = value!.id!;
-                                    referenceAgent = null;
-                                  });
-                                },
-                                //itemHeight: 40,
-                                dropdownMaxHeight: 25.h,
-                                searchController: textEditingController,
-                                searchInnerWidget: Padding(
-                                  padding: const EdgeInsets.only(
-                                    top: 8,
-                                    bottom: 4,
-                                    right: 8,
-                                    left: 8,
-                                  ),
-                                  child: TextFormField(
-                                    controller: textEditingController,
-                                    decoration: InputDecoration(
-                                      isDense: true,
-                                      hintText: 'Search for clients...',
-                                      hintStyle: const TextStyle(fontSize: 12),
-                                      border: OutlineInputBorder(
-                                        borderRadius: BorderRadius.circular(8),
+                                          ))
+                                      .toList(),
+                                  value: referenceAgent,
+                                  onChanged: (value) {
+                                    setState(() {
+                                      selectedAgentsReference = value!.id!;
+                                      referenceAgent = null;
+                                    });
+                                  },
+                                  //itemHeight: 40,
+                                  dropdownSearchData: DropdownSearchData(
+                                  //dropdownMaxHeight: 25.h,
+                                  searchController: textEditingController,
+                                  searchInnerWidgetHeight: 50,
+                                  searchInnerWidget: Padding(
+                                    padding: const EdgeInsets.only(
+                                      top: 8,
+                                      bottom: 4,
+                                      right: 8,
+                                      left: 8,
+                                    ),
+                                    child: TextFormField(
+                                      controller: textEditingController,
+                                      decoration: InputDecoration(
+                                        isDense: true,
+                                        hintText: 'Search for clients...',
+                                        hintStyle: const TextStyle(fontSize: 12),
+                                        border: OutlineInputBorder(
+                                          borderRadius: BorderRadius.circular(8),
+                                        ),
                                       ),
                                     ),
                                   ),
+                                  searchMatchFn: (item, searchValue) {
+                                    return (item.value
+                                        .toString()
+                                        .contains(searchValue));
+                                  },
+                                  ),
+                                  //This to clear the search value when you close the menu
+                                  onMenuStateChange: (isOpen) {
+                                    if (!isOpen) {
+                                      textEditingController.clear();
+                                    }
+                                  },
                                 ),
-                                searchMatchFn: (item, searchValue) {
-                                  return (item.value
-                                      .toString()
-                                      .contains(searchValue));
-                                },
-                                //This to clear the search value when you close the menu
-                                onMenuStateChange: (isOpen) {
-                                  if (!isOpen) {
-                                    textEditingController.clear();
-                                  }
-                                },
                               ),
                             );
                           }, error: (Object error, StackTrace stackTrace) {
@@ -929,10 +934,10 @@ class _CreateAgentSectionMobileState
                           }
                           return DropdownButtonHideUnderline(
                             child: DropdownButton2(
-                              dropdownDecoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(8),
-                                color: const Color(0xFFf9f9f9),
-                              ),
+                              // dropdownDecoration: BoxDecoration(
+                              //   borderRadius: BorderRadius.circular(8),
+                              //   color: const Color(0xFFf9f9f9),
+                              // ),
                               isExpanded: true,
                               hint: Text(
                                 'Select Reference',
@@ -944,7 +949,7 @@ class _CreateAgentSectionMobileState
                               ),
                               items: _data.value?.data!
                                   .map((item) =>
-                                      DropdownMenuItem<AgentsResponseData>(
+                                      DropdownMenuItem(
                                         value: item,
                                         child: Text(
                                           item.name.toString(),
@@ -958,11 +963,12 @@ class _CreateAgentSectionMobileState
                               onChanged: (value) {
                                 setState(() {
                                   //selectedAgents = value;
-                                  selectedAgentsReference = value!.id!;
+                                  //selectedAgentsReference = value!.id!;
                                 });
                               },
                               //itemHeight: 40,
-                              dropdownMaxHeight: 25.h,
+                              //dropdownMaxHeight: 25.h,
+                              dropdownSearchData: DropdownSearchData(
                               searchController: textEditingController,
                               searchInnerWidget: Padding(
                                 padding: const EdgeInsets.only(
@@ -991,7 +997,7 @@ class _CreateAgentSectionMobileState
                                 return (item.value
                                     .toString()
                                     .contains(searchValue));
-                              },
+                              },),
                               //This to clear the search value when you close the menu
                               onMenuStateChange: (isOpen) {
                                 if (!isOpen) {

@@ -20,7 +20,7 @@ class PanelRepository {
       "pair_value": pair_value.toString(),
       "total": total
     });
-
+    print('addPanel postBody : ${postBody}');
     Uri url = Uri.parse("${AppConfig.BASE_URL}/e-panels");
     final response = await http.post(url,
         headers: await global.getApiHeaders(true), body: postBody);
