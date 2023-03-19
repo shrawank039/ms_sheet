@@ -1,6 +1,7 @@
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:ms_sheet/providers/data_providers.dart';
 import 'package:ms_sheet/repositories/agents_repository.dart';
 import 'package:ms_sheet/ui/styles/color.dart';
@@ -32,93 +33,105 @@ class _SheetsState extends ConsumerState<Agents> {
     final _data = ref.watch(agentsDataProvider);
     print('agentsDataProvider : ${_data.value?.message}');
 
-    return LayoutBuilder(
-      builder: (BuildContext context, BoxConstraints constraints) {
-        // Mobile = Small (smaller than 640px)
-        // Tablet = Medium (641px to 1007px)
-        // Laptop = Large (1008px and larger)
-        if (constraints.maxWidth < 640) {
-          return SingleChildScrollView(
-            physics: BouncingScrollPhysics(),
-            child: Column(
+    return Expanded(
+      child: LayoutBuilder(
+        builder: (BuildContext context, BoxConstraints constraints) {
+          // Mobile = Small (smaller than 640px)
+          // Tablet = Medium (641px to 1007px)
+          // Laptop = Large (1008px and larger)
+          if (constraints.maxWidth < 640) {
+            return SingleChildScrollView(
+              physics: BouncingScrollPhysics(),
+              child: Column(
+                children: [
+                  SizedBox(
+                    height: 4.w,
+                  ),
+                  CreateAgentSectionMobile(),
+                  SizedBox(
+                    height: 2.w,
+                  ),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Expanded(
+                        child: Consumer(
+                          builder: (BuildContext context, WidgetRef ref,
+                              Widget? child) {
+                            return _data.when(data: (dynamic data) {
+                              print(
+                                  'agentsDataProvider 0 : ${_data.value?.data}');
+                              return Column(
+                                children: _data.value!.data!.map((e) {
+                                  return agentsListMobile(e, context);
+                                }).toList(),
+                              );
+                            }, error: (Object error, StackTrace stackTrace) {
+                              return Text('Error');
+                            }, loading: () {
+                              return Center(
+        child: LoadingAnimationWidget.staggeredDotsWave(
+          color: Colors.grey,
+          size: 40,
+        ),
+      );
+                            });
+                          },
+                        ),
+                      ),
+                    ],
+                  )
+                ],
+              ),
+            );
+          } else {
+            return Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 SizedBox(
                   height: 4.w,
                 ),
-                CreateAgentSectionMobile(),
-                SizedBox(
-                  height: 2.w,
-                ),
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Expanded(
-                      child: Consumer(
-                        builder: (BuildContext context, WidgetRef ref,
-                            Widget? child) {
-                          return _data.when(data: (dynamic data) {
-                            print(
-                                'agentsDataProvider 0 : ${_data.value?.data}');
-                            return Column(
-                              children: _data.value!.data!.map((e) {
-                                return agentsListMobile(e, context);
-                              }).toList(),
-                            );
-                          }, error: (Object error, StackTrace stackTrace) {
-                            return Text('Error');
-                          }, loading: () {
-                            return CircularProgressIndicator();
-                          });
-                        },
+                const CreateAgentSection(),
+                Expanded(
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      SizedBox(
+                        width: 3.w,
                       ),
-                    ),
-                  ],
+                      Consumer(
+                          builder: (BuildContext context, WidgetRef ref,
+                              Widget? child) {
+                            return _data.when(data: (dynamic data) {
+                              debugPrint(
+                                  'agentsDataProvider 0 : ${_data.value!.message}');
+                              return Expanded(
+                                child: ListView(
+                                  children: _data.value!.data!.map((e) {
+                                    return agentsList(e, context);
+                                  }).toList(),
+                                ),
+                              );
+                            }, error: (Object error, StackTrace stackTrace) {
+                              return Text('Error');
+                            }, loading: () {
+                              return Center(
+        child: LoadingAnimationWidget.staggeredDotsWave(
+          color: Colors.grey,
+          size: 40,
+        ),
+      );
+                            });
+                          },
+                      ),
+                    ],
+                  ),
                 )
               ],
-            ),
-          );
-        } else {
-          return Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              SizedBox(
-                height: 4.w,
-              ),
-              const CreateAgentSection(),
-              Expanded(
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    SizedBox(
-                      width: 3.w,
-                    ),
-                    Expanded(
-                      child: Consumer(
-                        builder: (BuildContext context, WidgetRef ref,
-                            Widget? child) {
-                          return _data.when(data: (dynamic data) {
-                            debugPrint(
-                                'agentsDataProvider 0 : ${_data.value!.message}');
-                            return Column(
-                              children: _data.value!.data!.map((e) {
-                                return agentsList(e, context);
-                              }).toList(),
-                            );
-                          }, error: (Object error, StackTrace stackTrace) {
-                            return Text('Error');
-                          }, loading: () {
-                            return CircularProgressIndicator();
-                          });
-                        },
-                      ),
-                    ),
-                  ],
-                ),
-              )
-            ],
-          );
-        }
-      },
+            );
+          }
+        },
+      ),
     );
   }
 }
@@ -618,7 +631,12 @@ class _CreateAgentSectionState extends ConsumerState<CreateAgentSection> {
                           }, error: (Object error, StackTrace stackTrace) {
                             return Text('Error');
                           }, loading: () {
-                            return CircularProgressIndicator();
+                            return Center(
+      child: LoadingAnimationWidget.staggeredDotsWave(
+        color: Colors.grey,
+        size: 40,
+      ),
+    );
                           });
                         },
                       ),
@@ -655,14 +673,7 @@ class _CreateAgentSectionState extends ConsumerState<CreateAgentSection> {
                   child: InkWell(
                     onTap: () async {
                       if (_controllerName.text.isNotEmpty &&
-                              _controllerMobile.text.isNotEmpty &&
-                              _controllerPair.text.isNotEmpty &&
-                              _controllerInOut.text.isNotEmpty &&
-                              _controllerCommission.text.isNotEmpty &&
-                              _controllerPatti.text.isNotEmpty &&
-                              _controllerReferenceComm.text.isNotEmpty &&
-                              _controllerIncentive.text.isNotEmpty
-                          //&& selectedAgents!.name!.isNotEmpty
+                              _controllerMobile.text.isNotEmpty 
                           ) {
                         var addAgent = updateAgent
                             ? await AgentsRepository().updateAgent(
@@ -992,7 +1003,12 @@ class _CreateAgentSectionMobileState
                         }, error: (Object error, StackTrace stackTrace) {
                           return Text('Error');
                         }, loading: () {
-                          return CircularProgressIndicator();
+                          return Center(
+      child: LoadingAnimationWidget.staggeredDotsWave(
+        color: Colors.grey,
+        size: 40,
+      ),
+    );
                         });
                       },
                     ),

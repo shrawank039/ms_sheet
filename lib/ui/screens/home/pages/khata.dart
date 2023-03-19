@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:iconly/iconly.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:ms_sheet/models/wallet_balance_entity.dart';
 import 'package:ms_sheet/models/wallet_transactions_entity.dart';
 import 'package:ms_sheet/repositories/wallet_repo.dart';
@@ -42,24 +43,24 @@ class _SheetsState extends ConsumerState<Wallet> {
       child: PageView(
         controller: controller,
         children: [
+         Column(
+                children: [
+                  topBar(),
+                  SizedBox(
+                    height: 3.w,
+                  ),
+                  body(context, _data, walletBal)
+                ],
+            ),
           Column(
-            children: [
-              topBar(),
-              SizedBox(
-                height: 3.w,
-              ),
-              body(context, _data, walletBal)
-            ],
-          ),
-          Column(
-            children: [
-              topBarTran(),
-              SizedBox(
-                height: 3.w,
-              ),
-              bodyTran(context, clientTransProvider)
-            ],
-          ),
+              children: [
+                topBarTran(),
+                SizedBox(
+                  height: 3.w,
+                ),
+                bodyTran(context, clientTransProvider)
+              ],
+            ),
         ],
       ),
     );
@@ -188,7 +189,12 @@ Widget body(BuildContext context, AsyncValue<WalletClientEntity> _data,
                       }, error: (Object error, StackTrace stackTrace) {
                         return Text('Error');
                       }, loading: () {
-                        return CircularProgressIndicator();
+                        return Center(
+      child: LoadingAnimationWidget.staggeredDotsWave(
+        color: Colors.grey,
+        size: 40,
+      ),
+    );
                       });
                     },
                   ),
@@ -308,250 +314,163 @@ Widget body(BuildContext context, AsyncValue<WalletClientEntity> _data,
                 }, error: (Object error, StackTrace stackTrace) {
                   return Text('Error');
                 }, loading: () {
-                  return CircularProgressIndicator();
+                  return Center(
+      child: LoadingAnimationWidget.staggeredDotsWave(
+        color: Colors.grey,
+        size: 40,
+      ),
+    );
                 });
               },
             ),
           ],
         )
-      : Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Expanded(
-              flex: 2,
-              child: Column(
-                children: [
-                  Container(
-                      margin: EdgeInsets.only(top: 1.w),
-                      padding: EdgeInsets.only(top: 4.w, bottom: 2.w),
-                      decoration: DesignConfig.boxDecorationContainerCardShadow(
-                          ColorsRes.white,
-                          const Color.fromRGBO(44, 39, 46, 0.059),
-                          16.0,
-                          3,
-                          3,
-                          20,
-                          0),
-                      child: Column(
-                        children: [
-                          Row(
-                            children: [
-                              Expanded(
-                                child: Column(
-                                  children: [
-                                    Text(
-                                      '₹${walletBal.value?.data?.inAmount}',
-                                      style: TextStyle(
-                                          color: ColorsRes.mainBlue,
-                                          fontFamily: 'Spartan',
-                                          fontSize: 3.w,
-                                          fontWeight: FontWeight.w600),
-                                    ),
-                                    SizedBox(
-                                      height: 1.w,
-                                    ),
-                                    Text(
-                                      'In Amount',
-                                      style: TextStyle(
-                                        color: Color(0xFF979FC6),
-                                        fontSize: 2.w,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              Container(
-                                height: 5.w,
-                                width: 1,
-                                color: ColorsRes.greyLightColor,
-                              ),
-                              Expanded(
-                                child: Column(
-                                  children: [
-                                    Text(
-                                      '₹${walletBal.value?.data?.outAmount}',
-                                      style: TextStyle(
-                                          color: ColorsRes.green,
-                                          fontFamily: 'Spartan',
-                                          fontSize: 3.w,
-                                          fontWeight: FontWeight.w600),
-                                    ),
-                                    SizedBox(
-                                      height: 1.w,
-                                    ),
-                                    Text(
-                                      'Out Amount',
-                                      style: TextStyle(
-                                        color: Color(0xFF979FC6),
-                                        fontSize: 2.w,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-                          SizedBox(
-                            height: 3.w,
-                          ),
-                          Row(
-                            children: [
-                              Expanded(
-                                child: GestureDetector(
-                                  onTap: () {},
-                                  child: Card(
-                                    margin:
-                                        EdgeInsets.symmetric(horizontal: 2.2.w),
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(1.2.w)),
-                                    color: Color(0xFFf9f9f9),
-                                    elevation: 0,
-                                    child: Container(
-                                      padding:
-                                          EdgeInsets.symmetric(vertical: 1.w),
-                                      alignment: Alignment.center,
-                                      child: const Text(
-                                        'View Reports',
-                                        style: TextStyle(
-                                            color: ColorsRes.mainBlue),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      )),
-                  SizedBox(
-                    height: 3.w,
-                  ),
-                  /*Row(
-                    children: [
-                      Expanded(
-                        child: GestureDetector(
-                          onTap: (() {
-                            showDialog(
-                                context: context,
-                                builder: (context) => KhataEntryPopup());
-                          }),
-                          child: Container(
-                            padding: EdgeInsets.symmetric(
-                                horizontal: 1.6.w, vertical: 1.5.w),
-                            decoration:
-                                DesignConfig.boxDecorationContainerCardShadow(
-                                    ColorsRes.white,
-                                    Color.fromRGBO(44, 39, 46, 0.059),
-                                    16,
-                                    3,
-                                    3,
-                                    20,
-                                    0),
-                            child: Row(
+      : Expanded(
+        child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Expanded(
+                child: Column(
+                  children: [
+                    Container(
+                        margin: EdgeInsets.only(top: 1.w),
+                        padding: EdgeInsets.only(top: 4.w, bottom: 2.w),
+                        decoration: DesignConfig.boxDecorationContainerCardShadow(
+                            ColorsRes.white,
+                            const Color.fromRGBO(44, 39, 46, 0.059),
+                            16.0,
+                            3,
+                            3,
+                            20,
+                            0),
+                        child: Column(
+                          children: [
+                            Row(
                               children: [
-                                Card(
-                                  color: ColorsRes.mainBlue,
-                                  elevation: 0,
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(1.6.w),
-                                  ),
-                                  child: Padding(
-                                    padding: EdgeInsets.symmetric(
-                                        horizontal: 2.w, vertical: 1.w),
-                                    child: Text(
-                                      '₹',
-                                      style: TextStyle(
-                                          fontSize: 2.5.w,
-                                          color: Color.fromARGB(
-                                              255, 255, 255, 255)),
-                                    ),
-                                  ),
-                                ),
-                                SizedBox(
-                                  width: 1.3.w,
-                                ),
-                                Padding(
-                                  padding: EdgeInsets.all(0.5.w),
+                                Expanded(
                                   child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
                                     children: [
                                       Text(
-                                        'Create New Entry',
-                                        textAlign: TextAlign.left,
+                                        '₹${walletBal.value?.data?.inAmount}',
                                         style: TextStyle(
-                                            fontSize: 1.9.w,
-                                            fontWeight: FontWeight.w500,
-                                            color:
-                                                Color.fromARGB(255, 0, 0, 0)),
+                                            color: ColorsRes.mainBlue,
+                                            fontFamily: 'Spartan',
+                                            fontSize: 3.w,
+                                            fontWeight: FontWeight.w600),
+                                      ),
+                                      SizedBox(
+                                        height: 1.w,
                                       ),
                                       Text(
-                                        'Daily Entry',
-                                        textAlign: TextAlign.left,
+                                        'In Amount',
                                         style: TextStyle(
-                                          fontSize: 1.3.w,
-                                          fontWeight: FontWeight.w300,
-                                          color: Colors.grey,
+                                          color: Color(0xFF979FC6),
+                                          fontSize: 2.w,
                                         ),
                                       ),
                                     ],
                                   ),
                                 ),
-                                Expanded(child: Container()),
-                                Card(
-                                  color: ColorsRes.lightBlue,
-                                  elevation: 0,
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(3.w),
+                                Container(
+                                  height: 5.w,
+                                  width: 1,
+                                  color: ColorsRes.greyLightColor,
+                                ),
+                                Expanded(
+                                  child: Column(
+                                    children: [
+                                      Text(
+                                        '₹${walletBal.value?.data?.outAmount}',
+                                        style: TextStyle(
+                                            color: ColorsRes.green,
+                                            fontFamily: 'Spartan',
+                                            fontSize: 3.w,
+                                            fontWeight: FontWeight.w600),
+                                      ),
+                                      SizedBox(
+                                        height: 1.w,
+                                      ),
+                                      Text(
+                                        'Out Amount',
+                                        style: TextStyle(
+                                          color: Color(0xFF979FC6),
+                                          fontSize: 2.w,
+                                        ),
+                                      ),
+                                    ],
                                   ),
-                                  child: Padding(
-                                    padding: EdgeInsets.symmetric(
-                                        horizontal: 2.w, vertical: 1.w),
-                                    child: Text(
-                                      '+',
-                                      style: TextStyle(
-                                          fontSize: 2.5.w,
-                                          color: ColorsRes.mainBlue),
+                                ),
+                              ],
+                            ),
+                            SizedBox(
+                              height: 3.w,
+                            ),
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: GestureDetector(
+                                    onTap: () {},
+                                    child: Card(
+                                      margin:
+                                          EdgeInsets.symmetric(horizontal: 2.2.w),
+                                      shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(1.2.w)),
+                                      color: Color(0xFFf9f9f9),
+                                      elevation: 0,
+                                      child: Container(
+                                        padding:
+                                            EdgeInsets.symmetric(vertical: 1.w),
+                                        alignment: Alignment.center,
+                                        child: const Text(
+                                          'View Reports',
+                                          style: TextStyle(
+                                              color: ColorsRes.mainBlue),
+                                        ),
+                                      ),
                                     ),
                                   ),
                                 ),
                               ],
                             ),
-                          ),
+                          ],
+                        )),
+                    SizedBox(
+                      height: 3.w,
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(
+                width: 1.w,
+              ),
+              Consumer(
+                  builder: (BuildContext context, WidgetRef ref, Widget? child) {
+                    return _data.when(data: (dynamic data) {
+                      print(
+                          'walletsClientsDataProvider 0 : ${_data.value?.data}');
+                      return Expanded(
+                        child: ListView(
+                          children: _data.value!.data!.map((e) {
+                            return transactionList(e, context, ref);
+                          }).toList(),
                         ),
-                      ),
-                    ],
-                  )*/
-                ],
+                      );
+                    }, error: (Object error, StackTrace stackTrace) {
+                      return Text('Error');
+                    }, loading: () {
+                      return Center(
+        child: LoadingAnimationWidget.staggeredDotsWave(
+          color: Colors.grey,
+          size: 40,
+        ),
+          );
+                    });
+                  },
               ),
-            ),
-            SizedBox(
-              width: 3.w,
-            ),
-            Expanded(
-              flex: 3,
-              child: Consumer(
-                builder: (BuildContext context, WidgetRef ref, Widget? child) {
-                  return _data.when(data: (dynamic data) {
-                    print(
-                        'walletsClientsDataProvider 0 : ${_data.value?.data}');
-                    return Column(
-                      children: _data.value!.data!.map((e) {
-                        return transactionList(e, context, ref);
-                      }).toList(),
-                    );
-                  }, error: (Object error, StackTrace stackTrace) {
-                    return Text('Error');
-                  }, loading: () {
-                    return CircularProgressIndicator();
-                  });
-                },
-              ),
-            ),
-          ],
-        );
+            ],
+          ),
+      );
 }
 
 Widget bodyTran(BuildContext context,
@@ -656,7 +575,12 @@ Widget bodyTran(BuildContext context,
                       }, error: (Object error, StackTrace stackTrace) {
                         return Text('Error');
                       }, loading: () {
-                        return CircularProgressIndicator();
+                        return Center(
+      child: LoadingAnimationWidget.staggeredDotsWave(
+        color: Colors.grey,
+        size: 40,
+      ),
+    );
                       });
                     },
                   ),
@@ -778,324 +702,336 @@ Widget bodyTran(BuildContext context,
                 }, error: (Object error, StackTrace stackTrace) {
                   return Text('Error');
                 }, loading: () {
-                  return CircularProgressIndicator();
+                  return Center(
+      child: LoadingAnimationWidget.staggeredDotsWave(
+        color: Colors.grey,
+        size: 40,
+      ),
+    );
                 });
               },
             ),
           ],
         )
-      : Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Expanded(
-              flex: 2,
-              child: Consumer(
-                builder: (BuildContext context, WidgetRef ref, Widget? child) {
-                  return clientTransProvider.when(data: (dynamic data) {
-                    print(
-                        'clientTransProvider pc : ${clientTransProvider.value?.data}');
-                    return Column(
-                      children: [
-                        Container(
-                            margin: EdgeInsets.only(top: 1.w),
-                            padding: EdgeInsets.only(top: 4.w, bottom: 2.w),
-                            decoration:
-                                DesignConfig.boxDecorationContainerCardShadow(
-                                    ColorsRes.white,
-                                    const Color.fromRGBO(44, 39, 46, 0.059),
-                                    16.0,
-                                    3,
-                                    3,
-                                    20,
-                                    0),
-                            child: Column(
-                              children: [
-                                Row(
-                                  children: [
-                                    Expanded(
-                                      child: userDetails(),
-                                    ),
-                                    Container(
-                                      height: 5.w,
-                                      width: 1,
-                                      color: ColorsRes.greyLightColor,
-                                    ),
-                                    Expanded(
-                                      child: Column(
-                                        children: [
-                                          Text(
-                                            '₹${clientTransProvider.value?.data?.balance}',
-                                            style: TextStyle(
-                                                color: ColorsRes.green,
-                                                fontFamily: 'Spartan',
-                                                fontSize: 2.5.w,
-                                                fontWeight: FontWeight.w600),
-                                          ),
-                                          SizedBox(
-                                            height: 1.w,
-                                          ),
-                                          Text(
-                                            'Payable Amount',
-                                            style: TextStyle(
-                                              color: Color(0xFF979FC6),
-                                              fontSize: 1.7.w,
-                                            ),
-                                          ),
-                                        ],
+      : Expanded(
+        child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Expanded(
+                child: Consumer(
+                  builder: (BuildContext context, WidgetRef ref, Widget? child) {
+                    return clientTransProvider.when(data: (dynamic data) {
+                      print(
+                          'clientTransProvider pc : ${clientTransProvider.value?.data}');
+                      return Column(
+                        children: [
+                          Container(
+                              margin: EdgeInsets.only(top: 1.w),
+                              padding: EdgeInsets.only(top: 4.w, bottom: 2.w),
+                              decoration:
+                                  DesignConfig.boxDecorationContainerCardShadow(
+                                      ColorsRes.white,
+                                      const Color.fromRGBO(44, 39, 46, 0.059),
+                                      16.0,
+                                      3,
+                                      3,
+                                      20,
+                                      0),
+                              child: Column(
+                                children: [
+                                  Row(
+                                    children: [
+                                      Expanded(
+                                        child: userDetails(),
                                       ),
-                                    ),
-                                  ],
-                                ),
-                                SizedBox(
-                                  height: 3.w,
-                                ),
-                                Row(
-                                  children: [
-                                    Expanded(
-                                      child: GestureDetector(
-                                        onTap: () {},
-                                        child: Card(
-                                          margin: EdgeInsets.symmetric(
-                                              horizontal: 2.2.w),
-                                          shape: RoundedRectangleBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(1.2.w)),
-                                          color: Color(0xFFf9f9f9),
-                                          elevation: 0,
-                                          child: Container(
-                                            padding: EdgeInsets.symmetric(
-                                                vertical: 1.w),
-                                            alignment: Alignment.center,
-                                            child: const Text(
-                                              'View Reports',
+                                      Container(
+                                        height: 5.w,
+                                        width: 1,
+                                        color: ColorsRes.greyLightColor,
+                                      ),
+                                      Expanded(
+                                        child: Column(
+                                          children: [
+                                            Text(
+                                              '₹${clientTransProvider.value?.data?.balance}',
                                               style: TextStyle(
-                                                  color: ColorsRes.mainBlue),
+                                                  color: ColorsRes.green,
+                                                  fontFamily: 'Spartan',
+                                                  fontSize: 2.5.w,
+                                                  fontWeight: FontWeight.w600),
+                                            ),
+                                            SizedBox(
+                                              height: 1.w,
+                                            ),
+                                            Text(
+                                              'Payable Amount',
+                                              style: TextStyle(
+                                                color: Color(0xFF979FC6),
+                                                fontSize: 1.7.w,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  SizedBox(
+                                    height: 3.w,
+                                  ),
+                                  Row(
+                                    children: [
+                                      Expanded(
+                                        child: GestureDetector(
+                                          onTap: () {},
+                                          child: Card(
+                                            margin: EdgeInsets.symmetric(
+                                                horizontal: 2.2.w),
+                                            shape: RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(1.2.w)),
+                                            color: Color(0xFFf9f9f9),
+                                            elevation: 0,
+                                            child: Container(
+                                              padding: EdgeInsets.symmetric(
+                                                  vertical: 1.w),
+                                              alignment: Alignment.center,
+                                              child: const Text(
+                                                'View Reports',
+                                                style: TextStyle(
+                                                    color: ColorsRes.mainBlue),
+                                              ),
                                             ),
                                           ),
                                         ),
                                       ),
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            )),
-                        SizedBox(
-                          height: 3.w,
-                        ),
-                        Column(
-                          //mainAxisAlignment: MainAxisAlignment.center,
-                          children: <Widget>[
-                            Row(
-                              children: [
-                                Expanded(
-                                    child: Container(
-                                  alignment: Alignment.center,
-                                  // height: 9.w,
-                                  child: Card(
-                                    margin: EdgeInsets.only(top: 2.w),
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(1.5.w)),
-                                    elevation: 0,
-                                    color: ColorsRes.lightWeightColor,
-                                    child: Padding(
-                                      padding: EdgeInsets.only(left: 1.w),
-                                      child: TextField(
-                                        controller: controllerAmt,
-                                        textAlign: TextAlign.start,
-                                        style: TextStyle(
-                                            fontSize: 2.5.w,
-                                            fontFamily: 'Arial',
-                                            fontWeight: FontWeight.w500),
-                                        decoration: const InputDecoration(
-                                          prefixIcon: Icon(
-                                            Icons.currency_rupee,
-                                            color: ColorsRes.darkGrey,
-                                          ),
-                                          isDense: true,
-                                          hintText: '00',
-                                          labelText: 'Amount',
-                                          hintStyle: TextStyle(
-                                              color:
-                                                  Color.fromARGB(50, 0, 0, 0)),
-                                          border: OutlineInputBorder(
-                                              borderSide: BorderSide.none),
-                                        ),
-                                      ),
-                                    ),
+                                    ],
                                   ),
-                                )),
-                              ],
-                            ),
-                            Row(
-                              children: [
-                                Expanded(
-                                    child: Container(
-                                  alignment: Alignment.center,
-                                  // height: 9.w,
-                                  child: Card(
-                                    margin: EdgeInsets.only(top: 2.w),
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(1.5.w)),
-                                    elevation: 0,
-                                    color: ColorsRes.lightWeightColor,
-                                    child: Padding(
-                                      padding: EdgeInsets.only(left: 1.w),
-                                      child: TextField(
-                                        controller: controllerDetails,
-                                        textAlign: TextAlign.start,
-                                        style: TextStyle(
-                                            fontSize: 2.5.w,
-                                            fontFamily: 'Arial',
-                                            fontWeight: FontWeight.w500),
-                                        decoration: const InputDecoration(
-                                          prefixIcon: Icon(
-                                            Icons.info,
-                                            color: ColorsRes.darkGrey,
-                                          ),
-                                          isDense: true,
-                                          hintText: 'Optional',
-                                          labelText: 'Details',
-                                          hintStyle: TextStyle(
-                                              color:
-                                                  Color.fromARGB(50, 0, 0, 0)),
-                                          border: OutlineInputBorder(
-                                              borderSide: BorderSide.none),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                )),
-                              ],
-                            ),
-                            SizedBox(
-                              height: 1.w,
-                            ),
-                            Row(
-                              children: [
-                                Expanded(
-                                  child: GestureDetector(
-                                    onTap: () async {
-                                      var addTransaction = await WalletRepo()
-                                          .addTransaction(
-                                              agentID,
-                                              'pay',
-                                              controllerAmt.text,
-                                              controllerDetails.text);
-                                      if (addTransaction.success == true) {
-                                        ExtraDataParameter extraDataParameter =
-                                            ExtraDataParameter(
-                                                dataList: [agentID]);
-                                        ref.refresh(clientTranDataProvider(
-                                            extraDataParameter));
-                                        ref.refresh(walletClinetsDataProvider);
-                                      }
-                                    },
+                                ],
+                              )),
+                          SizedBox(
+                            height: 3.w,
+                          ),
+                          Column(
+                            //mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              Row(
+                                children: [
+                                  Expanded(
+                                      child: Container(
+                                    alignment: Alignment.center,
+                                    // height: 9.w,
                                     child: Card(
-                                      margin: EdgeInsets.only(
-                                          right: 1.w, top: 1.5.w),
-                                      color: ColorsRes.red,
-                                      elevation: 0,
+                                      margin: EdgeInsets.only(top: 2.w),
                                       shape: RoundedRectangleBorder(
                                           borderRadius:
-                                              BorderRadius.circular(1.6.w)),
-                                      child: Container(
-                                        height: 6.w,
-                                        width: 25.w,
-                                        alignment: Alignment.center,
-                                        child: Text(
-                                          'Pay',
-                                          textAlign: TextAlign.center,
+                                              BorderRadius.circular(1.5.w)),
+                                      elevation: 0,
+                                      color: ColorsRes.lightWeightColor,
+                                      child: Padding(
+                                        padding: EdgeInsets.only(left: 1.w),
+                                        child: TextField(
+                                          controller: controllerAmt,
+                                          textAlign: TextAlign.start,
                                           style: TextStyle(
-                                              color: ColorsRes.white,
-                                              fontSize: 2.w),
+                                              fontSize: 2.5.w,
+                                              fontFamily: 'Arial',
+                                              fontWeight: FontWeight.w500),
+                                          decoration: const InputDecoration(
+                                            prefixIcon: Icon(
+                                              Icons.currency_rupee,
+                                              color: ColorsRes.darkGrey,
+                                            ),
+                                            isDense: true,
+                                            hintText: '00',
+                                            labelText: 'Amount',
+                                            hintStyle: TextStyle(
+                                                color:
+                                                    Color.fromARGB(50, 0, 0, 0)),
+                                            border: OutlineInputBorder(
+                                                borderSide: BorderSide.none),
+                                          ),
                                         ),
                                       ),
                                     ),
-                                  ),
-                                ),
-                                Expanded(
-                                  child: GestureDetector(
-                                    onTap: () async {
-                                      var addTransaction = await WalletRepo()
-                                          .addTransaction(
-                                              agentID,
-                                              'receive',
-                                              controllerAmt.text,
-                                              controllerDetails.text);
-                                      if (addTransaction.success == true) {
-                                        ExtraDataParameter extraDataParameter =
-                                            ExtraDataParameter(
-                                                dataList: [agentID]);
-                                        ref.refresh(clientTranDataProvider(
-                                            extraDataParameter));
-                                        ref.refresh(walletClinetsDataProvider);
-                                      }
-                                    },
+                                  )),
+                                ],
+                              ),
+                              Row(
+                                children: [
+                                  Expanded(
+                                      child: Container(
+                                    alignment: Alignment.center,
+                                    // height: 9.w,
                                     child: Card(
-                                      margin: EdgeInsets.only(
-                                          right: 1.w, top: 1.5.w),
-                                      color: ColorsRes.green,
-                                      elevation: 0,
+                                      margin: EdgeInsets.only(top: 2.w),
                                       shape: RoundedRectangleBorder(
                                           borderRadius:
-                                              BorderRadius.circular(1.6.w)),
-                                      child: Container(
-                                        height: 6.w,
-                                        width: 25.w,
-                                        alignment: Alignment.center,
-                                        child: Text(
-                                          'Receive',
-                                          textAlign: TextAlign.center,
+                                              BorderRadius.circular(1.5.w)),
+                                      elevation: 0,
+                                      color: ColorsRes.lightWeightColor,
+                                      child: Padding(
+                                        padding: EdgeInsets.only(left: 1.w),
+                                        child: TextField(
+                                          controller: controllerDetails,
+                                          textAlign: TextAlign.start,
                                           style: TextStyle(
-                                              color: ColorsRes.white,
-                                              fontSize: 2.w),
+                                              fontSize: 2.5.w,
+                                              fontFamily: 'Arial',
+                                              fontWeight: FontWeight.w500),
+                                          decoration: const InputDecoration(
+                                            prefixIcon: Icon(
+                                              Icons.info,
+                                              color: ColorsRes.darkGrey,
+                                            ),
+                                            isDense: true,
+                                            hintText: 'Optional',
+                                            labelText: 'Details',
+                                            hintStyle: TextStyle(
+                                                color:
+                                                    Color.fromARGB(50, 0, 0, 0)),
+                                            border: OutlineInputBorder(
+                                                borderSide: BorderSide.none),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  )),
+                                ],
+                              ),
+                              SizedBox(
+                                height: 1.w,
+                              ),
+                              Row(
+                                children: [
+                                  Expanded(
+                                    child: GestureDetector(
+                                      onTap: () async {
+                                        var addTransaction = await WalletRepo()
+                                            .addTransaction(
+                                                agentID,
+                                                'pay',
+                                                controllerAmt.text,
+                                                controllerDetails.text);
+                                        if (addTransaction.success == true) {
+                                          ExtraDataParameter extraDataParameter =
+                                              ExtraDataParameter(
+                                                  dataList: [agentID]);
+                                          ref.refresh(clientTranDataProvider(
+                                              extraDataParameter));
+                                          ref.refresh(walletClinetsDataProvider);
+                                        }
+                                      },
+                                      child: Card(
+                                        margin: EdgeInsets.only(
+                                            right: 1.w, top: 1.5.w),
+                                        color: ColorsRes.red,
+                                        elevation: 0,
+                                        shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(1.6.w)),
+                                        child: Container(
+                                          height: 6.w,
+                                          width: 25.w,
+                                          alignment: Alignment.center,
+                                          child: Text(
+                                            'Pay',
+                                            textAlign: TextAlign.center,
+                                            style: TextStyle(
+                                                color: ColorsRes.white,
+                                                fontSize: 2.w),
+                                          ),
                                         ),
                                       ),
                                     ),
                                   ),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ],
-                    );
-                  }, error: (Object error, StackTrace stackTrace) {
-                    return Text('Error');
-                  }, loading: () {
-                    return CircularProgressIndicator();
-                  });
-                },
+                                  Expanded(
+                                    child: GestureDetector(
+                                      onTap: () async {
+                                        var addTransaction = await WalletRepo()
+                                            .addTransaction(
+                                                agentID,
+                                                'receive',
+                                                controllerAmt.text,
+                                                controllerDetails.text);
+                                        if (addTransaction.success == true) {
+                                          ExtraDataParameter extraDataParameter =
+                                              ExtraDataParameter(
+                                                  dataList: [agentID]);
+                                          ref.refresh(clientTranDataProvider(
+                                              extraDataParameter));
+                                          ref.refresh(walletClinetsDataProvider);
+                                        }
+                                      },
+                                      child: Card(
+                                        margin: EdgeInsets.only(
+                                            right: 1.w, top: 1.5.w),
+                                        color: ColorsRes.green,
+                                        elevation: 0,
+                                        shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(1.6.w)),
+                                        child: Container(
+                                          height: 6.w,
+                                          width: 25.w,
+                                          alignment: Alignment.center,
+                                          child: Text(
+                                            'Receive',
+                                            textAlign: TextAlign.center,
+                                            style: TextStyle(
+                                                color: ColorsRes.white,
+                                                fontSize: 2.w),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ],
+                      );
+                    }, error: (Object error, StackTrace stackTrace) {
+                      return Text('Error');
+                    }, loading: () {
+                      return Center(
+        child: LoadingAnimationWidget.staggeredDotsWave(
+          color: Colors.grey,
+          size: 40,
+        ),
+          );
+                    });
+                  },
+                ),
               ),
-            ),
-            SizedBox(
-              width: 3.w,
-            ),
-            Expanded(
-              flex: 3,
-              child: Consumer(
-                builder: (BuildContext context, WidgetRef ref, Widget? child) {
-                  return clientTransProvider.when(data: (dynamic data) {
-                    print(
-                        'clientTransProvider pc list : ${clientTransProvider.value!.data}');
-                    return Column(
-                      children: clientTransProvider.value!.data!.transactions!
-                          .map((e) {
-                        return clientTransactionList(e, context);
-                      }).toList(),
-                    );
-                  }, error: (Object error, StackTrace stackTrace) {
-                    return Text('Error');
-                  }, loading: () {
-                    return CircularProgressIndicator();
-                  });
-                },
+              SizedBox(
+                width: 1.w,
               ),
-            ),
-          ],
-        );
+              Consumer(
+                  builder: (BuildContext context, WidgetRef ref, Widget? child) {
+                    return clientTransProvider.when(data: (dynamic data) {
+                       return Expanded(
+                         child: ListView(
+                          children: clientTransProvider.value!.data!.transactions!
+                              .map((e) {
+                            return clientTransactionList(e, context);
+                          }).toList(),    ),
+                       );
+                    }, error: (Object error, StackTrace stackTrace) {
+                      return Text('Error');
+                    }, loading: () {
+                      return Center(
+        child: LoadingAnimationWidget.staggeredDotsWave(
+          color: Colors.grey,
+          size: 40,
+        ),
+          );
+                    });
+                  },
+              ),
+            ],
+          ),
+      );
 }
 
 Widget topBar() {
@@ -1203,7 +1139,7 @@ Widget userDetails() {
 Widget transactionList(
     WalletClientData walletClient, BuildContext context, WidgetRef ref) {
   return Container(
-    margin: EdgeInsets.only(top: 1.w),
+    margin: EdgeInsets.all(1.w),
     decoration: DesignConfig.boxDecorationContainerCardShadow(
         ColorsRes.white, Color.fromRGBO(44, 39, 46, 0.059), 12.0, 3, 3, 20, 0),
     child: Padding(
@@ -1309,7 +1245,7 @@ Widget clientTransactionList(
     WalletTransactionsDataTransactions walletTransactionsData,
     BuildContext context) {
   return Container(
-    margin: EdgeInsets.only(top: 1.w),
+    margin: EdgeInsets.all(1.w),
     decoration: DesignConfig.boxDecorationContainerCardShadow(
         ColorsRes.white, Color.fromRGBO(44, 39, 46, 0.059), 12.0, 3, 3, 20, 0),
     child: Padding(

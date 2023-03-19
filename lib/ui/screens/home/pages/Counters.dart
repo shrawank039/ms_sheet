@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:ms_sheet/models/counters_entity.dart';
 import 'package:ms_sheet/repositories/counters_repository.dart';
 import 'package:ms_sheet/ui/styles/color.dart';
@@ -60,7 +61,12 @@ class _SheetsState extends ConsumerState<Counters> {
                 }, error: (Object error, StackTrace stackTrace) {
                   return Text('Error');
                 }, loading: () {
-                  return CircularProgressIndicator();
+                  return Center(
+      child: LoadingAnimationWidget.staggeredDotsWave(
+        color: Colors.grey,
+        size: 40,
+      ),
+    );
                 });
               },
             ),

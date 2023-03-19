@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:iconly/iconly.dart';
 import 'package:intl/intl.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:ms_sheet/models/sheets_response_entity.dart';
 import 'package:ms_sheet/providers/data_providers.dart';
 import 'package:ms_sheet/ui/screens/panels/main_panel.dart';
@@ -76,7 +77,12 @@ class _SheetsState extends ConsumerState<Sheets> {
     }, error: (Object error, StackTrace stackTrace) {
                   return Text('Error');
                 }, loading: () {
-                  return CircularProgressIndicator();
+                  return Center(
+      child: LoadingAnimationWidget.staggeredDotsWave(
+        color: Colors.grey,
+        size: 40,
+      ),
+    );
                 });
               },
             );

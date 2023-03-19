@@ -6,6 +6,7 @@ import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:http/http.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:ms_sheet/global.dart' as global;
 import 'package:ms_sheet/models/panel_response_entity.dart';
 import 'package:ms_sheet/providers/data_providers.dart';
@@ -868,7 +869,12 @@ class _MainPanelState extends ConsumerState<MainPanel> {
                                                     StackTrace stackTrace) {
                                               return Text('Error');
                                             }, loading: () {
-                                              return CircularProgressIndicator();
+                                              return Center(
+      child: LoadingAnimationWidget.staggeredDotsWave(
+        color: Colors.grey,
+        size: 40,
+      ),
+    );
                                             });
                                           },
                                         ),
@@ -1038,7 +1044,12 @@ class _MainPanelState extends ConsumerState<MainPanel> {
                       }, error: (Object error, StackTrace stackTrace) {
                         return Text('Error');
                       }, loading: () {
-                        return CircularProgressIndicator();
+                        return Center(
+      child: LoadingAnimationWidget.staggeredDotsWave(
+        color: Colors.grey,
+        size: 40,
+      ),
+    );
                       });
                     }),
                     SizedBox(

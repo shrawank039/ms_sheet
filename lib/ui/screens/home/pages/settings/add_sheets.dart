@@ -2,6 +2,7 @@ import 'package:date_time_picker/date_time_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:iconly/iconly.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:ms_sheet/global.dart' as global;
 import 'package:ms_sheet/models/sheets_response_entity.dart';
 import 'package:ms_sheet/providers/data_providers.dart';
@@ -256,7 +257,12 @@ class _CreateSheetsState extends ConsumerState<CreateSheets> {
                 }, error: (Object error, StackTrace stackTrace) {
                   return Text('Error');
                 }, loading: () {
-                  return CircularProgressIndicator();
+                  return Center(
+      child: LoadingAnimationWidget.staggeredDotsWave(
+        color: Colors.grey,
+        size: 40,
+      ),
+    );
                 });
               },
             ),
