@@ -9,6 +9,7 @@ import 'package:ms_sheet/ui/styles/color.dart';
 import 'package:ms_sheet/ui/styles/design.dart';
 import 'package:sizer/sizer.dart';
 
+import '../../../../helper/life_cycle_event_handler.dart';
 import '../../../../models/wallet_client_entity.dart';
 import '../../../../providers/data_providers.dart';
 
@@ -31,6 +32,14 @@ class _SheetsState extends ConsumerState<Wallet> {
   }
 
   @override
+  void initState() {
+    super.initState();
+
+    WidgetsBinding.instance.addObserver(
+        LifecycleEventHandler(resumeCallBack: () async => setState(() {})));
+  }
+
+  @override
   Widget build(BuildContext context) {
     final _data = ref.watch(walletClinetsDataProvider);
     final walletBal = ref.watch(walletBalDataProvider);
@@ -40,28 +49,44 @@ class _SheetsState extends ConsumerState<Wallet> {
         ref.watch(clientTranDataProvider(extraDataParameter));
 
     return Expanded(
-      child: PageView(
-        controller: controller,
-        children: [
-         Column(
-                children: [
-                  topBar(),
-                  SizedBox(
-                    height: 3.w,
-                  ),
-                  body(context, _data, walletBal)
-                ],
-            ),
-          Column(
+      child: Consumer(
+        builder: (BuildContext context, WidgetRef ref, Widget? child) {
+          return walletBal.when(data: (dynamic data) {
+            print('walletBal pc : ${walletBal.value?.data}');
+            return PageView(
+              controller: controller,
               children: [
-                topBarTran(),
-                SizedBox(
-                  height: 3.w,
+                Column(
+                  children: [
+                    topBar(),
+                    SizedBox(
+                      height: 3.w,
+                    ),
+                    body(context, _data, walletBal)
+                  ],
                 ),
-                bodyTran(context, clientTransProvider)
+                Column(
+                  children: [
+                    topBarTran(ref),
+                    SizedBox(
+                      height: 3.w,
+                    ),
+                    bodyTran(context, clientTransProvider)
+                  ],
+                ),
               ],
-            ),
-        ],
+            );
+          }, error: (Object error, StackTrace stackTrace) {
+            return Text('Error');
+          }, loading: () {
+            return Center(
+              child: LoadingAnimationWidget.staggeredDotsWave(
+                color: Colors.grey,
+                size: 40,
+              ),
+            );
+          });
+        },
       ),
     );
   }
@@ -133,7 +158,11 @@ Widget body(BuildContext context, AsyncValue<WalletClientEntity> _data,
                                       Text(
                                         '₹${walletBal.value?.data?.outAmount}',
                                         style: TextStyle(
-                                            color: ColorsRes.green,
+                                            color: walletBal.value!.data!
+                                                        .outAmount! <=
+                                                    0
+                                                ? Colors.red
+                                                : ColorsRes.green,
                                             fontFamily: 'Spartan',
                                             fontSize: 3.w,
                                             fontWeight: FontWeight.w600),
@@ -190,11 +219,11 @@ Widget body(BuildContext context, AsyncValue<WalletClientEntity> _data,
                         return Text('Error');
                       }, loading: () {
                         return Center(
-      child: LoadingAnimationWidget.staggeredDotsWave(
-        color: Colors.grey,
-        size: 40,
-      ),
-    );
+                          child: LoadingAnimationWidget.staggeredDotsWave(
+                            color: Colors.grey,
+                            size: 40,
+                          ),
+                        );
                       });
                     },
                   ),
@@ -315,18 +344,18 @@ Widget body(BuildContext context, AsyncValue<WalletClientEntity> _data,
                   return Text('Error');
                 }, loading: () {
                   return Center(
-      child: LoadingAnimationWidget.staggeredDotsWave(
-        color: Colors.grey,
-        size: 40,
-      ),
-    );
+                    child: LoadingAnimationWidget.staggeredDotsWave(
+                      color: Colors.grey,
+                      size: 40,
+                    ),
+                  );
                 });
               },
             ),
           ],
         )
       : Expanded(
-        child: Row(
+          child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Expanded(
@@ -335,14 +364,15 @@ Widget body(BuildContext context, AsyncValue<WalletClientEntity> _data,
                     Container(
                         margin: EdgeInsets.only(top: 1.w),
                         padding: EdgeInsets.only(top: 4.w, bottom: 2.w),
-                        decoration: DesignConfig.boxDecorationContainerCardShadow(
-                            ColorsRes.white,
-                            const Color.fromRGBO(44, 39, 46, 0.059),
-                            16.0,
-                            3,
-                            3,
-                            20,
-                            0),
+                        decoration:
+                            DesignConfig.boxDecorationContainerCardShadow(
+                                ColorsRes.white,
+                                const Color.fromRGBO(44, 39, 46, 0.059),
+                                16.0,
+                                3,
+                                3,
+                                20,
+                                0),
                         child: Column(
                           children: [
                             Row(
@@ -382,7 +412,11 @@ Widget body(BuildContext context, AsyncValue<WalletClientEntity> _data,
                                       Text(
                                         '₹${walletBal.value?.data?.outAmount}',
                                         style: TextStyle(
-                                            color: ColorsRes.green,
+                                            color: walletBal.value!.data!
+                                                        .outAmount! <
+                                                    0
+                                                ? Colors.red
+                                                : ColorsRes.green,
                                             fontFamily: 'Spartan',
                                             fontSize: 3.w,
                                             fontWeight: FontWeight.w600),
@@ -411,8 +445,8 @@ Widget body(BuildContext context, AsyncValue<WalletClientEntity> _data,
                                   child: GestureDetector(
                                     onTap: () {},
                                     child: Card(
-                                      margin:
-                                          EdgeInsets.symmetric(horizontal: 2.2.w),
+                                      margin: EdgeInsets.symmetric(
+                                          horizontal: 2.2.w),
                                       shape: RoundedRectangleBorder(
                                           borderRadius:
                                               BorderRadius.circular(1.2.w)),
@@ -445,32 +479,32 @@ Widget body(BuildContext context, AsyncValue<WalletClientEntity> _data,
                 width: 1.w,
               ),
               Consumer(
-                  builder: (BuildContext context, WidgetRef ref, Widget? child) {
-                    return _data.when(data: (dynamic data) {
-                      print(
-                          'walletsClientsDataProvider 0 : ${_data.value?.data}');
-                      return Expanded(
-                        child: ListView(
-                          children: _data.value!.data!.map((e) {
-                            return transactionList(e, context, ref);
-                          }).toList(),
-                        ),
-                      );
-                    }, error: (Object error, StackTrace stackTrace) {
-                      return Text('Error');
-                    }, loading: () {
-                      return Center(
-        child: LoadingAnimationWidget.staggeredDotsWave(
-          color: Colors.grey,
-          size: 40,
-        ),
-          );
-                    });
-                  },
+                builder: (BuildContext context, WidgetRef ref, Widget? child) {
+                  return _data.when(data: (dynamic data) {
+                    print(
+                        'walletsClientsDataProvider 0 : ${_data.value?.data}');
+                    return Expanded(
+                      child: ListView(
+                        children: _data.value!.data!.map((e) {
+                          return transactionList(e, context, ref);
+                        }).toList(),
+                      ),
+                    );
+                  }, error: (Object error, StackTrace stackTrace) {
+                    return Text('Error');
+                  }, loading: () {
+                    return Center(
+                      child: LoadingAnimationWidget.staggeredDotsWave(
+                        color: Colors.grey,
+                        size: 40,
+                      ),
+                    );
+                  });
+                },
               ),
             ],
           ),
-      );
+        );
 }
 
 Widget bodyTran(BuildContext context,
@@ -519,7 +553,11 @@ Widget bodyTran(BuildContext context,
                                       Text(
                                         '₹${clientTransProvider.value?.data?.balance}',
                                         style: TextStyle(
-                                            color: ColorsRes.green,
+                                            color: clientTransProvider
+                                                    .value!.data!.balance!
+                                                    .contains('-')
+                                                ? Colors.red
+                                                : ColorsRes.green,
                                             fontFamily: 'Spartan',
                                             fontSize: 3.w,
                                             fontWeight: FontWeight.w600),
@@ -576,11 +614,11 @@ Widget bodyTran(BuildContext context,
                         return Text('Error');
                       }, loading: () {
                         return Center(
-      child: LoadingAnimationWidget.staggeredDotsWave(
-        color: Colors.grey,
-        size: 40,
-      ),
-    );
+                          child: LoadingAnimationWidget.staggeredDotsWave(
+                            color: Colors.grey,
+                            size: 40,
+                          ),
+                        );
                       });
                     },
                   ),
@@ -703,23 +741,24 @@ Widget bodyTran(BuildContext context,
                   return Text('Error');
                 }, loading: () {
                   return Center(
-      child: LoadingAnimationWidget.staggeredDotsWave(
-        color: Colors.grey,
-        size: 40,
-      ),
-    );
+                    child: LoadingAnimationWidget.staggeredDotsWave(
+                      color: Colors.grey,
+                      size: 40,
+                    ),
+                  );
                 });
               },
             ),
           ],
         )
       : Expanded(
-        child: Row(
+          child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Expanded(
                 child: Consumer(
-                  builder: (BuildContext context, WidgetRef ref, Widget? child) {
+                  builder:
+                      (BuildContext context, WidgetRef ref, Widget? child) {
                     return clientTransProvider.when(data: (dynamic data) {
                       print(
                           'clientTransProvider pc : ${clientTransProvider.value?.data}');
@@ -755,7 +794,11 @@ Widget bodyTran(BuildContext context,
                                             Text(
                                               '₹${clientTransProvider.value?.data?.balance}',
                                               style: TextStyle(
-                                                  color: ColorsRes.green,
+                                                  color: clientTransProvider
+                                                          .value!.data!.balance!
+                                                          .contains('-')
+                                                      ? Colors.red
+                                                      : ColorsRes.green,
                                                   fontFamily: 'Spartan',
                                                   fontSize: 2.5.w,
                                                   fontWeight: FontWeight.w600),
@@ -788,7 +831,8 @@ Widget bodyTran(BuildContext context,
                                                 horizontal: 2.2.w),
                                             shape: RoundedRectangleBorder(
                                                 borderRadius:
-                                                    BorderRadius.circular(1.2.w)),
+                                                    BorderRadius.circular(
+                                                        1.2.w)),
                                             color: Color(0xFFf9f9f9),
                                             elevation: 0,
                                             child: Container(
@@ -845,8 +889,8 @@ Widget bodyTran(BuildContext context,
                                             hintText: '00',
                                             labelText: 'Amount',
                                             hintStyle: TextStyle(
-                                                color:
-                                                    Color.fromARGB(50, 0, 0, 0)),
+                                                color: Color.fromARGB(
+                                                    50, 0, 0, 0)),
                                             border: OutlineInputBorder(
                                                 borderSide: BorderSide.none),
                                           ),
@@ -887,8 +931,8 @@ Widget bodyTran(BuildContext context,
                                             hintText: 'Optional',
                                             labelText: 'Details',
                                             hintStyle: TextStyle(
-                                                color:
-                                                    Color.fromARGB(50, 0, 0, 0)),
+                                                color: Color.fromARGB(
+                                                    50, 0, 0, 0)),
                                             border: OutlineInputBorder(
                                                 borderSide: BorderSide.none),
                                           ),
@@ -913,12 +957,14 @@ Widget bodyTran(BuildContext context,
                                                 controllerAmt.text,
                                                 controllerDetails.text);
                                         if (addTransaction.success == true) {
-                                          ExtraDataParameter extraDataParameter =
+                                          ExtraDataParameter
+                                              extraDataParameter =
                                               ExtraDataParameter(
                                                   dataList: [agentID]);
                                           ref.refresh(clientTranDataProvider(
                                               extraDataParameter));
-                                          ref.refresh(walletClinetsDataProvider);
+                                          ref.refresh(
+                                              walletClinetsDataProvider);
                                         }
                                       },
                                       child: Card(
@@ -954,12 +1000,14 @@ Widget bodyTran(BuildContext context,
                                                 controllerAmt.text,
                                                 controllerDetails.text);
                                         if (addTransaction.success == true) {
-                                          ExtraDataParameter extraDataParameter =
+                                          ExtraDataParameter
+                                              extraDataParameter =
                                               ExtraDataParameter(
                                                   dataList: [agentID]);
                                           ref.refresh(clientTranDataProvider(
                                               extraDataParameter));
-                                          ref.refresh(walletClinetsDataProvider);
+                                          ref.refresh(
+                                              walletClinetsDataProvider);
                                         }
                                       },
                                       child: Card(
@@ -995,11 +1043,11 @@ Widget bodyTran(BuildContext context,
                       return Text('Error');
                     }, loading: () {
                       return Center(
-        child: LoadingAnimationWidget.staggeredDotsWave(
-          color: Colors.grey,
-          size: 40,
-        ),
-          );
+                        child: LoadingAnimationWidget.staggeredDotsWave(
+                          color: Colors.grey,
+                          size: 40,
+                        ),
+                      );
                     });
                   },
                 ),
@@ -1008,30 +1056,31 @@ Widget bodyTran(BuildContext context,
                 width: 1.w,
               ),
               Consumer(
-                  builder: (BuildContext context, WidgetRef ref, Widget? child) {
-                    return clientTransProvider.when(data: (dynamic data) {
-                       return Expanded(
-                         child: ListView(
-                          children: clientTransProvider.value!.data!.transactions!
-                              .map((e) {
-                            return clientTransactionList(e, context);
-                          }).toList(),    ),
-                       );
-                    }, error: (Object error, StackTrace stackTrace) {
-                      return Text('Error');
-                    }, loading: () {
-                      return Center(
-        child: LoadingAnimationWidget.staggeredDotsWave(
-          color: Colors.grey,
-          size: 40,
-        ),
-          );
-                    });
-                  },
+                builder: (BuildContext context, WidgetRef ref, Widget? child) {
+                  return clientTransProvider.when(data: (dynamic data) {
+                    return Expanded(
+                      child: ListView(
+                        children: clientTransProvider.value!.data!.transactions!
+                            .map((e) {
+                          return clientTransactionList(e, context);
+                        }).toList(),
+                      ),
+                    );
+                  }, error: (Object error, StackTrace stackTrace) {
+                    return Text('Error');
+                  }, loading: () {
+                    return Center(
+                      child: LoadingAnimationWidget.staggeredDotsWave(
+                        color: Colors.grey,
+                        size: 40,
+                      ),
+                    );
+                  });
+                },
               ),
             ],
           ),
-      );
+        );
 }
 
 Widget topBar() {
@@ -1062,11 +1111,12 @@ Widget topBar() {
   );
 }
 
-Widget topBarTran() {
+Widget topBarTran(WidgetRef ref) {
   return Row(
     children: [
       IconButton(
           onPressed: () {
+            ref.refresh(walletBalDataProvider);
             controller.jumpToPage(0);
           },
           hoverColor: Colors.transparent,
@@ -1202,7 +1252,9 @@ Widget transactionList(
                   style: TextStyle(
                       fontSize: 2.w,
                       fontWeight: FontWeight.w600,
-                      color:  walletClient.balance!.contains('-')?Colors.red:ColorsRes.green),
+                      color: walletClient.balance!.contains('-')
+                          ? Colors.red
+                          : ColorsRes.green),
                 ),
                 Text(
                   'Credited',

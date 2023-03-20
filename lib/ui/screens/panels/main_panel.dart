@@ -20,6 +20,7 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:screenshot/screenshot.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:sizer/sizer.dart';
+import '../../../helper/life_cycle_event_handler.dart';
 import '../../../models/agents_response_entity.dart';
 import '../../../widgets/delete_confirmation_popup.dart';
 import '../../styles/design.dart';
@@ -65,6 +66,11 @@ class _MainPanelState extends ConsumerState<MainPanel> {
     selectedIndex = 0;
     fToast = FToast();
     fToast.init(context);
+
+     WidgetsBinding.instance.addObserver(
+        LifecycleEventHandler(resumeCallBack: () async => setState(() {
+    
+        })));
   }
 
   @override

@@ -293,12 +293,14 @@ Widget SheetsCardPC(SheetsResponseData data, BuildContext context) {
                     Expanded(
                       child: GestureDetector(
                         onTap: () {
-                          Navigator.push(
+                          if(data.declared_status == 0){
+                              Navigator.push(
                               context,
                               MaterialPageRoute(
                                 builder: (context) =>
                                     MainPanel(data.id!, data.name!, data.refreshedAt!),
                               ));
+                          }
                         },
                         child: DesignConfig.flatButton(
                           ColorsRes.mainBlue,
