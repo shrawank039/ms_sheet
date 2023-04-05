@@ -36,6 +36,7 @@ class User {
     this.email,
     this.token,
     this.mobile_number,
+    this.type,
   });
 
   int? id;
@@ -43,6 +44,7 @@ class User {
   String? email;
   String? token;
   String? mobile_number;
+  String? type;
 
   factory User.fromJson(Map<String, dynamic> json) => User(
         id: json["id"],
@@ -50,6 +52,7 @@ class User {
         email: json["email"],
         token: json["token"],
         mobile_number: json["mobile_number"],
+        type: json["type"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -58,5 +61,6 @@ class User {
         "email": email,
         "token": token,
         "mobile_number": mobile_number,
+        "type": type,
       };
 }

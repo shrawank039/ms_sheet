@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:ms_sheet/models/sheets_response_entity.dart';
 import 'package:ms_sheet/providers/data_providers.dart';
+import 'package:ms_sheet/ui/pip_screen.dart';
 import 'package:ms_sheet/ui/screens/panels/main_panel.dart';
 import 'package:ms_sheet/ui/screens/panels/master_panel.dart';
 import 'package:ms_sheet/ui/styles/color.dart';
@@ -48,44 +49,43 @@ class _SheetsState extends ConsumerState<Sheets> {
 
   @override
   Widget build(BuildContext context) {
-
     final _data = ref.watch(sheetHomeDataProvider);
 
     return Consumer(
-              builder: (BuildContext contex, WidgetRef ref, Widget? child) {
-                return _data.when(data: (dynamic data) {
-                  print('agentsDataProvider r0 : ${_data.value!.data}');
+      builder: (BuildContext contex, WidgetRef ref, Widget? child) {
+        return _data.when(data: (dynamic data) {
+          print('agentsDataProvider r0 : ${_data.value!.data}');
 
-                  if (_data.value!.success == true) {
+          if (_data.value!.success == true) {
             _sheetsList.clear();
             _sheetsList.addAll(_data.value!.data!);
           }
-      return Expanded(
-      child: LayoutBuilder(
-        builder: (BuildContext context, BoxConstraints constraints) {
-          // Mobile = Small (smaller than 640px)
-          // Tablet = Medium (641px to 1007px)
-          // Laptop = Large (1008px and larger)
-          if (constraints.maxWidth < 640) {
-            return SheetsMobile();
-          } else {
-            return SheetsPC();
-          }
-        },
-      ),
-    );
-    }, error: (Object error, StackTrace stackTrace) {
-                  return Text('Error');
-                }, loading: () {
-                  return Center(
-      child: LoadingAnimationWidget.staggeredDotsWave(
-        color: Colors.grey,
-        size: 40,
-      ),
-    );
-                });
+          return Expanded(
+            child: LayoutBuilder(
+              builder: (BuildContext context, BoxConstraints constraints) {
+                // Mobile = Small (smaller than 640px)
+                // Tablet = Medium (641px to 1007px)
+                // Laptop = Large (1008px and larger)
+                if (constraints.maxWidth < 640) {
+                  return SheetsMobile();
+                } else {
+                  return SheetsPC();
+                }
               },
-            );
+            ),
+          );
+        }, error: (Object error, StackTrace stackTrace) {
+          return Text('Error');
+        }, loading: () {
+          return Center(
+            child: LoadingAnimationWidget.staggeredDotsWave(
+              color: Colors.grey,
+              size: 40,
+            ),
+          );
+        });
+      },
+    );
   }
 }
 
@@ -214,7 +214,7 @@ Widget SheetsCardPC(SheetsResponseData data, BuildContext context) {
             height: 2.4.w,
           ),
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal:8.0),
+            padding: const EdgeInsets.symmetric(horizontal: 8.0),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -240,13 +240,12 @@ Widget SheetsCardPC(SheetsResponseData data, BuildContext context) {
                   ],
                 ),
                 Text(
-                      data.declared_result==null?
-                      '':data.declared_result!,
-                      style: TextStyle(
-                          color: ColorsRes.black,
-                          fontSize: 4.0.w,
-                          fontWeight: FontWeight.w600),
-                    ),
+                  data.declared_result == null ? '' : data.declared_result!,
+                  style: TextStyle(
+                      color: ColorsRes.black,
+                      fontSize: 4.0.w,
+                      fontWeight: FontWeight.w600),
+                ),
               ],
             ),
           ),
@@ -278,8 +277,8 @@ Widget SheetsCardPC(SheetsResponseData data, BuildContext context) {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) =>
-                                  MasterPanel(data.id!, data.name!, data.refreshedAt!),
+                              builder: (context) => MasterPanel(
+                                  data.id!, data.name!, data.refreshedAt!),
                             ));
                       },
                       child: DesignConfig.flatButton(
@@ -293,13 +292,13 @@ Widget SheetsCardPC(SheetsResponseData data, BuildContext context) {
                     Expanded(
                       child: GestureDetector(
                         onTap: () {
-                          if(data.declared_status == 0){
-                              Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) =>
-                                    MainPanel(data.id!, data.name!, data.refreshedAt!),
-                              ));
+                          if (data.declared_status == 0) {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => MainPanel(
+                                      data.id!, data.name!, data.refreshedAt!),
+                                ));
                           }
                         },
                         child: DesignConfig.flatButton(
@@ -429,7 +428,8 @@ class SheetsCreateSection extends ConsumerStatefulWidget {
   const SheetsCreateSection({super.key});
 
   @override
-  ConsumerState<SheetsCreateSection> createState() => _SheetsCreateSectionState();
+  ConsumerState<SheetsCreateSection> createState() =>
+      _SheetsCreateSectionState();
 }
 
 class _SheetsCreateSectionState extends ConsumerState<SheetsCreateSection> {
@@ -538,9 +538,14 @@ class _SheetsCreateSectionState extends ConsumerState<SheetsCreateSection> {
               InkWell(
                 onTap: () async {
                   var refreshSheet = await SheetsRepository().refreshSheets();
-                  if(refreshSheet.success == true){
+                  if (refreshSheet.success == true) {
                     ref.refresh(sheetHomeDataProvider);
                   }
+                  //  Navigator.push(
+                  //                       context,
+                  //                       MaterialPageRoute(
+                  //                           builder: (context) => PipScreen(
+                  //                             )));
                 },
                 child: Card(
                   margin: EdgeInsets.only(left: 2.w),
@@ -553,7 +558,8 @@ class _SheetsCreateSectionState extends ConsumerState<SheetsCreateSection> {
                           vertical: 0.7.h, horizontal: 2.2.w),
                       child: Text(
                         'Create',
-                        style: TextStyle(color: ColorsRes.white, fontSize: 1.7.w),
+                        style:
+                            TextStyle(color: ColorsRes.white, fontSize: 1.7.w),
                       )),
                 ),
               ),

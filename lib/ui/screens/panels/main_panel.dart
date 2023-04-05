@@ -32,6 +32,7 @@ import 'package:pdf/widgets.dart' as pw;
 bool updatePanel = false;
 bool updatePanelStatus = false;
 int selectedAgentId = 0;
+int editMatchID = 0;
 int selectedIndex = 0;
 final FocusNode _focusNode = FocusNode();
 final FocusNode focusNode = FocusNode();
@@ -67,10 +68,8 @@ class _MainPanelState extends ConsumerState<MainPanel> {
     fToast = FToast();
     fToast.init(context);
 
-     WidgetsBinding.instance.addObserver(
-        LifecycleEventHandler(resumeCallBack: () async => setState(() {
-    
-        })));
+    WidgetsBinding.instance.addObserver(
+        LifecycleEventHandler(resumeCallBack: () async => setState(() {})));
   }
 
   @override
@@ -692,6 +691,7 @@ class _MainPanelState extends ConsumerState<MainPanel> {
                                           var updatePanelApi =
                                               await PanelRepository()
                                                   .updatePanel(
+                                                      editMatchID,
                                                       widget.sheet_id,
                                                       selectedAgents!.id!,
                                                       widget.date,
@@ -773,7 +773,8 @@ class _MainPanelState extends ConsumerState<MainPanel> {
                                                     'DropdownButton2 0 : ${selectedAgents}');
                                               }
                                               return DropdownButtonHideUnderline(
-                                                child: DropdownButton2<AgentsResponseData>(
+                                                child: DropdownButton2<
+                                                    AgentsResponseData>(
                                                   hint: Text(
                                                     'Select Client',
                                                     style: TextStyle(
@@ -813,48 +814,52 @@ class _MainPanelState extends ConsumerState<MainPanel> {
                                                                 true;
                                                           });
                                                         },
-                                                        dropdownSearchData: DropdownSearchData(
-                                                  searchController:
-                                                      textEditingController,
-                                                      searchInnerWidgetHeight: 50,
-                                                  searchInnerWidget: Padding(
-                                                    padding:
-                                                        const EdgeInsets.only(
-                                                      top: 8,
-                                                      bottom: 4,
-                                                      right: 8,
-                                                      left: 8,
-                                                    ),
-                                                    child: TextFormField(
-                                                      controller:
-                                                          textEditingController,
-                                                      decoration:
-                                                          InputDecoration(
-                                                        isDense: true,
-                                                        // contentPadding: const EdgeInsets.symmetric(
-                                                        //   horizontal: 10,
-                                                        //   vertical: 8,
-                                                        // ),
-                                                        hintText:
-                                                            'Search for clients...',
-                                                        hintStyle:
-                                                            const TextStyle(
-                                                                fontSize: 12),
-                                                        border:
-                                                            OutlineInputBorder(
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(8),
+                                                  dropdownSearchData:
+                                                      DropdownSearchData(
+                                                    searchController:
+                                                        textEditingController,
+                                                    searchInnerWidgetHeight: 50,
+                                                    searchInnerWidget: Padding(
+                                                      padding:
+                                                          const EdgeInsets.only(
+                                                        top: 8,
+                                                        bottom: 4,
+                                                        right: 8,
+                                                        left: 8,
+                                                      ),
+                                                      child: TextFormField(
+                                                        controller:
+                                                            textEditingController,
+                                                        decoration:
+                                                            InputDecoration(
+                                                          isDense: true,
+                                                          // contentPadding: const EdgeInsets.symmetric(
+                                                          //   horizontal: 10,
+                                                          //   vertical: 8,
+                                                          // ),
+                                                          hintText:
+                                                              'Search for clients...',
+                                                          hintStyle:
+                                                              const TextStyle(
+                                                                  fontSize: 12),
+                                                          border:
+                                                              OutlineInputBorder(
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        8),
+                                                          ),
                                                         ),
                                                       ),
                                                     ),
+                                                    searchMatchFn:
+                                                        (item, searchValue) {
+                                                      return (item.value
+                                                          .toString()
+                                                          .contains(
+                                                              searchValue));
+                                                    },
                                                   ),
-                                                  searchMatchFn:
-                                                      (item, searchValue) {
-                                                    return (item.value
-                                                        .toString()
-                                                        .contains(searchValue));
-                                                  },),
                                                   //This to clear the search value when you close the menu
                                                   onMenuStateChange: (isOpen) {
                                                     if (!isOpen) {
@@ -869,11 +874,12 @@ class _MainPanelState extends ConsumerState<MainPanel> {
                                               return Text('Error');
                                             }, loading: () {
                                               return Center(
-      child: LoadingAnimationWidget.staggeredDotsWave(
-        color: Colors.grey,
-        size: 40,
-      ),
-    );
+                                                child: LoadingAnimationWidget
+                                                    .staggeredDotsWave(
+                                                  color: Colors.grey,
+                                                  size: 40,
+                                                ),
+                                              );
                                             });
                                           },
                                         ),
@@ -1044,11 +1050,11 @@ class _MainPanelState extends ConsumerState<MainPanel> {
                         return Text('Error');
                       }, loading: () {
                         return Center(
-      child: LoadingAnimationWidget.staggeredDotsWave(
-        color: Colors.grey,
-        size: 40,
-      ),
-    );
+                          child: LoadingAnimationWidget.staggeredDotsWave(
+                            color: Colors.grey,
+                            size: 40,
+                          ),
+                        );
                       });
                     }),
                     SizedBox(
@@ -1092,7 +1098,9 @@ class _MainPanelState extends ConsumerState<MainPanel> {
                                         context,
                                         MaterialPageRoute(
                                             builder: (context) => MasterPanel(
-                                                widget.sheet_id, widget.sheet_name, widget.date)));
+                                                widget.sheet_id,
+                                                widget.sheet_name,
+                                                widget.date)));
                                   },
                                   child: DesignConfig.flatButtonWithIcon(
                                     ColorsRes.mainBlue,
@@ -1219,7 +1227,7 @@ Widget numberBox(int index) {
                   },
                   onTap: () {
                     print("onClickOurtside: $pairKey");
-                    selectedIndex = index;                 
+                    selectedIndex = index;
                     pointController.selection = TextSelection(
                       baseOffset: 0,
                       extentOffset: pointController.text.length,
@@ -1435,6 +1443,7 @@ Widget clientsList(PanelResponseData data,
                   // }
                   global.numberPair = result;
                   selectedAgentId = data.agentId!;
+                  editMatchID = data.id!;
                   updatePanel = true;
                   updatePanelStatus = true;
                   global.pairKey.clear();

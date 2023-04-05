@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:iconly/iconly.dart';
 import 'package:ms_sheet/ui/screens/home/pages/Counters.dart';
 import 'package:ms_sheet/ui/screens/home/pages/agents.dart';
+import 'package:ms_sheet/ui/screens/home/pages/assistants.dart';
 import 'package:ms_sheet/ui/screens/home/pages/khata.dart';
 import 'package:ms_sheet/ui/screens/home/pages/local_players.dart';
 import 'package:ms_sheet/ui/screens/home/pages/settings.dart';
@@ -24,11 +26,36 @@ class PCHome extends StatefulWidget {
 
 class _PCHomeState extends State<PCHome> {
   String currentPage = 'Sheets';
+  late FToast fToast;
 
   @override
   void initState() {
     currentPage = 'Sheets';
+    fToast = FToast();
+    fToast.init(context);
     super.initState();
+  }
+
+  _showToast(String text) {
+    Widget toast = Container(
+      padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 12.0),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(25.0),
+        color: Colors.greenAccent,
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(text),
+        ],
+      ),
+    );
+
+    fToast.showToast(
+      child: toast,
+      gravity: ToastGravity.BOTTOM,
+      toastDuration: Duration(seconds: 2),
+    );
   }
 
   @override
@@ -156,9 +183,13 @@ class _PCHomeState extends State<PCHome> {
                       ),
                       GestureDetector(
                         onTap: () {
-                          setState(() {
-                            currentPage = 'Clients';
-                          });
+                          if (global.prefs.get('type') == 'admin') {
+                            setState(() {
+                              currentPage = 'Clients';
+                            });
+                          }else{
+                            _showToast('You don\'t have permission.');
+                          }
                         },
                         child: (currentPage == 'Clients')
                             ? Card(
@@ -295,6 +326,79 @@ class _PCHomeState extends State<PCHome> {
                                 ),
                               ),
                       ),
+                      SizedBox(
+                        height: 0.2.h,
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          if (global.prefs.get('type') == 'admin') {
+                          setState(() {
+                            currentPage = 'Assistants';
+                          });
+                           }else{
+                            _showToast('You don\'t have permission.');
+                          }
+                        },
+                        child: (currentPage == 'Assistants')
+                            ? Card(
+                                color: ColorsRes.lightBlue,
+                                elevation: 0,
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(1.w)),
+                                child: Padding(
+                                  padding: EdgeInsets.all(1.w),
+                                  child: Row(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: [
+                                      const Icon(
+                                        IconlyBold.user_2,
+                                        color: ColorsRes.mainBlue,
+                                      ),
+                                      SizedBox(
+                                        width: 1.5.w,
+                                      ),
+                                      Text(
+                                        'Assistants',
+                                        style: TextStyle(
+                                          color: ColorsRes.mainBlue,
+                                          fontSize: 1.7.w,
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                ),
+                              )
+                            : Card(
+                                color: ColorsRes.white,
+                                elevation: 0,
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(1.w)),
+                                child: Padding(
+                                  padding: EdgeInsets.all(1.w),
+                                  child: Row(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: [
+                                      const Icon(
+                                        IconlyLight.user,
+                                        color: ColorsRes.darkGrey,
+                                      ),
+                                      SizedBox(
+                                        width: 1.5.w,
+                                      ),
+                                      Text(
+                                        'Assistants',
+                                        style: TextStyle(
+                                          color: ColorsRes.darkGrey,
+                                          fontSize: 1.7.w,
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                ),
+                              ),
+                      ),
                     ],
                   ),
                 ),
@@ -309,9 +413,13 @@ class _PCHomeState extends State<PCHome> {
                     children: [
                       GestureDetector(
                         onTap: () {
+                          if (global.prefs.get('type') == 'admin') {
                           setState(() {
                             currentPage = 'Chats';
                           });
+                           }else{
+                            _showToast('You don\'t have permission.');
+                          }
                         },
                         child: (currentPage == 'Chats')
                             ? DesignConfig.flatButtonWithIcon(
@@ -421,9 +529,13 @@ class _PCHomeState extends State<PCHome> {
                       ),
                       GestureDetector(
                         onTap: () {
+                        //  if (global.prefs.get('type') == 'admin') {
                           setState(() {
                             currentPage = 'Settings';
                           });
+                          //  }else{
+                          //   _showToast('You don\'t have permission.');
+                          // }
                         },
                         child: (currentPage == 'Settings')
                             ? DesignConfig.flatButtonWithIcon(
@@ -469,6 +581,9 @@ class _PCHomeState extends State<PCHome> {
                   ] else if (currentPage == 'Wallet') ...[
                     hiding(),
                     Wallet(),
+                  ] else if (currentPage == 'Assistants') ...[
+                    hiding(),
+                    Assistants(),
                   ] else if (currentPage == 'Chats') ...[
                     hiding(),
                     LocalPlayers(),

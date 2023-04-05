@@ -62,11 +62,11 @@ class _SheetsState extends ConsumerState<Counters> {
                   return Text('Error');
                 }, loading: () {
                   return Center(
-      child: LoadingAnimationWidget.staggeredDotsWave(
-        color: Colors.grey,
-        size: 40,
-      ),
-    );
+                    child: LoadingAnimationWidget.staggeredDotsWave(
+                      color: Colors.grey,
+                      size: 40,
+                    ),
+                  );
                 });
               },
             ),

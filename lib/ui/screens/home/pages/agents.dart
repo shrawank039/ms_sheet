@@ -70,11 +70,11 @@ class _SheetsState extends ConsumerState<Agents> {
                               return Text('Error');
                             }, loading: () {
                               return Center(
-        child: LoadingAnimationWidget.staggeredDotsWave(
-          color: Colors.grey,
-          size: 40,
-        ),
-      );
+                                child: LoadingAnimationWidget.staggeredDotsWave(
+                                  color: Colors.grey,
+                                  size: 40,
+                                ),
+                              );
                             });
                           },
                         ),
@@ -100,29 +100,29 @@ class _SheetsState extends ConsumerState<Agents> {
                         width: 3.w,
                       ),
                       Consumer(
-                          builder: (BuildContext context, WidgetRef ref,
-                              Widget? child) {
-                            return _data.when(data: (dynamic data) {
-                              debugPrint(
-                                  'agentsDataProvider 0 : ${_data.value!.message}');
-                              return Expanded(
-                                child: ListView(
-                                  children: _data.value!.data!.map((e) {
-                                    return agentsList(e, context);
-                                  }).toList(),
-                                ),
-                              );
-                            }, error: (Object error, StackTrace stackTrace) {
-                              return Text('Error');
-                            }, loading: () {
-                              return Center(
-        child: LoadingAnimationWidget.staggeredDotsWave(
-          color: Colors.grey,
-          size: 40,
-        ),
-      );
-                            });
-                          },
+                        builder: (BuildContext context, WidgetRef ref,
+                            Widget? child) {
+                          return _data.when(data: (dynamic data) {
+                            debugPrint(
+                                'agentsDataProvider 0 : ${_data.value!.message}');
+                            return Expanded(
+                              child: ListView(
+                                children: _data.value!.data!.map((e) {
+                                  return agentsList(e, context);
+                                }).toList(),
+                              ),
+                            );
+                          }, error: (Object error, StackTrace stackTrace) {
+                            return Text('Error');
+                          }, loading: () {
+                            return Center(
+                              child: LoadingAnimationWidget.staggeredDotsWave(
+                                color: Colors.grey,
+                                size: 40,
+                              ),
+                            );
+                          });
+                        },
                       ),
                     ],
                   ),
@@ -276,7 +276,7 @@ Widget agentsList(AgentsResponseData data, BuildContext context) {
               onPressed: () {
                 selectedAgents = data;
                 selectedAgentsReference = int.parse(data.referenceId!);
-                referenceAgent = selectedAgentsReference == 0? null: data;
+                referenceAgent = selectedAgentsReference == 0 ? null : data;
                 updateAgent = true;
                 ref.refresh(agentsDataProvider);
               },
@@ -576,8 +576,7 @@ class _CreateAgentSectionState extends ConsumerState<CreateAgentSection> {
                                     ),
                                   ),
                                   items: _data.value?.data!
-                                      .map((item) =>
-                                          DropdownMenuItem(
+                                      .map((item) => DropdownMenuItem(
                                             value: item,
                                             child: Text(
                                               item.name.toString(),
@@ -596,33 +595,35 @@ class _CreateAgentSectionState extends ConsumerState<CreateAgentSection> {
                                   },
                                   //itemHeight: 40,
                                   dropdownSearchData: DropdownSearchData(
-                                  //dropdownMaxHeight: 25.h,
-                                  searchController: textEditingController,
-                                  searchInnerWidgetHeight: 50,
-                                  searchInnerWidget: Padding(
-                                    padding: const EdgeInsets.only(
-                                      top: 8,
-                                      bottom: 4,
-                                      right: 8,
-                                      left: 8,
-                                    ),
-                                    child: TextFormField(
-                                      controller: textEditingController,
-                                      decoration: InputDecoration(
-                                        isDense: true,
-                                        hintText: 'Search for clients...',
-                                        hintStyle: const TextStyle(fontSize: 12),
-                                        border: OutlineInputBorder(
-                                          borderRadius: BorderRadius.circular(8),
+                                    //dropdownMaxHeight: 25.h,
+                                    searchController: textEditingController,
+                                    searchInnerWidgetHeight: 50,
+                                    searchInnerWidget: Padding(
+                                      padding: const EdgeInsets.only(
+                                        top: 8,
+                                        bottom: 4,
+                                        right: 8,
+                                        left: 8,
+                                      ),
+                                      child: TextFormField(
+                                        controller: textEditingController,
+                                        decoration: InputDecoration(
+                                          isDense: true,
+                                          hintText: 'Search for clients...',
+                                          hintStyle:
+                                              const TextStyle(fontSize: 12),
+                                          border: OutlineInputBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(8),
+                                          ),
                                         ),
                                       ),
                                     ),
-                                  ),
-                                  searchMatchFn: (item, searchValue) {
-                                    return (item.value
-                                        .toString()
-                                        .contains(searchValue));
-                                  },
+                                    searchMatchFn: (item, searchValue) {
+                                      return (item.value
+                                          .toString()
+                                          .contains(searchValue));
+                                    },
                                   ),
                                   //This to clear the search value when you close the menu
                                   onMenuStateChange: (isOpen) {
@@ -637,11 +638,11 @@ class _CreateAgentSectionState extends ConsumerState<CreateAgentSection> {
                             return Text('Error');
                           }, loading: () {
                             return Center(
-      child: LoadingAnimationWidget.staggeredDotsWave(
-        color: Colors.grey,
-        size: 40,
-      ),
-    );
+                              child: LoadingAnimationWidget.staggeredDotsWave(
+                                color: Colors.grey,
+                                size: 40,
+                              ),
+                            );
                           });
                         },
                       ),
@@ -678,8 +679,7 @@ class _CreateAgentSectionState extends ConsumerState<CreateAgentSection> {
                   child: InkWell(
                     onTap: () async {
                       if (_controllerName.text.isNotEmpty &&
-                              _controllerMobile.text.isNotEmpty 
-                          ) {
+                          _controllerMobile.text.isNotEmpty) {
                         var addAgent = updateAgent
                             ? await AgentsRepository().updateAgent(
                                 selectedAgents!.id!,
@@ -948,8 +948,7 @@ class _CreateAgentSectionMobileState
                                 ),
                               ),
                               items: _data.value?.data!
-                                  .map((item) =>
-                                      DropdownMenuItem(
+                                  .map((item) => DropdownMenuItem(
                                         value: item,
                                         child: Text(
                                           item.name.toString(),
@@ -969,35 +968,36 @@ class _CreateAgentSectionMobileState
                               //itemHeight: 40,
                               //dropdownMaxHeight: 25.h,
                               dropdownSearchData: DropdownSearchData(
-                              searchController: textEditingController,
-                              searchInnerWidget: Padding(
-                                padding: const EdgeInsets.only(
-                                  top: 8,
-                                  bottom: 4,
-                                  right: 8,
-                                  left: 8,
-                                ),
-                                child: TextFormField(
-                                  controller: textEditingController,
-                                  decoration: InputDecoration(
-                                    isDense: true,
-                                    // contentPadding: const EdgeInsets.symmetric(
-                                    //   horizontal: 10,
-                                    //   vertical: 8,
-                                    // ),
-                                    hintText: 'Search for clients...',
-                                    hintStyle: const TextStyle(fontSize: 12),
-                                    border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(8),
+                                searchController: textEditingController,
+                                searchInnerWidget: Padding(
+                                  padding: const EdgeInsets.only(
+                                    top: 8,
+                                    bottom: 4,
+                                    right: 8,
+                                    left: 8,
+                                  ),
+                                  child: TextFormField(
+                                    controller: textEditingController,
+                                    decoration: InputDecoration(
+                                      isDense: true,
+                                      // contentPadding: const EdgeInsets.symmetric(
+                                      //   horizontal: 10,
+                                      //   vertical: 8,
+                                      // ),
+                                      hintText: 'Search for clients...',
+                                      hintStyle: const TextStyle(fontSize: 12),
+                                      border: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(8),
+                                      ),
                                     ),
                                   ),
                                 ),
+                                searchMatchFn: (item, searchValue) {
+                                  return (item.value
+                                      .toString()
+                                      .contains(searchValue));
+                                },
                               ),
-                              searchMatchFn: (item, searchValue) {
-                                return (item.value
-                                    .toString()
-                                    .contains(searchValue));
-                              },),
                               //This to clear the search value when you close the menu
                               onMenuStateChange: (isOpen) {
                                 if (!isOpen) {
@@ -1010,11 +1010,11 @@ class _CreateAgentSectionMobileState
                           return Text('Error');
                         }, loading: () {
                           return Center(
-      child: LoadingAnimationWidget.staggeredDotsWave(
-        color: Colors.grey,
-        size: 40,
-      ),
-    );
+                            child: LoadingAnimationWidget.staggeredDotsWave(
+                              color: Colors.grey,
+                              size: 40,
+                            ),
+                          );
                         });
                       },
                     ),

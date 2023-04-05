@@ -10,10 +10,12 @@ import 'package:ms_sheet/repositories/counters_repository.dart';
 import 'package:ms_sheet/repositories/panel_repository.dart';
 import 'package:ms_sheet/repositories/sheets_repository.dart';
 
+import '../models/assistant_response.dart';
 import '../models/panel_response_entity.dart';
 import '../models/sheets_response_entity.dart';
 import '../models/wallet_client_entity.dart';
 import '../repositories/agents_repository.dart';
+import '../repositories/assistant_repository.dart';
 import '../repositories/local_player_repository.dart';
 import '../repositories/wallet_repo.dart';
 
@@ -64,6 +66,11 @@ final walletBalDataProvider =
 final clientTranDataProvider = FutureProvider.autoDispose
     .family<WalletTransactionsEntity, ExtraDataParameter>((ref, data) async {
   return ref.watch(walletProvider).getTransaction(data.dataList[0]);
+});
+
+final assistantDataProvider =
+    FutureProvider.autoDispose<AssistantResponse>((ref) async {
+  return ref.watch(assitantProvider).getAssistant();
 });
 
 // Extra Data Class

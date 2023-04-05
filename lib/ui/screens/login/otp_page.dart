@@ -76,8 +76,8 @@ class _OtpState extends State<Otp> {
         verify = true;
       } else {}
       if (verify == true && widget.type == 'register') {
-        var registerResponse = await AuthRepository()
-            .getSignupResponse(widget.name, widget.mobile, widget.pass);
+        var registerResponse = await AuthRepository().getSignupResponse(
+            widget.name, widget.mobile, widget.pass, 'admin', 0);
         if (registerResponse.success = true) {
           await AuthHelper().setUserData(registerResponse);
           Navigator.pushReplacement(

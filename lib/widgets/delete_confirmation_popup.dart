@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:ms_sheet/repositories/agents_repository.dart';
+import 'package:ms_sheet/repositories/assistant_repository.dart';
 import 'package:ms_sheet/repositories/counters_repository.dart';
 import 'package:ms_sheet/repositories/local_player_repository.dart';
 import 'package:ms_sheet/repositories/panel_repository.dart';
@@ -93,7 +94,15 @@ class DeleteConfirmationPopup extends ConsumerWidget {
                                 Navigator.of(context).pop();
                                 ref.refresh(sheetDataProvider);
                               }
-                            } else if (type == 'local_player') {
+                            } else if (type == 'assistant') {
+                              delete =
+                                  await AssistantRepository().deleteAssistant(id);
+                              if (delete.success == true) {
+                                Navigator.of(context).pop();
+                                ref.refresh(assistantDataProvider);
+                              }
+                            }
+                            else if (type == 'local_player') {
                               delete = await LocalPlayersRepository()
                                   .deleteLocalPlayers(id);
                               if (delete.success == true) {

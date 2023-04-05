@@ -7,6 +7,7 @@ import 'package:ms_sheet/models/wallet_transactions_entity.dart';
 import 'package:ms_sheet/repositories/wallet_repo.dart';
 import 'package:ms_sheet/ui/styles/color.dart';
 import 'package:ms_sheet/ui/styles/design.dart';
+import 'package:pip_view/pip_view.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../../../helper/life_cycle_event_handler.dart';

@@ -6,8 +6,10 @@ class AuthHelper {
       await global.prefs.setString('token', loginResponse.user.token);
       await global.prefs.setInt('id', loginResponse.user.id);
       await global.prefs.setString('name', loginResponse.user.name);
-     // await global.prefs.setString('email', loginResponse.user.email);
-      await global.prefs.setString('mobile_number', loginResponse.user.mobile_number);
+      // await global.prefs.setString('email', loginResponse.user.email);
+      await global.prefs
+          .setString('mobile_number', loginResponse.user.mobile_number);
+      await global.prefs.setString('type', loginResponse.user.type);
     }
   }
 
@@ -15,7 +17,8 @@ class AuthHelper {
     await global.prefs.remove('token');
     await global.prefs.remove('id');
     await global.prefs.remove('name');
-  //  await global.prefs.remove('email');
+    //  await global.prefs.remove('email');
     await global.prefs.remove('mobile_number');
+    await global.prefs.remove('type');
   }
 }

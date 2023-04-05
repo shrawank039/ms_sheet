@@ -259,7 +259,7 @@ class _DeclarePopupState extends ConsumerState<DeclarePopup> {
                           if (resultController.text.length > 1) {
                             var declareResult = await PanelRepository()
                                 .declareResult(widget.sheet_id,
-                                    int.parse(resultController.text.trim()));
+                                    resultController.text.trim());
                             if (declareResult.success == true) {
                               Navigator.of(context).pop();
                               ref.refresh(sheetHomeDataProvider);

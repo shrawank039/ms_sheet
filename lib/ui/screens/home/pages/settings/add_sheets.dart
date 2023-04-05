@@ -258,11 +258,11 @@ class _CreateSheetsState extends ConsumerState<CreateSheets> {
                   return Text('Error');
                 }, loading: () {
                   return Center(
-      child: LoadingAnimationWidget.staggeredDotsWave(
-        color: Colors.grey,
-        size: 40,
-      ),
-    );
+                    child: LoadingAnimationWidget.staggeredDotsWave(
+                      color: Colors.grey,
+                      size: 40,
+                    ),
+                  );
                 });
               },
             ),

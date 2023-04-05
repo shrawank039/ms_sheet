@@ -57,11 +57,11 @@ class _SheetsState extends ConsumerState<LocalPlayers> {
                     return Text('Error');
                   }, loading: () {
                     return Center(
-      child: LoadingAnimationWidget.staggeredDotsWave(
-        color: Colors.grey,
-        size: 40,
-      ),
-    );
+                      child: LoadingAnimationWidget.staggeredDotsWave(
+                        color: Colors.grey,
+                        size: 40,
+                      ),
+                    );
                   });
                 },
               ),

@@ -62,6 +62,9 @@ dependencies:
   permission_handler: ^10.2.0
   pdf: ^3.9.0
   loading_animation_widget: ^1.2.0+4
+  pip_view: ^0.9.7
+  sqflite: ^2.2.6
+  #facebook_app_events: ^0.18.3
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
@@ -81,6 +84,7 @@ dev_dependencies:
   flutter_lints: ^2.0.1
   build_runner: ^2.3.3
   json_serializable: ^6.6.1
+  sqflite_common_ffi: ^2.2.2
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

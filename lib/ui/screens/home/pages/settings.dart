@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:iconly/iconly.dart';
+import 'package:ms_sheet/ui/screens/home/pages/settings/add_assistant.dart';
 import 'package:ms_sheet/ui/screens/home/pages/settings/add_sheets.dart';
-import 'package:ms_sheet/ui/screens/login/login_screen.dart';
 import 'package:ms_sheet/ui/screens/login/profile_screen.dart';
-import 'package:ms_sheet/ui/screens/login/register_screen.dart';
-import 'package:ms_sheet/ui/screens/login/reset_pass_screen.dart';
 import 'package:ms_sheet/ui/styles/color.dart';
 import 'package:ms_sheet/ui/styles/design.dart';
 import 'package:sizer/sizer.dart';
@@ -18,6 +17,38 @@ class Settings extends StatefulWidget {
 }
 
 class _SettingsState extends State<Settings> {
+
+  bool assistant = false;
+  late FToast fToast;
+  @override
+  void initState() {
+    fToast = FToast();
+    fToast.init(context);
+    super.initState();
+  }
+
+_showToast(String text) {
+    Widget toast = Container(
+      padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 12.0),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(25.0),
+        color: Colors.greenAccent,
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(text),
+        ],
+      ),
+    );
+
+    fToast.showToast(
+      child: toast,
+      gravity: ToastGravity.BOTTOM,
+      toastDuration: Duration(seconds: 2),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Expanded(
@@ -32,7 +63,7 @@ class _SettingsState extends State<Settings> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Expanded(
-                  child: Column(
+                  child: ListView(
                     children: [
                       Container(
                           padding: EdgeInsets.only(
@@ -124,8 +155,31 @@ class _SettingsState extends State<Settings> {
                       SizedBox(
                         height: 3.w,
                       ),
-                      settingButtons(Icons.create_new_folder, 'Add Sheet',
-                          'Create and edit sheets'),
+                      InkWell(
+                        onTap: () {
+                          setState(() {
+                            assistant = false;
+                          });
+                        },
+                        child: settingButtons(Icons.create_new_folder,
+                            'Add Sheet', 'Create and edit sheets'),
+                      ),
+                      SizedBox(
+                        height: 1.5.w,
+                      ),
+                      InkWell(
+                        onTap: () {
+                          if (global.prefs.get('type') == 'admin') {
+                          setState(() {
+                            assistant = true;
+                          });
+                           }else{
+                            _showToast('You don\'t have permission.');
+                          }
+                        },
+                        child: settingButtons(Icons.create_new_folder,
+                            'Add Assistant', 'Create and edit assistant'),
+                      ),
                       SizedBox(
                         height: 1.5.w,
                       ),
@@ -172,7 +226,7 @@ class _SettingsState extends State<Settings> {
                 SizedBox(
                   width: 3.w,
                 ),
-                const AddSheets(),
+                assistant ? const AddAssistant() : const AddSheets(),
               ],
             ),
           )
@@ -295,9 +349,8 @@ Widget userDetails(BuildContext context) {
       ),
       IconButton(
           onPressed: () {
-             Navigator.push(context,
-                              MaterialPageRoute(
-                                  builder: (context) => ProfileScreen()));
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => ProfileScreen()));
           },
           icon: Icon(
             Icons.create,

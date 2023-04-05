@@ -27,15 +27,20 @@ class AuthRepository {
   }
 
   Future<SignupResponse> getSignupResponse(
-      String name,
-      //  String email,
-      String mobileNumber,
-      String password) async {
+    String name,
+    //  String email,
+    String mobileNumber,
+    String password,
+    String type,
+    int parent_id,
+  ) async {
     var postBody = jsonEncode({
       "name": name,
       // "email": email,
       "mobile_number": mobileNumber,
-      "password": password
+      "password": password,
+      "type": type,
+      "parent_id": parent_id
     });
 
     Uri url = Uri.parse("${AppConfig.BASE_URL}/register");

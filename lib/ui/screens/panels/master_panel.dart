@@ -34,134 +34,132 @@ class MasterPanel extends ConsumerStatefulWidget {
 }
 
 class _MasterPanelState extends ConsumerState<MasterPanel> {
-
-
   @override
   void initState() {
     super.initState();
     global.numberPair = {
-  '00': 0,
-  '01': 0,
-  '02': 0,
-  '03': 0,
-  '04': 0,
-  '05': 0,
-  '06': 0,
-  '07': 0,
-  '08': 0,
-  '09': 0,
-  '10': 0,
-  '11': 0,
-  '12': 0,
-  '13': 0,
-  '14': 0,
-  '15': 0,
-  '16': 0,
-  '17': 0,
-  '18': 0,
-  '19': 0,
-  '20': 0,
-  '21': 0,
-  '22': 0,
-  '23': 0,
-  '24': 0,
-  '25': 0,
-  '26': 0,
-  '27': 0,
-  '28': 0,
-  '29': 0,
-  '30': 0,
-  '31': 0,
-  '32': 0,
-  '33': 0,
-  '34': 0,
-  '35': 0,
-  '36': 0,
-  '37': 0,
-  '38': 0,
-  '39': 0,
-  '40': 0,
-  '41': 0,
-  '42': 0,
-  '43': 0,
-  '44': 0,
-  '45': 0,
-  '46': 0,
-  '47': 0,
-  '48': 0,
-  '49': 0,
-  '50': 0,
-  '51': 0,
-  '52': 0,
-  '53': 0,
-  '54': 0,
-  '55': 0,
-  '56': 0,
-  '57': 0,
-  '58': 0,
-  '59': 0,
-  '60': 0,
-  '61': 0,
-  '62': 0,
-  '63': 0,
-  '64': 0,
-  '65': 0,
-  '66': 0,
-  '67': 0,
-  '68': 0,
-  '69': 0,
-  '70': 0,
-  '71': 0,
-  '72': 0,
-  '73': 0,
-  '74': 0,
-  '75': 0,
-  '76': 0,
-  '77': 0,
-  '78': 0,
-  '79': 0,
-  '80': 0,
-  '81': 0,
-  '82': 0,
-  '83': 0,
-  '84': 0,
-  '85': 0,
-  '86': 0,
-  '87': 0,
-  '88': 0,
-  '89': 0,
-  '90': 0,
-  '91': 0,
-  '92': 0,
-  '93': 0,
-  '94': 0,
-  '95': 0,
-  '96': 0,
-  '97': 0,
-  '98': 0,
-  '99': 0,
-  '100': 0,
-  '101': 0,
-  '102': 0,
-  '103': 0,
-  '104': 0,
-  '105': 0,
-  '106': 0,
-  '107': 0,
-  '108': 0,
-  '109': 0,
-  '110': 0,
-  '111': 0,
-  '112': 0,
-  '113': 0,
-  '114': 0,
-  '115': 0,
-  '116': 0,
-  '117': 0,
-  '118': 0,
-  '119': 0,
-  '120': 0,
-};
+      '00': 0,
+      '01': 0,
+      '02': 0,
+      '03': 0,
+      '04': 0,
+      '05': 0,
+      '06': 0,
+      '07': 0,
+      '08': 0,
+      '09': 0,
+      '10': 0,
+      '11': 0,
+      '12': 0,
+      '13': 0,
+      '14': 0,
+      '15': 0,
+      '16': 0,
+      '17': 0,
+      '18': 0,
+      '19': 0,
+      '20': 0,
+      '21': 0,
+      '22': 0,
+      '23': 0,
+      '24': 0,
+      '25': 0,
+      '26': 0,
+      '27': 0,
+      '28': 0,
+      '29': 0,
+      '30': 0,
+      '31': 0,
+      '32': 0,
+      '33': 0,
+      '34': 0,
+      '35': 0,
+      '36': 0,
+      '37': 0,
+      '38': 0,
+      '39': 0,
+      '40': 0,
+      '41': 0,
+      '42': 0,
+      '43': 0,
+      '44': 0,
+      '45': 0,
+      '46': 0,
+      '47': 0,
+      '48': 0,
+      '49': 0,
+      '50': 0,
+      '51': 0,
+      '52': 0,
+      '53': 0,
+      '54': 0,
+      '55': 0,
+      '56': 0,
+      '57': 0,
+      '58': 0,
+      '59': 0,
+      '60': 0,
+      '61': 0,
+      '62': 0,
+      '63': 0,
+      '64': 0,
+      '65': 0,
+      '66': 0,
+      '67': 0,
+      '68': 0,
+      '69': 0,
+      '70': 0,
+      '71': 0,
+      '72': 0,
+      '73': 0,
+      '74': 0,
+      '75': 0,
+      '76': 0,
+      '77': 0,
+      '78': 0,
+      '79': 0,
+      '80': 0,
+      '81': 0,
+      '82': 0,
+      '83': 0,
+      '84': 0,
+      '85': 0,
+      '86': 0,
+      '87': 0,
+      '88': 0,
+      '89': 0,
+      '90': 0,
+      '91': 0,
+      '92': 0,
+      '93': 0,
+      '94': 0,
+      '95': 0,
+      '96': 0,
+      '97': 0,
+      '98': 0,
+      '99': 0,
+      '100': 0,
+      '101': 0,
+      '102': 0,
+      '103': 0,
+      '104': 0,
+      '105': 0,
+      '106': 0,
+      '107': 0,
+      '108': 0,
+      '109': 0,
+      '110': 0,
+      '111': 0,
+      '112': 0,
+      '113': 0,
+      '114': 0,
+      '115': 0,
+      '116': 0,
+      '117': 0,
+      '118': 0,
+      '119': 0,
+      '120': 0,
+    };
     commCheck = false;
     pattiCheck = false;
     inOutCheck = false;
@@ -174,128 +172,128 @@ class _MasterPanelState extends ConsumerState<MasterPanel> {
   @override
   void dispose() {
     global.numberPair = {
-  '00': 0,
-  '01': 0,
-  '02': 0,
-  '03': 0,
-  '04': 0,
-  '05': 0,
-  '06': 0,
-  '07': 0,
-  '08': 0,
-  '09': 0,
-  '10': 0,
-  '11': 0,
-  '12': 0,
-  '13': 0,
-  '14': 0,
-  '15': 0,
-  '16': 0,
-  '17': 0,
-  '18': 0,
-  '19': 0,
-  '20': 0,
-  '21': 0,
-  '22': 0,
-  '23': 0,
-  '24': 0,
-  '25': 0,
-  '26': 0,
-  '27': 0,
-  '28': 0,
-  '29': 0,
-  '30': 0,
-  '31': 0,
-  '32': 0,
-  '33': 0,
-  '34': 0,
-  '35': 0,
-  '36': 0,
-  '37': 0,
-  '38': 0,
-  '39': 0,
-  '40': 0,
-  '41': 0,
-  '42': 0,
-  '43': 0,
-  '44': 0,
-  '45': 0,
-  '46': 0,
-  '47': 0,
-  '48': 0,
-  '49': 0,
-  '50': 0,
-  '51': 0,
-  '52': 0,
-  '53': 0,
-  '54': 0,
-  '55': 0,
-  '56': 0,
-  '57': 0,
-  '58': 0,
-  '59': 0,
-  '60': 0,
-  '61': 0,
-  '62': 0,
-  '63': 0,
-  '64': 0,
-  '65': 0,
-  '66': 0,
-  '67': 0,
-  '68': 0,
-  '69': 0,
-  '70': 0,
-  '71': 0,
-  '72': 0,
-  '73': 0,
-  '74': 0,
-  '75': 0,
-  '76': 0,
-  '77': 0,
-  '78': 0,
-  '79': 0,
-  '80': 0,
-  '81': 0,
-  '82': 0,
-  '83': 0,
-  '84': 0,
-  '85': 0,
-  '86': 0,
-  '87': 0,
-  '88': 0,
-  '89': 0,
-  '90': 0,
-  '91': 0,
-  '92': 0,
-  '93': 0,
-  '94': 0,
-  '95': 0,
-  '96': 0,
-  '97': 0,
-  '98': 0,
-  '99': 0,
-  '100': 0,
-  '101': 0,
-  '102': 0,
-  '103': 0,
-  '104': 0,
-  '105': 0,
-  '106': 0,
-  '107': 0,
-  '108': 0,
-  '109': 0,
-  '110': 0,
-  '111': 0,
-  '112': 0,
-  '113': 0,
-  '114': 0,
-  '115': 0,
-  '116': 0,
-  '117': 0,
-  '118': 0,
-  '119': 0,
-  '120': 0,
-};
+      '00': 0,
+      '01': 0,
+      '02': 0,
+      '03': 0,
+      '04': 0,
+      '05': 0,
+      '06': 0,
+      '07': 0,
+      '08': 0,
+      '09': 0,
+      '10': 0,
+      '11': 0,
+      '12': 0,
+      '13': 0,
+      '14': 0,
+      '15': 0,
+      '16': 0,
+      '17': 0,
+      '18': 0,
+      '19': 0,
+      '20': 0,
+      '21': 0,
+      '22': 0,
+      '23': 0,
+      '24': 0,
+      '25': 0,
+      '26': 0,
+      '27': 0,
+      '28': 0,
+      '29': 0,
+      '30': 0,
+      '31': 0,
+      '32': 0,
+      '33': 0,
+      '34': 0,
+      '35': 0,
+      '36': 0,
+      '37': 0,
+      '38': 0,
+      '39': 0,
+      '40': 0,
+      '41': 0,
+      '42': 0,
+      '43': 0,
+      '44': 0,
+      '45': 0,
+      '46': 0,
+      '47': 0,
+      '48': 0,
+      '49': 0,
+      '50': 0,
+      '51': 0,
+      '52': 0,
+      '53': 0,
+      '54': 0,
+      '55': 0,
+      '56': 0,
+      '57': 0,
+      '58': 0,
+      '59': 0,
+      '60': 0,
+      '61': 0,
+      '62': 0,
+      '63': 0,
+      '64': 0,
+      '65': 0,
+      '66': 0,
+      '67': 0,
+      '68': 0,
+      '69': 0,
+      '70': 0,
+      '71': 0,
+      '72': 0,
+      '73': 0,
+      '74': 0,
+      '75': 0,
+      '76': 0,
+      '77': 0,
+      '78': 0,
+      '79': 0,
+      '80': 0,
+      '81': 0,
+      '82': 0,
+      '83': 0,
+      '84': 0,
+      '85': 0,
+      '86': 0,
+      '87': 0,
+      '88': 0,
+      '89': 0,
+      '90': 0,
+      '91': 0,
+      '92': 0,
+      '93': 0,
+      '94': 0,
+      '95': 0,
+      '96': 0,
+      '97': 0,
+      '98': 0,
+      '99': 0,
+      '100': 0,
+      '101': 0,
+      '102': 0,
+      '103': 0,
+      '104': 0,
+      '105': 0,
+      '106': 0,
+      '107': 0,
+      '108': 0,
+      '109': 0,
+      '110': 0,
+      '111': 0,
+      '112': 0,
+      '113': 0,
+      '114': 0,
+      '115': 0,
+      '116': 0,
+      '117': 0,
+      '118': 0,
+      '119': 0,
+      '120': 0,
+    };
     commCheck = false;
     pattiCheck = false;
     inOutCheck = false;
@@ -454,12 +452,15 @@ class _MasterPanelState extends ConsumerState<MasterPanel> {
                                                   for (int i = index * 10;
                                                       i < index * 10 + 10;
                                                       i++) {
-                                                        String pairKey = i.toString();
-      if (i < 10) {
-        pairKey = pairKey.padLeft(2, '0');
-      }
+                                                    String pairKey =
+                                                        i.toString();
+                                                    if (i < 10) {
+                                                      pairKey = pairKey.padLeft(
+                                                          2, '0');
+                                                    }
                                                     total = total +
-                                                        global.numberPair[pairKey]!;
+                                                        global.numberPair[
+                                                            pairKey]!;
                                                   }
                                                   return Container(
                                                     alignment:
@@ -519,10 +520,12 @@ class _MasterPanelState extends ConsumerState<MasterPanel> {
                                                   for (int i = index * 10;
                                                       i < index * 10 + 10;
                                                       i++) {
-                                                        String pairKey = (i+100).toString();
-      if (i < 10) {
-        pairKey = pairKey.padLeft(2, '0');
-      }
+                                                    String pairKey =
+                                                        (i + 100).toString();
+                                                    if (i < 10) {
+                                                      pairKey = pairKey.padLeft(
+                                                          2, '0');
+                                                    }
                                                     total = total +
                                                         global.numberPair[
                                                             pairKey]!;
@@ -628,11 +631,12 @@ class _MasterPanelState extends ConsumerState<MasterPanel> {
                                         return Text('Error');
                                       }, loading: () {
                                         return Center(
-      child: LoadingAnimationWidget.staggeredDotsWave(
-        color: Colors.grey,
-        size: 40,
-      ),
-    );
+                                          child: LoadingAnimationWidget
+                                              .staggeredDotsWave(
+                                            color: Colors.grey,
+                                            size: 40,
+                                          ),
+                                        );
                                       });
                                     },
                                   ),
@@ -754,7 +758,7 @@ class _MasterPanelState extends ConsumerState<MasterPanel> {
                                   //     ),
                                   //   ),
                                   // ),
- 
+
                                   // Card(
                                   //   // margin: EdgeInsets.only(left: 2.w),
                                   //   color: ColorsRes.lightBlue,
@@ -858,10 +862,10 @@ class _MasterPanelState extends ConsumerState<MasterPanel> {
 Widget numberBox(int index) {
   final TextEditingController pointController = TextEditingController();
 
-    String pairKey = (index+1).toString();
-      if (index+1 < 10) {
-        pairKey = pairKey.padLeft(2, '0');
-      }
+  String pairKey = (index + 1).toString();
+  if (index + 1 < 10) {
+    pairKey = pairKey.padLeft(2, '0');
+  }
 
   if (global.numberPair[pairKey]! > 0) {
     pointController.text = global.numberPair[pairKey].toString();
@@ -970,9 +974,9 @@ Widget controls() {
                   global.numberPair = convertPair(_selectedList);
                   for (int i = 0; i < global.numberPair.length; i++) {
                     String pairKey = i.toString();
-      if (i < 10) {
-        pairKey = pairKey.padLeft(2, '0');
-      }
+                    if (i < 10) {
+                      pairKey = pairKey.padLeft(2, '0');
+                    }
                     if (global.numberPair[pairKey]! > 0) {
                       global.numberPair[pairKey] =
                           (global.numberPair[pairKey]! - int.parse(value));
@@ -1000,9 +1004,9 @@ Widget controls() {
                   global.numberPair = convertPair(_selectedList);
                   for (int i = 0; i < global.numberPair.length; i++) {
                     String pairKey = i.toString();
-      if (i < 10) {
-        pairKey = pairKey.padLeft(2, '0');
-      }
+                    if (i < 10) {
+                      pairKey = pairKey.padLeft(2, '0');
+                    }
                     if (global.numberPair[pairKey]! >= int.parse(value)) {
                       global.numberPair[pairKey] =
                           (global.numberPair[pairKey]! - int.parse(value));
@@ -1030,12 +1034,13 @@ Widget controls() {
                   global.numberPair = convertPair(_selectedList);
                   for (int i = 0; i < global.numberPair.length; i++) {
                     String pairKey = i.toString();
-      if (i < 10) {
-        pairKey = pairKey.padLeft(2, '0');
-      }
+                    if (i < 10) {
+                      pairKey = pairKey.padLeft(2, '0');
+                    }
                     if (global.numberPair[pairKey]! > 0) {
                       int percent = int.parse(value);
-                      var finalValue = (global.numberPair[pairKey]! * percent) / 100;
+                      var finalValue =
+                          (global.numberPair[pairKey]! * percent) / 100;
                       global.numberPair[pairKey] = finalValue.toInt();
                     }
                   }
@@ -1061,9 +1066,9 @@ Widget controls() {
                   global.numberPair = convertPair(_selectedList);
                   for (int i = 0; i < global.numberPair.length; i++) {
                     String pairKey = i.toString();
-      if (i < 10) {
-        pairKey = pairKey.padLeft(2, '0');
-      }
+                    if (i < 10) {
+                      pairKey = pairKey.padLeft(2, '0');
+                    }
                     if (global.numberPair[pairKey]! >= int.parse(value)) {
                       global.numberPair[pairKey] = 0;
                     }
@@ -1090,9 +1095,9 @@ Widget controls() {
                   global.numberPair = convertPair(_selectedList);
                   for (int i = 0; i < global.numberPair.length; i++) {
                     String pairKey = i.toString();
-      if (i < 10) {
-        pairKey = pairKey.padLeft(2, '0');
-      }
+                    if (i < 10) {
+                      pairKey = pairKey.padLeft(2, '0');
+                    }
                     if (global.numberPair[pairKey]! <= int.parse(value)) {
                       global.numberPair[pairKey] = 0;
                     }
@@ -1130,24 +1135,26 @@ Widget controls() {
                       if (value) {
                         for (int i = 0; i < global.numberPair.length; i++) {
                           String pairKey = i.toString();
-      if (i < 10) {
-        pairKey = pairKey.padLeft(2, '0');
-      }
+                          if (i < 10) {
+                            pairKey = pairKey.padLeft(2, '0');
+                          }
                           if (global.numberPair[pairKey]! > 0) {
-                            global.numberPair[pairKey] = (global.numberPair[pairKey]! -
-                                    (selectPairList[i]! * round))
-                                .toInt();
+                            global.numberPair[pairKey] =
+                                (global.numberPair[pairKey]! -
+                                        (selectPairList[i]! * round))
+                                    .toInt();
                           }
                         }
                       } else {
                         for (int i = 0; i < global.numberPair.length; i++) {
                           String pairKey = i.toString();
-      if (i < 10) {
-        pairKey = pairKey.padLeft(2, '0');
-      }
-                          global.numberPair[pairKey] = (global.numberPair[pairKey]! +
-                                  (selectPairList[i]! * round))
-                              .toInt();
+                          if (i < 10) {
+                            pairKey = pairKey.padLeft(2, '0');
+                          }
+                          global.numberPair[pairKey] =
+                              (global.numberPair[pairKey]! +
+                                      (selectPairList[i]! * round))
+                                  .toInt();
                         }
                       }
                       ref.refresh(numberPairProvider);
@@ -1170,9 +1177,9 @@ Widget controls() {
                           for (int i = 0; i < 10; i++) {
                             int a = i * 10 + 1;
                             String pairKey = a.toString();
-      if (i < 10) {
-        pairKey = pairKey.padLeft(2, '0');
-      }
+                            if (i < 10) {
+                              pairKey = pairKey.padLeft(2, '0');
+                            }
                             global.numberPair[pairKey] =
                                 (global.numberPair[pairKey]! + inout).toInt();
                           }
@@ -1180,9 +1187,9 @@ Widget controls() {
                           for (int i = 0; i < 10; i++) {
                             int a = i * 10 + 1;
                             String pairKey = a.toString();
-      if (i < 10) {
-        pairKey = pairKey.padLeft(2, '0');
-      }
+                            if (i < 10) {
+                              pairKey = pairKey.padLeft(2, '0');
+                            }
                             if (global.numberPair[pairKey]! > 0) {
                               global.numberPair[pairKey] =
                                   (global.numberPair[pairKey]! - inout).toInt();
@@ -1195,9 +1202,9 @@ Widget controls() {
                           for (int i = 0; i < 10; i++) {
                             int a = i * 10 + 10;
                             String pairKey = a.toString();
-      if (i < 10) {
-        pairKey = pairKey.padLeft(2, '0');
-      }
+                            if (i < 10) {
+                              pairKey = pairKey.padLeft(2, '0');
+                            }
                             global.numberPair[pairKey] =
                                 (global.numberPair[pairKey]! + inout2).toInt();
                           }
@@ -1205,12 +1212,13 @@ Widget controls() {
                           for (int i = 0; i < 10; i++) {
                             int a = i * 10 + 10;
                             String pairKey = a.toString();
-      if (i < 10) {
-        pairKey = pairKey.padLeft(2, '0');
-      }
+                            if (i < 10) {
+                              pairKey = pairKey.padLeft(2, '0');
+                            }
                             if (global.numberPair[pairKey]! > 0) {
                               global.numberPair[pairKey] =
-                                  (global.numberPair[pairKey]! - inout2).toInt();
+                                  (global.numberPair[pairKey]! - inout2)
+                                      .toInt();
                             }
                           }
                         }
@@ -1233,24 +1241,26 @@ Widget controls() {
                       if (value) {
                         for (int i = 0; i < global.numberPair.length; i++) {
                           String pairKey = i.toString();
-      if (i < 10) {
-        pairKey = pairKey.padLeft(2, '0');
-      }
+                          if (i < 10) {
+                            pairKey = pairKey.padLeft(2, '0');
+                          }
                           if (global.numberPair[pairKey]! > 0) {
-                            global.numberPair[pairKey] = (global.numberPair[pairKey]! -
-                                    (selectPairList[i]! * commission))
-                                .toInt();
+                            global.numberPair[pairKey] =
+                                (global.numberPair[pairKey]! -
+                                        (selectPairList[i]! * commission))
+                                    .toInt();
                           }
                         }
                       } else {
                         for (int i = 0; i < global.numberPair.length; i++) {
                           String pairKey = i.toString();
-      if (i < 10) {
-        pairKey = pairKey.padLeft(2, '0');
-      }
-                          global.numberPair[pairKey] = (global.numberPair[pairKey]! +
-                                  (selectPairList[i]! * commission))
-                              .toInt();
+                          if (i < 10) {
+                            pairKey = pairKey.padLeft(2, '0');
+                          }
+                          global.numberPair[pairKey] =
+                              (global.numberPair[pairKey]! +
+                                      (selectPairList[i]! * commission))
+                                  .toInt();
                         }
                       }
                       ref.refresh(numberPairProvider);
@@ -1271,24 +1281,26 @@ Widget controls() {
                       if (value) {
                         for (int i = 0; i < global.numberPair.length; i++) {
                           String pairKey = i.toString();
-      if (i < 10) {
-        pairKey = pairKey.padLeft(2, '0');
-      }
+                          if (i < 10) {
+                            pairKey = pairKey.padLeft(2, '0');
+                          }
                           if (global.numberPair[pairKey]! > 0) {
-                            global.numberPair[i.toString()] = (global.numberPair[pairKey]! -
-                                    (selectPairList[i]! * patti))
-                                .toInt();
+                            global.numberPair[i.toString()] =
+                                (global.numberPair[pairKey]! -
+                                        (selectPairList[i]! * patti))
+                                    .toInt();
                           }
                         }
                       } else {
                         for (int i = 0; i < global.numberPair.length; i++) {
                           String pairKey = i.toString();
-      if (i < 10) {
-        pairKey = pairKey.padLeft(2, '0');
-      }
-                          global.numberPair[pairKey] = (global.numberPair[pairKey]! +
-                                  (selectPairList[i]! * patti))
-                              .toInt();
+                          if (i < 10) {
+                            pairKey = pairKey.padLeft(2, '0');
+                          }
+                          global.numberPair[pairKey] =
+                              (global.numberPair[pairKey]! +
+                                      (selectPairList[i]! * patti))
+                                  .toInt();
                         }
                       }
                       ref.refresh(numberPairProvider);
@@ -1326,10 +1338,10 @@ Widget clientsList(
   int total = 0;
 
   for (int i = 0 * 10; i < 120; i++) {
-    String pairKey = (i+1).toString();
-      if (i < 10) {
-        pairKey = pairKey.padLeft(2, '0');
-      }
+    String pairKey = (i + 1).toString();
+    if (i < 10) {
+      pairKey = pairKey.padLeft(2, '0');
+    }
     total = total + result[pairKey]!;
   }
 
@@ -1399,10 +1411,11 @@ Widget clientsList(
                   checkBox.add(data.id!);
                   for (int i = 0; i < global.numberPair.length - 1; i++) {
                     String pairKey = i.toString();
-      if (i < 10) {
-        pairKey = pairKey.padLeft(2, '0');
-      }
-                    global.numberPair[pairKey] = global.numberPair[pairKey]! + pair[pairKey]!;
+                    if (i < 10) {
+                      pairKey = pairKey.padLeft(2, '0');
+                    }
+                    global.numberPair[pairKey] =
+                        global.numberPair[pairKey]! + pair[pairKey]!;
                   }
                   _selectedList = global.numberPair;
                   selectPairList = global.numberPair;
@@ -1410,10 +1423,11 @@ Widget clientsList(
                   checkBox.remove(data.id!);
                   for (int i = 0; i < global.numberPair.length - 1; i++) {
                     String pairKey = i.toString();
-      if (i < 10) {
-        pairKey = pairKey.padLeft(2, '0');
-      }
-                    global.numberPair[pairKey] = global.numberPair[pairKey]! - pair[pairKey]!;
+                    if (i < 10) {
+                      pairKey = pairKey.padLeft(2, '0');
+                    }
+                    global.numberPair[pairKey] =
+                        global.numberPair[pairKey]! - pair[pairKey]!;
                   }
                   _selectedList = global.numberPair;
                   selectPairList = global.numberPair;
