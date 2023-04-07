@@ -383,7 +383,7 @@ class _LaddiPopupState extends ConsumerState<LaddiPopup> {
 
                             for (int i = from; i <= to; i++) {
                               global.numberPair[i.toString()] =
-                                  global.numberPair[i]! + amt;
+                                  global.numberPair[i.toString()]! + amt;
                               print(i.toString().padLeft(2, '0'));
                             }
                           }
@@ -405,8 +405,8 @@ class _LaddiPopupState extends ConsumerState<LaddiPopup> {
                             }
 
                             for (int i = 0; i < crossingPair.length; i++) {
-                              int a = int.parse(crossingPair[i]);
-                              global.numberPair[a.toString()] =
+                              String a = crossingPair[i];
+                              global.numberPair[a] =
                                   global.numberPair[a]! + amtCross;
                               print(i.toString().padLeft(2, '0'));
                             }

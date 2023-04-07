@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:iconly/iconly.dart';
@@ -256,9 +255,13 @@ class _PCHomeState extends State<PCHome> {
                       ),
                       GestureDetector(
                         onTap: () {
+                          if (global.prefs.get('type') == 'admin') {
                           setState(() {
                             currentPage = 'Wallet';
                           });
+                          }else{
+                            _showToast('You don\'t have permission.');
+                          }
                         },
                         child: (currentPage == 'Wallet')
                             ? Card(
@@ -529,7 +532,7 @@ class _PCHomeState extends State<PCHome> {
                       ),
                       GestureDetector(
                         onTap: () {
-                        //  if (global.prefs.get('type') == 'admin') {
+                          //if (global.prefs.get('type') == 'admin') {
                           setState(() {
                             currentPage = 'Settings';
                           });

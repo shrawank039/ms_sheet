@@ -148,15 +148,15 @@ class _CPPopupState extends ConsumerState<CPPopup> {
                             var splitArray = cpStr.split(" ");
                             if (splitArray.length > 1) {
                               String strAmt = splitArray[splitArray.length - 1]
-                                  .replaceAll(new RegExp(r'[^0-9]'), '');
+                                  .replaceAll(RegExp(r'[^0-9]'), '');
                               intAmt = int.parse(strAmt);
                             }
                             for (int i = 0; i < splitArray.length - 1; i++) {
                               if (splitArray[i].isNumeric) {
-                                int key = int.parse(splitArray[i]);
-                                global.numberPair[key.toString()] =
+                                String key = splitArray[i];
+                                global.numberPair[key] =
                                     (global.numberPair[key])! + intAmt;
-                                global.pairKey.add(key.toString());
+                                global.pairKey.add(key);
                                 global.pairValue.add(intAmt);
                               }
                             }

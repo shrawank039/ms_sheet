@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:iconly/iconly.dart';
 import 'package:intl/intl.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:ms_sheet/models/sheets_response_entity.dart';
 import 'package:ms_sheet/providers/data_providers.dart';
-import 'package:ms_sheet/ui/pip_screen.dart';
 import 'package:ms_sheet/ui/screens/panels/main_panel.dart';
 import 'package:ms_sheet/ui/screens/panels/master_panel.dart';
 import 'package:ms_sheet/ui/styles/color.dart';
@@ -13,7 +13,7 @@ import 'package:ms_sheet/ui/styles/design.dart';
 import 'package:ms_sheet/widgets/declare_popup.dart';
 import 'package:responsive_grid/responsive_grid.dart';
 import 'package:sizer/sizer.dart';
-
+import 'package:ms_sheet/global.dart' as global;
 import '../../../../repositories/sheets_repository.dart';
 import '../../login/login_screen.dart';
 
@@ -97,6 +97,38 @@ class SheetsPC extends StatefulWidget {
 }
 
 class _SheetsPCState extends State<SheetsPC> {
+
+ late FToast fToast;
+
+  @override
+  void initState() {
+    super.initState();
+    fToast = FToast();
+    fToast.init(context);
+  }
+
+  _showToast(String text) {
+    Widget toast = Container(
+      padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 12.0),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(25.0),
+        color: Colors.greenAccent,
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(text),
+        ],
+      ),
+    );
+
+    fToast.showToast(
+      child: toast,
+      gravity: ToastGravity.BOTTOM,
+      toastDuration: Duration(seconds: 2),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -130,6 +162,8 @@ class SheetsMobile extends StatefulWidget {
 }
 
 class _SheetsMobileState extends State<SheetsMobile> {
+
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -259,10 +293,14 @@ Widget SheetsCardPC(SheetsResponseData data, BuildContext context) {
                   children: [
                     GestureDetector(
                       onTap: () {
+                        if (global.prefs.get('type') == 'admin') {
                         showDialog(
                             context: context,
                             builder: (context) => DeclarePopup(
                                 data.id!, data.declared_result.toString()));
+                                }else{
+                            //_showToast('You don\'t have permission.');
+                          }
                       },
                       child: DesignConfig.flatButton(
                         ColorsRes.lightBlue,

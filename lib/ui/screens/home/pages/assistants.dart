@@ -253,6 +253,9 @@ class _SheetsState extends ConsumerState<Assistants> {
                     ],
                   ),
                 ),
+                SizedBox(
+                  width: 1.w,
+                ),
                 Expanded(
                   child: selectedAssistant != null
                       ? Column(
@@ -321,7 +324,7 @@ class _SheetsState extends ConsumerState<Assistants> {
                                         ],
                                       ),
                                     ),
-                                       Card(
+                                    Card(
                                       margin: EdgeInsets.all(1.w),
                                       color: ColorsRes.orangeColor,
                                       elevation: 0,
@@ -329,13 +332,10 @@ class _SheetsState extends ConsumerState<Assistants> {
                                           borderRadius:
                                               BorderRadius.circular(1.6.w)),
                                       child: InkWell(
-                                        onTap: () async {
-                                          
-                                        },
+                                        onTap: () async {},
                                         child: Container(
                                           padding: const EdgeInsets.symmetric(
                                               horizontal: 10, vertical: 5),
-                                      
                                           alignment: Alignment.center,
                                           child: Text(
                                             'Points: ${selectedAssistant!.creditPoints}',
@@ -355,13 +355,10 @@ class _SheetsState extends ConsumerState<Assistants> {
                                           borderRadius:
                                               BorderRadius.circular(1.6.w)),
                                       child: InkWell(
-                                        onTap: () async {
-                                          
-                                        },
+                                        onTap: () async {},
                                         child: Container(
                                           padding: const EdgeInsets.symmetric(
                                               horizontal: 10, vertical: 5),
-                                      
                                           alignment: Alignment.center,
                                           child: Text(
                                             'Clients: ${selectedAssistant!.totalClients}',
@@ -381,30 +378,31 @@ class _SheetsState extends ConsumerState<Assistants> {
                                     ),
                                     Card(
                                       margin: EdgeInsets.all(1.5.w),
-                                      color: ColorsRes.mainBlue,
-                                      elevation: 0,
+                                      color: updateAgent ?ColorsRes.red:ColorsRes.mainBlue,
+                                      elevation: 2,
                                       shape: RoundedRectangleBorder(
                                           borderRadius:
                                               BorderRadius.circular(1.6.w)),
                                       child: InkWell(
                                         onTap: () async {
                                           if (updateAgent) {
-                                            updateAgent = false;
-                                            var assign = await AssistantRepository().assignAgents(
-                                                selectedAssistant!.id!,
-                                                assignAgents);
-                                                if(assign.success==true){
-
-                                                }
+                                            var assign =
+                                                await AssistantRepository()
+                                                    .assignAgents(
+                                                        selectedAssistant!.id!,
+                                                        assignAgents);
+                                            if (assign.success == true) {
+                                              updateAgent = false;
+                                            }
                                           } else {
                                             updateAgent = true;
                                           }
-                                          ref.refresh(agentsDataProvider);
+                                          ref.refresh(assistantDataProvider);
                                         },
                                         child: Container(
                                           padding: const EdgeInsets.symmetric(
                                               horizontal: 10),
-                                          height: 6.w,
+                                          height: 5.w,
                                           alignment: Alignment.center,
                                           child: Text(
                                             updateAgent ? 'Update' : 'Edit',
@@ -560,8 +558,18 @@ Widget topBar() {
 
 Widget assistentList(
     String? pic, AssistantResponseData data, BuildContext context) {
+  
   return Consumer(
     builder: (BuildContext context, WidgetRef ref, Widget? child) {
+
+      if (selectedAgentsID == data.id && !updateAgent) {
+    selectedAssistant = data;
+    assignAgents.clear();
+    for (int i = 0; i < selectedAssistant!.clients!.length; i++) {
+      assignAgents.add(selectedAssistant!.clients![i].id!);
+    }
+    debugPrint('selectedAssistant is matched');
+  }
       return Container(
         // width: 50.w,
         margin: EdgeInsets.only(top: 1.w),
@@ -627,6 +635,7 @@ Widget assistentList(
               InkWell(
                 onTap: () {
                   selectedAssistant = data;
+                  selectedAgentsID = data.id!;
                   assignAgents.clear();
                   updateAgent = false;
                   for (int i = 0; i < selectedAssistant!.clients!.length; i++) {
