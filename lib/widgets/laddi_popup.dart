@@ -382,9 +382,13 @@ class _LaddiPopupState extends ConsumerState<LaddiPopup> {
                             int amt = int.parse(amtController.text);
 
                             for (int i = from; i <= to; i++) {
-                              global.numberPair[i.toString()] =
-                                  global.numberPair[i.toString()]! + amt;
-                              print(i.toString().padLeft(2, '0'));
+                              String pairKey = i.toString();
+                              if (i < 10) {
+                              pairKey = pairKey.padLeft(2, '0');
+                              }
+                              global.numberPair[pairKey] =
+                                  global.numberPair[pairKey]! + amt;
+                      
                             }
                           }
                           if (amtCrossController.text.isNotEmpty &&

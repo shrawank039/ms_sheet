@@ -74,14 +74,14 @@ class _OtpState extends State<Otp> {
           await AuthRepository().verifyOTP(widget.mobile, otpNumber);
       if (verifyResponse.success = true) {
         verify = true;
-      } else {}
+      } 
       if (verify == true && widget.type == 'register') {
         var registerResponse = await AuthRepository().getSignupResponse(
             widget.name, widget.mobile, widget.pass, 'admin', 0);
         if (registerResponse.success = true) {
           await AuthHelper().setUserData(registerResponse);
           Navigator.pushReplacement(
-              context, MaterialPageRoute(builder: (context) => Home()));
+              context, MaterialPageRoute(builder: (context) => const Home()));
         }
       } else if (verify == true && widget.type == 'pass') {
         Navigator.pushReplacement(context,

@@ -550,7 +550,7 @@ class _MainPanelState extends ConsumerState<MainPanel> {
                                           style: TextStyle(
                                               fontSize: 2.2.w,
                                               color: ColorsRes.darkGrey,
-                                              fontWeight: FontWeight.w400),
+                                              fontWeight: FontWeight.w700),
                                         ),
                                         Container(
                                           width: 9.w,
@@ -561,7 +561,7 @@ class _MainPanelState extends ConsumerState<MainPanel> {
                                             style: TextStyle(
                                                 fontSize: 2.2.w,
                                                 color: ColorsRes.mainBlue,
-                                                fontWeight: FontWeight.w600),
+                                                fontWeight: FontWeight.w700),
                                           ),
                                         ),
                                       ],
@@ -920,7 +920,7 @@ class _MainPanelState extends ConsumerState<MainPanel> {
                                                         color:
                                                             ColorsRes.mainBlue,
                                                         fontWeight:
-                                                            FontWeight.w500),
+                                                            FontWeight.w700),
                                                     decoration: InputDecoration(
                                                       hintText: 'Enter box no.',
                                                       isCollapsed: true,
@@ -976,7 +976,7 @@ class _MainPanelState extends ConsumerState<MainPanel> {
                                                 style: const TextStyle(
                                                     color: ColorsRes.mainBlue,
                                                     fontWeight:
-                                                        FontWeight.w500),
+                                                        FontWeight.w700),
                                                 decoration: InputDecoration(
                                                   hintText: 'Amount',
                                                   isCollapsed: true,
@@ -1237,7 +1237,7 @@ Widget numberBox(int index) {
                   textAlign: TextAlign.end,
                   scribbleEnabled: true,
                   style: const TextStyle(
-                      color: ColorsRes.mainBlue, fontWeight: FontWeight.w500),
+                      color: ColorsRes.mainBlue, fontWeight: FontWeight.w700),
                   decoration: InputDecoration(
                     isCollapsed: true,
                     contentPadding:
@@ -1385,8 +1385,8 @@ Widget clientsList(PanelResponseData data,
                       textAlign: TextAlign.left,
                       style: TextStyle(
                         fontSize: 1.3.w,
-                        fontWeight: FontWeight.w300,
-                        color: Colors.grey,
+                        fontWeight: FontWeight.w700,
+                        color: Colors.grey.shade700,
                       ),
                     ),
                     SizedBox(
@@ -1397,8 +1397,8 @@ Widget clientsList(PanelResponseData data,
                       textAlign: TextAlign.left,
                       style: TextStyle(
                         fontSize: 1.3.w,
-                        fontWeight: FontWeight.w300,
-                        color: Colors.grey,
+                        fontWeight: FontWeight.w700,
+                        color: Colors.grey.shade700,
                       ),
                     ),
                   ],

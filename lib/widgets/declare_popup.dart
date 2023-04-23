@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sizer/sizer.dart';
-
 import '../providers/data_providers.dart';
 import '../repositories/panel_repository.dart';
 import '../ui/styles/color.dart';
@@ -256,15 +255,17 @@ class _DeclarePopupState extends ConsumerState<DeclarePopup> {
                           borderRadius: BorderRadius.circular(1.6.w)),
                       child: InkWell(
                         onTap: () async {
-                          if (resultController.text.length > 1) {
-                            var declareResult = await PanelRepository()
-                                .declareResult(widget.sheet_id,
-                                    resultController.text.trim());
-                            if (declareResult.success == true) {
-                              Navigator.of(context).pop();
-                              ref.refresh(sheetHomeDataProvider);
-                            }
-                          } else {}
+                          if (widget.result == 'null') {
+                            if (resultController.text.length > 1) {
+                              var declareResult = await PanelRepository()
+                                  .declareResult(widget.sheet_id,
+                                      resultController.text.trim());
+                              if (declareResult.success == true) {
+                                Navigator.of(context).pop();
+                                ref.refresh(sheetHomeDataProvider);
+                              }
+                            } else {}
+                          }
                         },
                         child: Container(
                           height: 6.w,

@@ -9,9 +9,9 @@ import 'package:ms_sheet/ui/screens/panels/master_panel.dart';
 import 'package:ms_sheet/ui/styles/color.dart';
 import 'package:ms_sheet/ui/styles/design.dart';
 import 'package:sizer/sizer.dart';
-
-import '../../../../global.dart';
+import '../../../../global.dart' as global;
 import '../../../../repositories/sheets_repository.dart';
+import '../../../../widgets/declare_popup.dart';
 
 class SheetsHistory extends StatefulWidget {
   @override
@@ -103,20 +103,6 @@ class _SheetsHistoryState extends State<SheetsHistory> {
                 ),
               ),
             ),
-            Card(
-              margin: EdgeInsets.only(left: 2.w),
-              color: ColorsRes.mainBlue,
-              elevation: 0,
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(1.5.w)),
-              child: Padding(
-                  padding:
-                      EdgeInsets.symmetric(vertical: 0.7.h, horizontal: 2.2.w),
-                  child: Text(
-                    'Create',
-                    style: TextStyle(color: ColorsRes.white, fontSize: 1.7.w),
-                  )),
-            ),
           ],
         ),
         SizedBox(
@@ -201,21 +187,88 @@ Widget sheetsList(SheetsResponseData data, String date, BuildContext context) {
           SizedBox(
             width: 4.w,
           ),
-          IconButton(
-            onPressed: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) =>
-                        MasterPanel(data.id!, data.name!, date),
-                  ));
-            },
-            icon: Icon(
-              IconlyBroken.arrow_right,
-              color: ColorsRes.mainBlue,
-              size: 3.w,
-            ),
+
+           Text(
+                  data.declared_result == null ? '' : data.declared_result!,
+                  style: TextStyle(
+                      color: ColorsRes.black,
+                      fontSize: 4.0.w,
+                      fontWeight: FontWeight.w600),
+                ),
+                SizedBox(
+            width: 4.w,
           ),
+          GestureDetector(
+                      onTap: () {
+                        if (global.prefs.get('type') == 'admin') {
+                        showDialog(
+                            context: context,
+                            builder: (context) => DeclarePopup(
+                                data.id!, data.declared_result.toString()));
+                                }else{
+                            //_showToast('You don\'t have permission.');
+                          }
+                      },
+                      child: DesignConfig.flatButton(
+                        ColorsRes.lightBlue,
+                        1.4.w,
+                        'Declare',
+                        1.8.w,
+                        ColorsRes.mainBlue,
+                      ),
+                    ),
+           GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => MasterPanel(
+                                  data.id!, data.name!, data.refreshedAt!),
+                            ));
+                      },
+                      child: DesignConfig.flatButton(
+                        ColorsRes.lightBlue,
+                        1.4.w,
+                        'Master',
+                        1.8.w,
+                        ColorsRes.mainBlue,
+                      ),
+                    ),
+                    GestureDetector(
+                        onTap: () {
+                          if (data.declared_status == 0) {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => MainPanel(
+                                      data.id!, data.name!, data.refreshedAt!),
+                                ));
+                          }
+                        },
+                        child: DesignConfig.flatButton(
+                          ColorsRes.mainBlue,
+                          1.4.w,
+                          'E-Panel',
+                          1.8.w,
+                          ColorsRes.white,
+                        ),
+                      ),
+                   
+          // IconButton(
+          //   onPressed: () {
+          //     Navigator.push(
+          //         context,
+          //         MaterialPageRoute(
+          //           builder: (context) =>
+          //               MasterPanel(data.id!, data.name!, date),
+          //         ));
+          //   },
+          //   icon: Icon(
+          //     IconlyBroken.arrow_right,
+          //     color: ColorsRes.mainBlue,
+          //     size: 3.w,
+          //   ),
+          // ),
         ],
       ),
     ),

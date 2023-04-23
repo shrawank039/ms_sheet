@@ -186,11 +186,11 @@ Widget topBar() {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Local Players',
+            'Chats',
             style: TextStyle(fontWeight: FontWeight.w500, fontSize: 2.6.w),
           ),
           Text(
-            'Manage Players',
+            'Manage Your Cahts',
             style: TextStyle(
               fontWeight: FontWeight.w300,
               fontSize: 1.4.w,
@@ -200,41 +200,6 @@ Widget topBar() {
         ],
       ),
       Expanded(child: Container()),
-      Card(
-        margin: EdgeInsets.only(left: 2.w),
-        color: Color(0xfff9f9f9),
-        elevation: 0,
-        shape:
-            RoundedRectangleBorder(borderRadius: BorderRadius.circular(1.5.w)),
-        child: Padding(
-          padding: EdgeInsets.symmetric(vertical: 0.7.h, horizontal: 1.8.w),
-          child: Row(
-            children: [
-              Text(
-                'Select Sheet',
-                style: TextStyle(color: ColorsRes.darkGrey, fontSize: 1.7.w),
-              ),
-              SizedBox(
-                width: 8.w,
-              ),
-              Icon(Icons.arrow_drop_down),
-            ],
-          ),
-        ),
-      ),
-      Card(
-        margin: EdgeInsets.only(left: 2.w),
-        color: ColorsRes.mainBlue,
-        elevation: 0,
-        shape:
-            RoundedRectangleBorder(borderRadius: BorderRadius.circular(1.5.w)),
-        child: Padding(
-            padding: EdgeInsets.symmetric(vertical: 0.7.h, horizontal: 2.2.w),
-            child: Text(
-              'Create',
-              style: TextStyle(color: ColorsRes.white, fontSize: 1.7.w),
-            )),
-      ),
     ],
   );
 }

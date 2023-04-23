@@ -981,7 +981,7 @@ Widget bodyTran(BuildContext context,
                                           width: 25.w,
                                           alignment: Alignment.center,
                                           child: Text(
-                                            'Pay',
+                                            'Pay (-)',
                                             textAlign: TextAlign.center,
                                             style: TextStyle(
                                                 color: ColorsRes.white,
@@ -1024,7 +1024,7 @@ Widget bodyTran(BuildContext context,
                                           width: 25.w,
                                           alignment: Alignment.center,
                                           child: Text(
-                                            'Receive',
+                                            'Receive (+)',
                                             textAlign: TextAlign.center,
                                             style: TextStyle(
                                                 color: ColorsRes.white,
@@ -1231,8 +1231,8 @@ Widget transactionList(
                   textAlign: TextAlign.left,
                   style: TextStyle(
                     fontSize: 1.3.w,
-                    fontWeight: FontWeight.w300,
-                    color: Colors.grey,
+                    fontWeight: FontWeight.w700,
+                    color: Colors.grey.shade700,
                   ),
                 ),
               ],
@@ -1262,8 +1262,8 @@ Widget transactionList(
                   textAlign: TextAlign.left,
                   style: TextStyle(
                     fontSize: 1.3.w,
-                    fontWeight: FontWeight.w300,
-                    color: Colors.grey,
+                    fontWeight: FontWeight.w700,
+                    color: Colors.grey.shade700,
                   ),
                 ),
               ],
@@ -1330,8 +1330,8 @@ Widget clientTransactionList(
                   textAlign: TextAlign.left,
                   style: TextStyle(
                     fontSize: 1.3.w,
-                    fontWeight: FontWeight.w300,
-                    color: Colors.grey,
+                    fontWeight: FontWeight.w700,
+                    color: Colors.grey.shade500,
                   ),
                 ),
               ],
@@ -1346,8 +1346,8 @@ Widget clientTransactionList(
                 textAlign: TextAlign.left,
                 style: TextStyle(
                   fontSize: 1.1.w,
-                  fontWeight: FontWeight.w300,
-                  color: Colors.grey,
+                  fontWeight: FontWeight.w700,
+                  color: Colors.grey.shade700,
                 ),
               ),
             ),
