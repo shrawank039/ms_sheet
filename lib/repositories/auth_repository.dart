@@ -26,7 +26,7 @@ class AuthRepository {
     return loginResponseFromJson(response.body);
   }
 
-  Future<SignupResponse> getSignupResponse(
+  Future<LoginResponse> getSignupResponse(
     String name,
     //  String email,
     String mobileNumber,
@@ -47,7 +47,7 @@ class AuthRepository {
     final response = await http.post(url,
         headers: await global.getApiHeaders(true), body: postBody);
     debugPrint('getSignupResponse : ${response.body}');
-    return signupResponseFromJson(response.body);
+    return loginResponseFromJson(response.body);
   }
 
   Future<SignupResponse> updateProfileResponse(

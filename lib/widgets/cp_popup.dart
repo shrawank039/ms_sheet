@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sizer/sizer.dart';
@@ -143,26 +145,103 @@ class _CPPopupState extends ConsumerState<CPPopup> {
                       child: InkWell(
                         onTap: () async {
                           if (cpController.text.length > 1) {
-                            int intAmt = 0;
-                            String cpStr = cpController.text;
-                            var splitArray = cpStr.split(" ");
-                            if (splitArray.length > 1) {
-                              String strAmt = splitArray[splitArray.length - 1]
-                                  .replaceAll(RegExp(r'[^0-9]'), '');
-                              intAmt = int.parse(strAmt);
+                            LineSplitter ls = const LineSplitter();
+                            List<String> lineArray =
+                                ls.convert(cpController.text);
+
+                          for (int i = 0; i < lineArray.length; i++) {
+
+                            String line = lineArray[i];
+                          
+                            String amt = '0';
+                            String entry = '';
+                            int? entryBox, entryAmt;
+
+                            var splitArray = [];
+
+                            if (line.contains(':')) {
+                              var split = line.split(':');
+                              line = split[split.length - 1];
                             }
-                            for (int i = 0; i < splitArray.length - 1; i++) {
-                              if (splitArray[i].isNumeric) {
-                                String key = splitArray[i];
-                                global.numberPair[key] =
-                                    (global.numberPair[key])! + intAmt;
-                                global.pairKey.add(key);
-                                global.pairValue.add(intAmt);
+                            if (line.contains('=')) {
+                              splitArray =
+                                  line.split(RegExp(r'=+'));
+                            } else if (line.contains('@')) {
+                              splitArray =
+                                  line.split(RegExp(r'@+'));
+                            } else if (line.contains('rs')) {
+                              splitArray =
+                                  line.split(RegExp(r'rs+'));
+                            } else if (line.contains('intu')) {
+                              splitArray =
+                                  line.split(RegExp(r'intu+'));
+                            } else if (line.contains('into')) {
+                              splitArray =
+                                  line.split(RegExp(r'into+'));
+                            } else if (line.contains('\$')) {
+                              splitArray =
+                                  line.split(RegExp(r'\$+'));
+                            } else if (line.contains('&')) {
+                              splitArray =
+                                  line.split(RegExp(r'&+'));
+                            } else if (line.contains('+')) {
+                              splitArray =
+                                  line.split(RegExp(r'\++'));
+                            } else if (line.contains('#')) {
+                              splitArray =
+                                  line.split(RegExp(r'#+'));
+                            } else if (line.contains('*')) {
+                              splitArray =
+                                  line.split(RegExp(r'\*+'));
+                            }
+
+                            if (splitArray.length > 1) {
+                              entry = splitArray[0]
+                                  .replaceAll(RegExp(r'[^0-9]'), '');
+                              amt = splitArray[1]
+                                  .replaceAll(RegExp(r'[^0-9]'), '');
+                            }
+
+                            if (entry.length.isEven) {
+                              for (int i = 0; i < entry.length; i++) {
+                                entryBox = int.parse(entry[i] + entry[i + 1]);
+                                if (entryBox == 00) {
+                                  entryBox = 100;
+                                }
+                                String pairKey = entryBox.toString();
+                                if (entryBox < 10) {
+                                  pairKey = pairKey.padLeft(2, '0');
+                                }
+
+                                entryAmt = int.parse(amt);
+                                global.numberPair[pairKey] =
+                                    (global.numberPair[pairKey])! + entryAmt;
+                                global.pairKey.add(pairKey);
+                                global.pairValue.add(entryAmt!);
+                                i = i + 1;
                               }
+                            } else {
+                              for (int i = 0; i < entry.length; i++) {
+                                entryBox = int.parse(
+                                    entry[i] + entry[i + 1] + entry[i + 2]);
+
+                                String pairKey = entryBox.toString();
+                                if (entryBox < 10) {
+                                  pairKey = pairKey.padLeft(2, '0');
+                                }
+
+                                entryAmt = int.parse(amt);
+                                global.numberPair[pairKey] =
+                                    (global.numberPair[pairKey])! + entryAmt;
+                                global.pairKey.add(pairKey);
+                                global.pairValue.add(entryAmt);
+                                i = i + 2;
+                              }
+                            }
                             }
                             ref.refresh(numberPairProvider);
                             Navigator.of(context).pop();
-                          } else {}
+                          } 
                         },
                         child: Container(
                           height: 6.w,

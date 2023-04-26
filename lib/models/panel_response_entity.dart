@@ -30,6 +30,7 @@ class PanelResponseData {
   @JSONField(name: "agent_id")
   int? agentId;
   String? pair;
+  String? pair_rate;
   String? pair_key;
   String? pair_value;
   String? date;

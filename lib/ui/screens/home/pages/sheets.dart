@@ -42,8 +42,13 @@ class _SheetsState extends ConsumerState<Sheets> {
     if (getSheets.success == true) {
     } else {
       // ignore: use_build_context_synchronously
-      Navigator.pushReplacement(
-          context, MaterialPageRoute(builder: (context) => LoginScreen()));
+       Navigator.pushAndRemoveUntil<dynamic>(
+                    context,
+                    MaterialPageRoute<dynamic>(
+                    builder: (BuildContext context) => LoginScreen(),
+                  ),
+          (route) => false,//if you want to disable back feature set to false
+            );
     }
   }
 

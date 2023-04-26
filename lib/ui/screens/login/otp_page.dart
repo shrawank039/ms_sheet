@@ -67,15 +67,13 @@ class _OtpState extends State<Otp> {
 //auto verify otp
   verifyOtp(String otpNumber) async {
     try {
-      var verify = false;
+    
       credentials = null;
       // await FirebaseAuth.instance.signInWithCredential(credentials);
       var verifyResponse =
           await AuthRepository().verifyOTP(widget.mobile, otpNumber);
       if (verifyResponse.success = true) {
-        verify = true;
-      } 
-      if (verify == true && widget.type == 'register') {
+        if (widget.type == 'register') {
         var registerResponse = await AuthRepository().getSignupResponse(
             widget.name, widget.mobile, widget.pass, 'admin', 0);
         if (registerResponse.success = true) {
@@ -83,10 +81,12 @@ class _OtpState extends State<Otp> {
           Navigator.pushReplacement(
               context, MaterialPageRoute(builder: (context) => const Home()));
         }
-      } else if (verify == true && widget.type == 'pass') {
+      } else if (widget.type == 'pass') {
         Navigator.pushReplacement(context,
             MaterialPageRoute(builder: (context) => ResetPassScreen()));
       }
+      } 
+      
     } on FirebaseAuthException catch (error) {
       if (error.code == 'invalid-verification-code') {
         setState(() {

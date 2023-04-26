@@ -45,6 +45,10 @@ PanelResponseData $PanelResponseDataFromJson(Map<String, dynamic> json) {
   if (pair != null) {
     panelResponseData.pair = pair;
   }
+  final String? pair_rate = jsonConvert.convert<String>(json['pair_rate']);
+  if (pair_rate != null) {
+    panelResponseData.pair_rate = pair_rate;
+  }
   final String? pair_key = jsonConvert.convert<String>(json['pair_key']);
   if (pair_key != null) {
     panelResponseData.pair_key = pair_key;
@@ -70,6 +74,7 @@ Map<String, dynamic> $PanelResponseDataToJson(PanelResponseData entity) {
   data['sheet_id'] = entity.sheetId;
   data['agent_id'] = entity.agentId;
   data['pair'] = entity.pair;
+  data['pair_rate'] = entity.pair_rate;
   data['pair_key'] = entity.pair_key;
   data['pair_value'] = entity.pair_value;
   data['date'] = entity.date;

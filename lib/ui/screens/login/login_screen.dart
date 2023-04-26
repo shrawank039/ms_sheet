@@ -43,12 +43,12 @@ class _LoginScreenState extends State<LoginScreen> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    InkWell(
-                        onTap: () {
-                          Navigator.pop(context);
-                        },
-                        hoverColor: Colors.transparent,
-                        child: const Icon(Icons.arrow_back)),
+                    // InkWell(
+                    //     onTap: () {
+                    //       Navigator.pop(context);
+                    //     },
+                    //     hoverColor: Colors.transparent,
+                    //     child: const Icon(Icons.arrow_back)),
                     const SizedBox(
                       height: 50,
                     ),

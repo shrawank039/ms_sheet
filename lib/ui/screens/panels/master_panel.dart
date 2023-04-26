@@ -6,6 +6,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:ms_sheet/global.dart' as global;
 import 'package:ms_sheet/ui/styles/color.dart';
+import 'package:ms_sheet/widgets/generate.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../../models/agents_response_entity.dart';
@@ -461,19 +462,19 @@ class _MasterPanelState extends ConsumerState<MasterPanel> {
                                                 crossAxisSpacing: 0,
                                                 itemBuilder: (context, index) {
                                                   int total = 0;
-                                                  for (int i = index * 10;
-                                                      i < index * 10 + 10;
-                                                      i++) {
-                                                    String pairKey =
-                                                        i.toString();
-                                                    if (i < 10) {
-                                                      pairKey = pairKey.padLeft(
-                                                          2, '0');
+                                                    for (int i = index * 10;
+                                                        i < index * 10 + 10;
+                                                        i++) {
+                                                      String pairKey =
+                                                          (i + 1).toString();
+                                                      if (i < 10) {
+                                                        pairKey = pairKey
+                                                            .padLeft(2, '0');
+                                                      }
+                                                      total = total +
+                                                          global.numberPair[
+                                                              pairKey]!;
                                                     }
-                                                    total = total +
-                                                        global.numberPair[
-                                                            pairKey]!;
-                                                  }
                                                   return Container(
                                                     padding: EdgeInsets.only(
                                                         left: 1.w,
@@ -533,19 +534,14 @@ class _MasterPanelState extends ConsumerState<MasterPanel> {
                                                 crossAxisSpacing: 0,
                                                 itemBuilder: (context, index) {
                                                   int total = 0;
-                                                  for (int i = index * 10;
-                                                      i < index * 10 + 10;
-                                                      i++) {
-                                                    String pairKey =
-                                                        (i + 100).toString();
-                                                    if (i < 10) {
-                                                      pairKey = pairKey.padLeft(
-                                                          2, '0');
+                                                    for (int i = index * 10;
+                                                        i < index * 10 + 10;
+                                                        i++) {
+                                                      total = total +
+                                                          global.numberPair[
+                                                              (i + 101)
+                                                                  .toString()]!;
                                                     }
-                                                    total = total +
-                                                        global.numberPair[
-                                                            pairKey]!;
-                                                  }
                                                   return Container(
                                                     alignment:
                                                         Alignment.centerLeft,
@@ -925,44 +921,65 @@ class _MasterPanelState extends ConsumerState<MasterPanel> {
                                   //     ),
                                   //   ),
                                   // ),
-                                  Card(
-                                    //margin: EdgeInsets.only(left: 2.w),
-                                    color: ColorsRes.lightBlue,
-                                    elevation: 0,
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(1.8.w)),
-                                    child: Padding(
-                                      padding: EdgeInsets.only(
-                                          top: 0.7.h,
-                                          bottom: 0.7.h,
-                                          left: 1.8.w),
-                                      child: Row(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.center,
-                                        children: [
-                                          SizedBox(
-                                            width: 0.1.w,
-                                          ),
-                                          Icon(
-                                            Icons.generating_tokens,
-                                            color: ColorsRes.mainBlue,
-                                            size: 2.w,
-                                          ),
-                                          SizedBox(
-                                            width: 1.0.w,
-                                          ),
-                                          Text(
-                                            'Generate',
-                                            style: TextStyle(
-                                              color: ColorsRes.mainBlue,
-                                              fontSize: 1.5.w,
+                                  InkWell(
+                                    onTap: () {
+                                      String generate = '';
+                                      for (int i = 0;
+                                          i < global.numberPair.length;
+                                          i++) {
+                                        String pairKey = i.toString();
+                                        if (i < 10) {
+                                          pairKey = pairKey.padLeft(2, '0');
+                                        }
+                                        if (global.numberPair[pairKey]! > 0) {
+                                          generate =
+                                              '$generate$pairKey(${global.numberPair[pairKey]!})';
+                                        }
+                                      }
+                                      showDialog(
+                                          context: context,
+                                          builder: (context) =>
+                                              Generate(generate));
+                                    },
+                                    child: Card(
+                                      //margin: EdgeInsets.only(left: 2.w),
+                                      color: ColorsRes.lightBlue,
+                                      elevation: 0,
+                                      shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(1.8.w)),
+                                      child: Padding(
+                                        padding: EdgeInsets.only(
+                                            top: 0.7.h,
+                                            bottom: 0.7.h,
+                                            left: 1.8.w),
+                                        child: Row(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                          children: [
+                                            SizedBox(
+                                              width: 0.1.w,
                                             ),
-                                          ),
-                                          SizedBox(
-                                            width: 1.0.w,
-                                          )
-                                        ],
+                                            Icon(
+                                              Icons.generating_tokens,
+                                              color: ColorsRes.mainBlue,
+                                              size: 2.w,
+                                            ),
+                                            SizedBox(
+                                              width: 1.0.w,
+                                            ),
+                                            Text(
+                                              'Generate',
+                                              style: TextStyle(
+                                                color: ColorsRes.mainBlue,
+                                                fontSize: 1.5.w,
+                                              ),
+                                            ),
+                                            SizedBox(
+                                              width: 1.0.w,
+                                            )
+                                          ],
+                                        ),
                                       ),
                                     ),
                                   ),
@@ -1015,6 +1032,7 @@ Widget numberBox(int index) {
             style: TextStyle(fontSize: 0.8.h, color: Colors.grey),
           ),
           TextField(
+            enabled: false,
             textInputAction: TextInputAction.next,
             textAlign: TextAlign.end,
             scribbleEnabled: true,
@@ -1103,14 +1121,30 @@ Widget controls() {
                     value = '0';
                   }
                   global.numberPair = convertPair(_selectedList);
-                  for (int i = 0; i < global.numberPair.length; i++) {
-                    String pairKey = i.toString();
-                    if (i < 10) {
-                      pairKey = pairKey.padLeft(2, '0');
+                  if (value != '0') {
+                    String maxPair = '00';
+                    for (int i = 0; i < global.numberPair.length; i++) {
+                      String pairKey = i.toString();
+                      if (i < 10) {
+                        pairKey = pairKey.padLeft(2, '0');
+                      }
+                      if (global.numberPair[pairKey]! >
+                          global.numberPair[maxPair]!) {
+                        global.numberPair[maxPair] =
+                            global.numberPair[pairKey]!;
+                      }
                     }
-                    if (global.numberPair[pairKey]! > 0) {
-                      global.numberPair[pairKey] =
-                          (global.numberPair[pairKey]! - int.parse(value));
+                    global.numberPair[maxPair] = global.numberPair[maxPair]! - int.parse(value);
+                        for (int i = 0; i < global.numberPair.length; i++) {
+                      String pairKey = i.toString();
+                      if (i < 10) {
+                        pairKey = pairKey.padLeft(2, '0');
+                      }
+                      if (global.numberPair[pairKey]! >
+                          global.numberPair[maxPair]!) {
+                        global.numberPair[pairKey] =
+                            global.numberPair[maxPair]!;
+                      }
                     }
                   }
                   ref.refresh(numberPairProvider);
@@ -1133,14 +1167,17 @@ Widget controls() {
                     value = '0';
                   }
                   global.numberPair = convertPair(_selectedList);
-                  for (int i = 0; i < global.numberPair.length; i++) {
-                    String pairKey = i.toString();
-                    if (i < 10) {
-                      pairKey = pairKey.padLeft(2, '0');
-                    }
-                    if (global.numberPair[pairKey]! >= int.parse(value)) {
-                      global.numberPair[pairKey] =
-                          (global.numberPair[pairKey]! - int.parse(value));
+                  if (value != '0') {
+                    for (int i = 0; i < global.numberPair.length; i++) {
+                      String pairKey = i.toString();
+                      if (i < 10) {
+                        pairKey = pairKey.padLeft(2, '0');
+                      }
+                      if (global.numberPair[pairKey]! <= int.parse(value) &&
+                          global.numberPair[pairKey]! > 0) {
+                        global.numberPair[pairKey] =
+                            (global.numberPair[pairKey]! - int.parse(value));
+                      }
                     }
                   }
                   ref.refresh(numberPairProvider);
@@ -1163,16 +1200,18 @@ Widget controls() {
                     value = '100';
                   }
                   global.numberPair = convertPair(_selectedList);
-                  for (int i = 0; i < global.numberPair.length; i++) {
-                    String pairKey = i.toString();
-                    if (i < 10) {
-                      pairKey = pairKey.padLeft(2, '0');
-                    }
-                    if (global.numberPair[pairKey]! > 0) {
-                      int percent = int.parse(value);
-                      var finalValue =
-                          (global.numberPair[pairKey]! * percent) / 100;
-                      global.numberPair[pairKey] = finalValue.toInt();
+                  if (value != '100') {
+                    for (int i = 0; i < global.numberPair.length; i++) {
+                      String pairKey = i.toString();
+                      if (i < 10) {
+                        pairKey = pairKey.padLeft(2, '0');
+                      }
+                      if (global.numberPair[pairKey]! > 0) {
+                        int percent = int.parse(value);
+                        var finalValue =
+                            (global.numberPair[pairKey]! * percent) / 100;
+                        global.numberPair[pairKey] = finalValue.toInt();
+                      }
                     }
                   }
                   ref.refresh(numberPairProvider);
@@ -1195,13 +1234,15 @@ Widget controls() {
                     value = '999999999';
                   }
                   global.numberPair = convertPair(_selectedList);
-                  for (int i = 0; i < global.numberPair.length; i++) {
-                    String pairKey = i.toString();
-                    if (i < 10) {
-                      pairKey = pairKey.padLeft(2, '0');
-                    }
-                    if (global.numberPair[pairKey]! >= int.parse(value)) {
-                      global.numberPair[pairKey] = 0;
+                  if (value != '999999999') {
+                    for (int i = 0; i < global.numberPair.length; i++) {
+                      String pairKey = i.toString();
+                      if (i < 10) {
+                        pairKey = pairKey.padLeft(2, '0');
+                      }
+                      if (global.numberPair[pairKey]! >= int.parse(value)) {
+                        global.numberPair[pairKey] = 0;
+                      }
                     }
                   }
                   ref.refresh(numberPairProvider);
@@ -1224,13 +1265,15 @@ Widget controls() {
                     value = '0';
                   }
                   global.numberPair = convertPair(_selectedList);
-                  for (int i = 0; i < global.numberPair.length; i++) {
-                    String pairKey = i.toString();
-                    if (i < 10) {
-                      pairKey = pairKey.padLeft(2, '0');
-                    }
-                    if (global.numberPair[pairKey]! <= int.parse(value)) {
-                      global.numberPair[pairKey] = 0;
+                  if (value != '0') {
+                    for (int i = 0; i < global.numberPair.length; i++) {
+                      String pairKey = i.toString();
+                      if (i < 10) {
+                        pairKey = pairKey.padLeft(2, '0');
+                      }
+                      if (global.numberPair[pairKey]! <= int.parse(value)) {
+                        global.numberPair[pairKey] = 0;
+                      }
                     }
                   }
                   ref.refresh(numberPairProvider);
@@ -1268,7 +1311,7 @@ Widget controls() {
                             pairKey = pairKey.padLeft(2, '0');
                           }
                           if (global.numberPair[pairKey]! > 0) {
-                            while(global.numberPair[pairKey]! % 5 !=0) {
+                            while (global.numberPair[pairKey]! % 5 != 0) {
                               //debugPrint("Round Click : ${global.numberPair[pairKey]}");
                               global.numberPair[pairKey] =
                                   global.numberPair[pairKey]! + 1;
@@ -1316,6 +1359,8 @@ Widget controls() {
                                 (global.numberPair[pairKey]! + inout2).toInt();
                           }
                         }
+                        global.numberPair['101'] = 0;
+                        global.numberPair['110'] = 0;
                       } else {
                         global.numberPair = convertPair(_selectedList);
                       }

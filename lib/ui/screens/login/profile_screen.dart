@@ -107,8 +107,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   _controllerEmail),
               GestureDetector(
                 onTap: () {
-                  Navigator.pushReplacement(context,
-                      MaterialPageRoute(builder: (context) => LoginScreen()));
+                    Navigator.pushAndRemoveUntil<dynamic>(
+                    context,
+                    MaterialPageRoute<dynamic>(
+                    builder: (BuildContext context) => LoginScreen(),
+                  ),
+          (route) => false,//if you want to disable back feature set to false
+            );
                   AuthHelper().clearUserData();
                 },
                 child: Container(

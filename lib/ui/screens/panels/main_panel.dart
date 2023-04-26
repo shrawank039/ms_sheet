@@ -26,10 +26,11 @@ import '../../../widgets/delete_confirmation_popup.dart';
 import '../../styles/design.dart';
 import 'dart:io';
 import 'dart:typed_data';
-import 'package:pdf/pdf.dart';
-import 'package:pdf/widgets.dart' as pw;
+// import 'package:pdf/pdf.dart';
+// import 'package:pdf/widgets.dart' as pw;
 
 bool updatePanel = false;
+bool onChanged = false;
 bool updatePanelStatus = false;
 int selectedAgentId = 0;
 int editMatchID = 0;
@@ -270,6 +271,7 @@ class _MainPanelState extends ConsumerState<MainPanel> {
           print('kReleaseMode (false) : enter');
         });
       }
+      onChanged = false;
     }
     //return KeyEventResult.handled;
   }
@@ -297,27 +299,27 @@ class _MainPanelState extends ConsumerState<MainPanel> {
   }
 
   Future getPdf(Uint8List screenShot, var path) async {
-    String fileName = '${DateTime.now().microsecondsSinceEpoch}';
-    final directory = (await getApplicationDocumentsDirectory())
-        .path; //from path_provide package
+    // String fileName = '${DateTime.now().microsecondsSinceEpoch}';
+    // final directory = (await getApplicationDocumentsDirectory())
+    //     .path; //from path_provide package
 
-    final image = pw.MemoryImage(
-      File(path).readAsBytesSync(),
-    );
+    // final image = pw.MemoryImage(
+    //   File(path).readAsBytesSync(),
+    // );
 
-    pw.Document pdf = pw.Document();
-    pdf.addPage(
-      pw.Page(
-        pageFormat: PdfPageFormat.a4,
-        build: (pw.Context context) {
-          return pw.Expanded(
-            child: pw.Image(image),
-          );
-        },
-      ),
-    );
-    File pdfFile = File('$directory/$fileName.pdf');
-    await pdfFile.writeAsBytes(await pdf.save());
+    // pw.Document pdf = pw.Document();
+    // pdf.addPage(
+    //   pw.Page(
+    //     pageFormat: PdfPageFormat.a4,
+    //     build: (pw.Context context) {
+    //       return pw.Expanded(
+    //         child: pw.Image(image),
+    //       );
+    //     },
+    //   ),
+    // );
+    // File pdfFile = File('$directory/$fileName.pdf');
+    // await pdfFile.writeAsBytes(await pdf.save());
   }
 
   @override
@@ -1131,42 +1133,68 @@ class _MainPanelState extends ConsumerState<MainPanel> {
 
   void enterBtn() {
     if (selectedAgents != null) {
-      if (entryBoxController.text.length.isEven) {
+      if (entryBoxController.text.contains('(')) {
+        String entry = '', amt = '';
+        bool isAmt = false;
         for (int i = 0; i < entryBoxController.text.length; i++) {
-          entryBox = int.parse(
-              entryBoxController.text[i] + entryBoxController.text[i + 1]);
-          if (entryBox == 00) {
-            entryBox = 100;
+          if (!isAmt) {
+            while (entryBoxController.text[i] != '(') {
+              entry = '$entry${entryBoxController.text[i]}';
+              i++;
+            }
+            isAmt = true;
+          } else {
+            while (entryBoxController.text[i] != ')') {
+              amt = '$amt${entryBoxController.text[i]}';
+              i++;
+            }
+            isAmt = false;
+            global.numberPair[entry] =
+                (global.numberPair[entry])! + int.parse(amt);
+            global.pairKey.add(entry);
+            global.pairValue.add(int.parse(amt));
+            amt = '';
+            entry = '';
           }
-          String pairKey = entryBox.toString();
-          if (entryBox! < 10) {
-            pairKey = pairKey.padLeft(2, '0');
-          }
-
-          entryAmt = int.parse(entryAmtController.text);
-          global.numberPair[pairKey] =
-              (global.numberPair[pairKey])! + entryAmt!;
-          global.pairKey.add(pairKey);
-          global.pairValue.add(entryAmt!);
-          i = i + 1;
         }
       } else {
-        for (int i = 0; i < entryBoxController.text.length; i++) {
-          entryBox = int.parse(entryBoxController.text[i] +
-              entryBoxController.text[i + 1] +
-              entryBoxController.text[i + 2]);
+        if (entryBoxController.text.length.isEven) {
+          for (int i = 0; i < entryBoxController.text.length; i++) {
+            entryBox = int.parse(
+                entryBoxController.text[i] + entryBoxController.text[i + 1]);
+            if (entryBox == 00) {
+              entryBox = 100;
+            }
+            String pairKey = entryBox.toString();
+            if (entryBox! < 10) {
+              pairKey = pairKey.padLeft(2, '0');
+            }
 
-          String pairKey = entryBox.toString();
-          if (entryBox! < 10) {
-            pairKey = pairKey.padLeft(2, '0');
+            entryAmt = int.parse(entryAmtController.text);
+            global.numberPair[pairKey] =
+                (global.numberPair[pairKey])! + entryAmt!;
+            global.pairKey.add(pairKey);
+            global.pairValue.add(entryAmt!);
+            i = i + 1;
           }
+        } else {
+          for (int i = 0; i < entryBoxController.text.length; i++) {
+            entryBox = int.parse(entryBoxController.text[i] +
+                entryBoxController.text[i + 1] +
+                entryBoxController.text[i + 2]);
 
-          entryAmt = int.parse(entryAmtController.text);
-          global.numberPair[pairKey] =
-              (global.numberPair[pairKey])! + entryAmt!;
-          global.pairKey.add(pairKey);
-          global.pairValue.add(entryAmt!);
-          i = i + 2;
+            String pairKey = entryBox.toString();
+            if (entryBox! < 10) {
+              pairKey = pairKey.padLeft(2, '0');
+            }
+
+            entryAmt = int.parse(entryAmtController.text);
+            global.numberPair[pairKey] =
+                (global.numberPair[pairKey])! + entryAmt!;
+            global.pairKey.add(pairKey);
+            global.pairValue.add(entryAmt!);
+            i = i + 2;
+          }
         }
       }
       ref.refresh(numberPairProvider);
@@ -1194,10 +1222,19 @@ Widget numberBox(int index) {
 
   return Consumer(
     builder: (BuildContext context, WidgetRef ref, Widget? child) {
-      pointController.selection = TextSelection(
-        baseOffset: 0,
-        extentOffset: pointController.text.length,
-      );
+      if (onChanged) {
+        pointController.selection = TextSelection(
+          baseOffset: global.numberPair[pairKey1] != 0
+              ? '${global.numberPair[pairKey1]!}'.length
+              : 0,
+          extentOffset: pointController.text.length,
+        );
+      } else {
+        pointController.selection = TextSelection(
+          baseOffset: 0,
+          extentOffset: pointController.text.length,
+        );
+      }
 
       return FocusScope(
         child: Focus(
@@ -1215,12 +1252,13 @@ Widget numberBox(int index) {
                   style: TextStyle(fontSize: 0.8.h, color: Colors.grey),
                 ),
                 TextField(
-                  autofocus: true,
                   textInputAction: TextInputAction.next,
                   controller: pointController,
                   onChanged: (value) {
                     if (value.isNotEmpty) {
                       global.numberPair[pairKey1] = int.parse(value.trim());
+                      onChanged = true;
+                      ref.refresh(numberPairProvider);
                     } else {
                       global.numberPair[pairKey1] = 0;
                     }
@@ -1232,7 +1270,7 @@ Widget numberBox(int index) {
                       baseOffset: 0,
                       extentOffset: pointController.text.length,
                     );
-                    ref.refresh(numberPairProvider);
+                    // ref.refresh(numberPairProvider);
                   },
                   textAlign: TextAlign.end,
                   scribbleEnabled: true,
@@ -1325,9 +1363,9 @@ Widget clientsList(PanelResponseData data,
     result.putIfAbsent((s[0].trim()), () => int.parse(s[1].trim()));
   }
 
-  int maxPair = 0;
+  //int maxPair = 0;
   int total = 0;
-  String highestPair = '';
+  //String highestPair = '';
 
   for (int i = 0 * 10; i < 120; i++) {
     String pairKey = (i + 1).toString();
@@ -1335,10 +1373,10 @@ Widget clientsList(PanelResponseData data,
       pairKey = pairKey.padLeft(2, '0');
     }
     total = total + result[pairKey]!;
-    if (maxPair < result[pairKey]!) {
-      maxPair = result[pairKey]!;
-      highestPair = '${i + 1}/${maxPair}';
-    }
+    // if (maxPair < result[pairKey]!) {
+    //   maxPair = result[pairKey]!;
+    //   highestPair = '${i + 1}/${maxPair}';
+    // }
   }
 
   return Container(
@@ -1381,7 +1419,7 @@ Widget clientsList(PanelResponseData data,
                 Row(
                   children: [
                     Text(
-                      'Pair: $highestPair',
+                      'Pair : ${data.pair_rate!}',
                       textAlign: TextAlign.left,
                       style: TextStyle(
                         fontSize: 1.3.w,
